@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Proyecto - SERFAGAB S.A.C.</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            line-height: 1.7;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 5px solid #e94560;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #0f3460;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        h3 {
+            color: #16213e;
+            margin: 20px 0 10px;
+            font-size: 1.2em;
+        }
+        h4 { color: #0f3460; margin: 15px 0 8px; }
+        .member-card {
+            background: #f8f9fa;
+            border-left: 5px solid #e94560;
+            padding: 18px 22px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .member-card h4 { margin: 0 0 8px; color: #e94560; }
+        .member-card .files { font-family: 'Consolas', monospace; font-size: 0.9em; color: #555; }
+        code {
+            background: #1a1a2e;
+            color: #f0e6d3;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'Consolas', monospace;
+        }
+        pre {
+            background: #1a1a2e;
+            color: #f0e6d3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background: #0f3460; color: white; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .badge-rest { background: #4CAF50; color: white; }
+        .badge-jpa { background: #2196F3; color: white; }
+        .badge-repo { background: #FF9800; color: white; }
+        .badge-srv { background: #9C27B0; color: white; }
+        .badge-ctrl { background: #e94560; color: white; }
+        .badge-dto { background: #607D8B; color: white; }
+        ul { margin: 10px 0; padding-left: 25px; }
+        li { margin: 5px 0; }
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .toc { background: #f8f9fa; padding: 20px 25px; border-radius: 10px; }
+        .toc ol { margin: 0; padding-left: 20px; }
+        .toc a { color: #0f3460; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .diagram { text-align: center; margin: 20px 0; }
+        .diagram pre { display: inline-block; text-align: left; }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>SERFAGAB S.A.C.</h1>
+        <p>Sistema de Gestión de Órdenes de Compra — API REST</p>
+        <p style="margin-top:10px;font-size:0.9em;opacity:0.7;">Avance de Proyecto &middot; Grupo 5</p>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- ===== 0. TABLA DE CONTENIDO ===== -->
+    <section class="toc">
+        <h2>&Iacute;ndice</h2>
+        <ol>
+            <li><a href="#intro">Introducci&oacute;n &mdash; &iquest;Qu&eacute; es SERFAGAB?</a></li>
+            <li><a href="#arquitectura">Arquitectura general del proyecto</a></li>
+            <li><a href="#estructura">Estructura de carpetas y archivos</a></li>
+            <li><a href="#entidades">Las entidades y la base de datos</a></li>
+            <li><a href="#capas">Recorrido por las capas del c&oacute;digo</a></li>
+            <li><a href="#reparto">Reparto de trabajo entre los 5 integrantes</a></li>
+            <li><a href="#endpoints">Endpoints y pruebas en Postman</a></li>
+            <li><a href="#datos">Datos de prueba (seed)</a></li>
+            <li><a href="#avances">Pr&oacute;ximos avances del proyecto</a></li>
+        </ol>
+    </section>
+
+    <!-- ===== 1. INTRODUCCIÓN ===== -->
+    <section id="intro">
+        <h2>1. Introducci&oacute;n &mdash; &iquest;Qu&eacute; es SERFAGAB?</h2>
+        <p><strong>SERFAGAB S.A.C.</strong> es una empresa peruana dedicada a la comercializaci&oacute;n de materiales industriales. Este proyecto consiste en construir una <strong>API REST</strong> que le permita gestionar sus <em>&Oacute;rdenes de Compra</em> de manera digital.</p>
+        <p>El sistema permite:</p>
+        <ul>
+            <li>Registrar y autenticar usuarios</li>
+            <li>Administrar proveedores</li>
+            <li>Gestionar materiales y sus tipos</li>
+            <li>Crear &oacute;rdenes de compra con m&uacute;ltiples detalles (materiales, cantidades, precios)</li>
+            <li>Cambiar el estado de las &oacute;rdenes (PENDIENTE &rarr; ENVIADO / ANULADO)</li>
+            <li>Consultar el historial de &oacute;rdenes por usuario</li>
+        </ul>
+        <div class="note">
+            <strong>Tecnolog&iacute;as:</strong> Java 24 &middot; Spring Boot 4.0.7 &middot; Spring Data JPA &middot; H2 (base en memoria) &middot; Lombok &middot; Maven
+        </div>
+    </section>
+
+    <!-- ===== 2. ARQUITECTURA ===== -->
+    <section id="arquitectura">
+        <h2>2. Arquitectura general</h2>
+        <p>El proyecto sigue el patr&oacute;n <strong>MVC</strong> (Modelo - Vista - Controlador) adaptado para APIs REST, con una <strong>arquitectura en capas</strong>:</p>
+        <div class="diagram">
+<pre>  ┌─────────────────────────────────────────────────────────────┐
+  │                     Cliente (Postman)                        │
+  │               (peticiones HTTP: JSON in / JSON out)          │
+  └─────────────────────┬───────────────────────────────────────┘
+                        │
+                        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  CAPA CONTROLLER     (@RestController)                      │
+  │  Recibe las peticiones HTTP, valida datos b&aacute;sicos,      │
+  │  delega en Services o directamente en Repositories          │
+  └─────────────────────┬───────────────────────────────────────┘
+                        │
+                        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  CAPA SERVICE        (@Service)                             │
+  │  Contiene la l&oacute;gica de negocio: crear &oacute;rdenes,         │
+  │  registrar lotes, calcular totales...                       │
+  └─────────────────────┬───────────────────────────────────────┘
+                        │
+                        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  CAPA REPOSITORY    (extends JpaRepository)                 │
+  │  Capa de acceso a datos. Spring Data JPA genera            │
+  │  autom&aacute;ticamente las consultas SQL                      │
+  └─────────────────────┬───────────────────────────────────────┘
+                        │
+                        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  CAPA ENTITY         (@Entity)                              │
+  │  Mapea las tablas de la base de datos a objetos Java        │
+  └─────────────────────────────────────────────────────────────┘
+                        │
+                        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │  Base de datos H2 en memoria                                │
+  │  (jdbc:h2:mem:serfagabdb)                                   │
+  └─────────────────────────────────────────────────────────────┘</pre>
+        </div>
+        <h3>Flujo de una petici&oacute;n (ejemplo: login)</h3>
+        <ol>
+            <li>Postman env&iacute;a <code>POST /api/auth/login</code> con un JSON <code>{"login":"admin","clave":"123"}</code></li>
+            <li><strong>AuthController</strong> recibe la petici&oacute;n y convierte el JSON en un objeto <code>LoginRequest</code></li>
+            <li>El controller llama a <code>usuarioRepository.findByLoginAndClave()</code></li>
+            <li><strong>UsuarioRepository</strong> (interface que extiende JpaRepository) ejecuta autom&aacute;ticamente la consulta SQL: <code>SELECT * FROM tbl_usuario WHERE login = ? AND clave = ?</code></li>
+            <li>Si encuentra el usuario, lo devuelve; si no, responde con 401 (credenciales inv&aacute;lidas)</li>
+            <li>Postman recibe la respuesta JSON con los datos del usuario</li>
+        </ol>
+    </section>
+
+    <!-- ===== 3. ESTRUCTURA ===== -->
+    <section id="estructura">
+        <h2>3. Estructura de carpetas y archivos</h2>
+        <p>El proyecto se organiza as&iacute;:</p>
+        <pre>ProyectoGrupo5/
+│
+├── pom.xml                          ← Configuraci&oacute;n de Maven
+│
+└── src/main/
+    ├── java/com/serfagab/
+    │   │
+    │   ├── SerfagabApplication.java    ← Punto de entrada de la aplicaci&oacute;n
+    │   │
+    │   ├── config/
+    │   │   └── DataSeeder.java         ← Carga datos de prueba al iniciar
+    │   │
+    │   ├── controller/                 ← 6 controladores REST
+    │   │   ├── AuthController.java
+    │   │   ├── UsuarioController.java
+    │   │   ├── ProveedorController.java
+    │   │   ├── TipoMaterialController.java
+    │   │   ├── MaterialController.java
+    │   │   └── OrdenCompraController.java
+    │   │
+    │   ├── dto/
+    │   │   └── LoginRequest.java       ← Objeto para recibir login/clave
+    │   │
+    │   ├── entities/                   ← 7 entidades JPA (tablas)
+    │   │   ├── Tipo.java
+    │   │   ├── Usuario.java
+    │   │   ├── Proveedor.java
+    │   │   ├── TipoMaterial.java
+    │   │   ├── Material.java
+    │   │   ├── OrdenCompra.java
+    │   │   └── DetalleOrdenCompra.java
+    │   │
+    │   ├── repository/                 ← 7 interfaces para acceso a BD
+    │   │   ├── TipoRepository.java
+    │   │   ├── UsuarioRepository.java
+    │   │   ├── ProveedorRepository.java
+    │   │   ├── TipoMaterialRepository.java
+    │   │   ├── MaterialRepository.java
+    │   │   ├── OrdenCompraRepository.java
+    │   │   └── DetalleOrdenCompraRepository.java
+    │   │
+    │   └── service/                    ← 2 servicios con l&oacute;gica de negocio
+    │       ├── MaterialService.java
+    │       └── OrdenCompraService.java
+    │
+    └── resources/
+        └── application.properties      ← Configuraci&oacute;n de BD y servidor</pre>
+    </section>
+
+    <!-- ===== 4. ENTIDADES ===== -->
+    <section id="entidades">
+        <h2>4. Las entidades y la base de datos</h2>
+        <p>Cada <strong>entidad</strong> es una clase Java anotada con <code>@Entity</code> que representa una tabla en la base de datos. Sus atributos son las columnas. La anotaci&oacute;n <code>@Data</code> de Lombok genera autom&aacute;ticamente los getters, setters, equals, hashCode y toString.</p>
+        
+        <h3>Diagrama de relaciones</h3>
+        <div class="diagram">
+<pre>  ┌───────────┐       ┌──────────────┐       ┌──────────────────┐
+  │   Tipo    │       │   Usuario    │       │   Proveedor     │
+  │───────────│       │──────────────│       │─────────────────│
+  │id_tipo PK│──┐    │id_usuario PK │       │id_proveedor PK  │
+  │descripcion│  │    │nombres       │       │razon_social     │
+  └───────────┘  │    │apellidos     │       │ruc              │
+                 │    │login         │       │celular, email   │
+                 │    │clave         │       │descripcion      │
+                 │    │email         │       │activo           │
+                 │    │activo        │       └──────────────────┘
+                 │    │id_tipo (FK)──┘               │
+                 │    └────────────────┘             │
+                 │                        ┌──────────┘
+                 │                        ▼
+  ┌──────────────┴─┐       ┌─────────────────────────────┐
+  │  TipoMaterial  │       │       OrdenCompra           │
+  │────────────────│       │─────────────────────────────│
+  │id_tipo_material│──┐    │id_orden_compra PK           │
+  │  PK            │  │    │id_proveedor (FK) ───────────┘
+  │nombre          │  │    │id_usuario (FK) ─────────────┐
+  │descripcion     │  │    │fecha                        │
+  │activo          │  │    │estado (PENDIENTE/ENVIADO/   │
+  └────────────────┘  │    │        ANULADO)             │
+                      │    │total                        │
+                      │    │observaciones                │
+  ┌──────────────┐    │    └────────────┬────────────────┘
+  │   Material   │    │                 │
+  │──────────────│    │                 │
+  │id_material PK│    │                 │ 1
+  │id_tipo_      │────┘                 ▼
+  │  material FK │       ┌─────────────────────────────┐
+  │nombre        │       │   DetalleOrdenCompra        │
+  │unidad_medida │       │─────────────────────────────│
+  │stock_actual  │       │id_detalle PK                │
+  │precio_       │       │id_orden_compra (FK) ────────┘
+  │  referencial │       │id_material (FK) ────────────┘
+  │descripcion   │       │cantidad                     │
+  │activo        │       │precio_unitario              │
+  └──────────────┘       │subtotal                     │
+                         └─────────────────────────────┘</pre>
+        </div>
+
+        <h3>Detalle de cada entidad</h3>
+        
+        <h4>Tipo</h4>
+        <p>Define los roles de usuario. Por ahora solo existe <code>"administrador"</code>.</p>
+        <pre>@Entity @Table(name = "tbl_tipo")
+public class Tipo {
+    @Id
+    private Integer idTipo;
+    private String descripcion;
+}</pre>
+
+        <h4>Usuario</h4>
+        <p>Representa a una persona que usa el sistema. Tiene credenciales de acceso (login + clave) y pertenece a un Tipo (rol).</p>
+        <pre>@Entity @Table(name = "tbl_usuario")
+public class Usuario {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idUsuario;
+    private String nombres, apellidos, login, clave, email;
+    private Boolean activo = true;
+    @ManyToOne @JoinColumn(name = "id_tipo")
+    private Tipo tipo;
+}</pre>
+        <p><code>@ManyToOne</code> indica que muchos usuarios pueden tener un mismo Tipo. La columna <code>id_tipo</code> es la clave for&aacute;nea.</p>
+
+        <h4>Proveedor</h4>
+        <p>Empresas que venden materiales a SERFAGAB. Contiene datos de contacto y RUC.</p>
+
+        <h4>TipoMaterial</h4>
+        <p>Categor&iacute;a de materiales (ej: "Plancha", "Pintura").</p>
+
+        <h4>Material</h4>
+        <p>Producto individual que se puede comprar. Pertenece a un TipoMaterial y tiene unidad de medida, stock y precio referencial.</p>
+
+        <h4>OrdenCompra</h4>
+        <p>Documento que registra una compra a un proveedor. La crea un usuario, tiene fecha, estado y un total que se calcula sumando los subtotales de sus detalles. La relaci&oacute;n <code>@OneToMany</code> con <code>cascade = CascadeType.ALL</code> significa que si se guarda una orden, autom&aacute;ticamente se guardan tambi&eacute;n sus detalles.</p>
+
+        <h4>DetalleOrdenCompra</h4>
+        <p>Cada l&iacute;nea de una orden de compra: qu&eacute; material se compra, en qu&eacute; cantidad, a qu&eacute; precio unitario, y el subtotal (cantidad &times; precio). La anotaci&oacute;n <code>@JsonIgnore</code> sobre <code>ordenCompra</code> evita que al serializar a JSON se genere un bucle infinito (la orden tiene detalles, y cada detalle tiene la orden...).</p>
+    </section>
+
+    <!-- ===== 5. CAPAS DEL CÓDIGO ===== -->
+    <section id="capas">
+        <h2>5. Recorrido por las capas del c&oacute;digo</h2>
+        
+        <h3>5.1 Punto de entrada: <code>SerfagabApplication.java</code></h3>
+        <pre>@SpringBootApplication
+public class SerfagabApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SerfagabApplication.class, args);
+    }
+}</pre>
+        <p><code>@SpringBootApplication</code> es un atajo que incluye:</p>
+        <ul>
+            <li><code>@Configuration</code> &mdash; permite definir beans</li>
+            <li><code>@EnableAutoConfiguration</code> &mdash; Spring Boot configura autom&aacute;ticamente todo (Tomcat, JPA, H2, etc.)</li>
+            <li><code>@ComponentScan</code> &mdash; escanea el paquete <code>com.serfagab</code> en busca de clases anotadas</li>
+        </ul>
+
+        <h3>5.2 Capa de persistencia: Repositorios</h3>
+        <p>Los repositorios son <strong>interfaces</strong> que extienden <code>JpaRepository&lt;Entidad, TipoDeId&gt;</code>. Spring Data JPA implementa autom&aacute;ticamente los m&eacute;todos, sin necesidad de escribir SQL.</p>
+        <pre>public interface UsuarioRepository extends JpaRepository&lt;Usuario, Integer&gt; {
+    Optional&lt;Usuario&gt; findByLoginAndClave(String login, String clave);
+}
+
+public interface MaterialRepository extends JpaRepository&lt;Material, Integer&gt; {
+    List&lt;Material&gt; findByNombre(String nombre);
+}</pre>
+        <p>Spring Data JPA interpreta el nombre del m&eacute;todo y genera la consulta: <code>findByLoginAndClave</code> se traduce a <code>WHERE login = ? AND clave = ?</code>. <code>Optional&lt;T&gt;</code> es un contenedor que puede o no tener valor, evitando errores de null.</p>
+
+        <h3>5.3 Capa de servicio: l&oacute;gica de negocio</h3>
+        
+        <h4>MaterialService</h4>
+        <p>Contiene el m&eacute;todo <code>registrarLote()</code> que guarda varios materiales de una sola vez usando <strong>batch inserts</strong>. Cada 10 inserciones hace <code>flush()</code> y <code>clear()</code> para liberar memoria. Esto es &uacute;til cuando se importan muchos materiales desde un archivo.</p>
+        <pre>@Transactional
+public void registrarLote(List&lt;Material&gt; materiales) {
+    int i = 0;
+    for (Material m : materiales) {
+        em.persist(m);
+        i++;
+        if (i % 10 == 0) { em.flush(); em.clear(); }
+    }
+}</pre>
+        <p><code>@Transactional</code> garantiza que si algo falla, se deshace todo (rollback).</p>
+
+        <h4>OrdenCompraService</h4>
+        <p>Tiene tres m&eacute;todos principales:</p>
+        <ul>
+            <li><code>crearOrden()</code> &mdash; crea una orden vac&iacute;a con estado PENDIENTE y total 0. Recibe el id del usuario, id del proveedor, fecha y observaciones.</li>
+            <li><code>agregarDetalle()</code> &mdash; a&ntilde;ade un material a una orden existente. Calcula el subtotal y lo acumula al total de la orden. Ambos m&eacute;todos son <code>@Transactional</code>.</li>
+            <li><code>listarPorUsuario()</code> &mdash; devuelve todas las &oacute;rdenes de un usuario.</li>
+        </ul>
+
+        <h3>5.4 Capa de controladores: los endpoints REST</h3>
+        <p>Cada controlador es un <code>@RestController</code> que expone endpoints. Veamos los m&aacute;s importantes:</p>
+
+        <h4>AuthController</h4>
+        <pre>@PostMapping("/login")
+public ResponseEntity&lt;?&gt; login(@RequestBody LoginRequest loginRequest) {
+    Usuario usuario = usuarioRepository
+        .findByLoginAndClave(loginRequest.getLogin(), loginRequest.getClave())
+        .orElse(null);
+    if (usuario == null)
+        return ResponseEntity.status(401).body("Credenciales invalidas");
+    return ResponseEntity.ok(usuario);
+}</pre>
+        <p><code>@RequestBody</code> convierte autom&aacute;ticamente el JSON que env&iacute;a Postman en un objeto <code>LoginRequest</code>. Si el usuario existe, se devuelve con c&oacute;digo 200; si no, 401.</p>
+
+        <h4>OrdenCompraController</h4>
+        <p>Es el controlador m&aacute;s complejo. Gestiona la creaci&oacute;n de &oacute;rdenes, el agregado de detalles, el cambio de estado y la consulta de historial. Los endpoints:</p>
+        <ul>
+            <li><code>POST /api/ordenes-compra/{idUsuario}/crear</code> &mdash; recibe JSON con el proveedor y la fecha</li>
+            <li><code>POST /api/ordenes-compra/{idOrden}/agregar-detalle</code> &mdash; recibe el material, cantidad y precio</li>
+            <li><code>PUT /api/ordenes-compra/{idOrden}/estado?estado=ENVIADO</code> &mdash; cambia el estado</li>
+            <li><code>GET /api/ordenes-compra/usuario/{idUsuario}</code> &mdash; historial</li>
+        </ul>
+        <p>El patr&oacute;n <code>ResponseEntity.ok()</code> / <code>.notFound().build()</code> / <code>.badRequest().body(mensaje)</code> permite controlar los c&oacute;digos HTTP de respuesta (200, 404, 400).</p>
+
+        <h3>5.5 DataSeeder: datos de prueba</h3>
+        <pre>@Component
+public class DataSeeder implements CommandLineRunner {
+    @Override
+    public void run(String... args) {
+        // Se ejecuta al arrancar la aplicaci&oacute;n
+        // Carga: 1 Tipo, 1 Usuario, 2 Proveedores,
+        //        2 TiposMaterial, 2 Materiales
+    }
+}</pre>
+        <p><code>CommandLineRunner</code> se ejecuta despu&eacute;s de que Spring Boot haya inicializado todo. El m&eacute;todo verifica primero si ya hay datos (<code>if (tipoRepository.count() &gt; 0) return</code>) para no duplicarlos en cada reinicio.</p>
+
+        <h3>5.6 application.properties: configuraci&oacute;n</h3>
+        <pre>server.port=8080
+spring.datasource.url=jdbc:h2:mem:serfagabdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=true</pre>
+        <ul>
+            <li><code>h2:mem:serfagabdb</code> &mdash; base de datos en memoria (los datos se pierden al apagar)</li>
+            <li><code>ddl-auto=create</code> &mdash; Hibernate crea las tablas autom&aacute;ticamente al iniciar</li>
+            <li><code>h2-console</code> &mdash; consola web para explorar la BD en <code>http://localhost:8080/h2-console</code></li>
+        </ul>
+
+        <h3>5.7 pom.xml: dependencias</h3>
+        <p>El archivo Maven declara las librer&iacute;as que usa el proyecto:</p>
+        <ul>
+            <li><strong>spring-boot-starter-web</strong> &mdash; para crear APIs REST</li>
+            <li><strong>spring-boot-starter-data-jpa</strong> &mdash; para conectar con BD usando JPA/Hibernate</li>
+            <li><strong>h2</strong> &mdash; el motor de base de datos en memoria</li>
+            <li><strong>lombok</strong> &mdash; genera getters/setters autom&aacute;ticamente con <code>@Data</code></li>
+            <li><strong>spring-boot-devtools</strong> &mdash; reinicio autom&aacute;tico al detectar cambios</li>
+        </ul>
+    </section>
+
+    <!-- ===== 6. REPARTO DE TRABAJO ===== -->
+    <section id="reparto">
+        <h2>6. Reparto de trabajo entre los 5 integrantes</h2>
+        <p>Cada integrante se encargar&aacute; de un grupo de archivos que forman una unidad funcional completa. Al ser capas separadas, el trabajo de cada uno se integra naturalmente sin conflictos.</p>
+
+        <div class="member-card">
+            <h4>👤 Valerie &mdash; Autenticaci&oacute;n y Usuarios</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> El sistema de login y registro de usuarios.</p>
+            <p class="files">Archivos a su cargo:</p>
+            <ul>
+                <li><code>entities/Tipo.java</code> &mdash; la entidad del rol de usuario</li>
+                <li><code>entities/Usuario.java</code> &mdash; la entidad Usuario</li>
+                <li><code>repository/TipoRepository.java</code> &mdash; acceso a datos de roles</li>
+                <li><code>repository/UsuarioRepository.java</code> &mdash; acceso a datos de usuarios</li>
+                <li><code>controller/AuthController.java</code> &mdash; endpoint de login</li>
+                <li><code>controller/UsuarioController.java</code> &mdash; endpoints de registro y listado</li>
+                <li><code>dto/LoginRequest.java</code> &mdash; el DTO para recibir credenciales</li>
+                <li>Pruebas en Postman de login y registro</li>
+            </ul>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> Enviar POST a <code>/api/auth/login</code> y POST a <code>/api/usuarios/registrar</code>.</p>
+        </div>
+
+        <div class="member-card">
+            <h4>👤 Carlos &mdash; Proveedores</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> El CRUD completo de proveedores.</p>
+            <p class="files">Archivos a su cargo:</p>
+            <ul>
+                <li><code>entities/Proveedor.java</code> &mdash; la entidad Proveedor</li>
+                <li><code>repository/ProveedorRepository.java</code> &mdash; acceso a datos</li>
+                <li><code>controller/ProveedorController.java</code> &mdash; endpoints CRUD</li>
+                <li>Pruebas en Postman de proveedores</li>
+            </ul>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> POST para crear, GET para listar/obtener, PUT para actualizar en <code>/api/proveedores</code>.</p>
+        </div>
+
+        <div class="member-card">
+            <h4>👤 Oscar &mdash; Tipos de Material y Materiales</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> La gesti&oacute;n de materiales y sus tipos, incluyendo la carga por lotes.</p>
+            <p class="files">Archivos a su cargo:</p>
+            <ul>
+                <li><code>entities/TipoMaterial.java</code> &mdash; entidad de categor&iacute;a de material</li>
+                <li><code>entities/Material.java</code> &mdash; entidad Material</li>
+                <li><code>repository/TipoMaterialRepository.java</code></li>
+                <li><code>repository/MaterialRepository.java</code></li>
+                <li><code>service/MaterialService.java</code> &mdash; servicio con batch insert</li>
+                <li><code>controller/TipoMaterialController.java</code></li>
+                <li><code>controller/MaterialController.java</code></li>
+                <li>Pruebas en Postman</li>
+            </ul>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> POST <code>/api/materiales/lote</code> para carga masiva, GET/PUT para consultas y actualizaciones.</p>
+        </div>
+
+        <div class="member-card">
+            <h4>👤 Isaac &mdash; &Oacute;rdenes de Compra (parte 1)</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> La creaci&oacute;n de &oacute;rdenes de compra y el agregado de detalles (la parte medular del sistema).</p>
+            <p class="files">Archivos a su cargo:</p>
+            <ul>
+                <li><code>entities/OrdenCompra.java</code> &mdash; entidad OrdenCompra</li>
+                <li><code>entities/DetalleOrdenCompra.java</code> &mdash; entidad DetalleOrdenCompra</li>
+                <li><code>repository/OrdenCompraRepository.java</code></li>
+                <li><code>repository/DetalleOrdenCompraRepository.java</code></li>
+                <li><code>service/OrdenCompraService.java</code> &mdash; l&oacute;gica de crear orden y agregar detalle</li>
+                <li>Pruebas en Postman de creaci&oacute;n de OC y agregado de detalles</li>
+            </ul>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> POST <code>/api/ordenes-compra/1/crear</code> y POST <code>/api/ordenes-compra/1/agregar-detalle</code>.</p>
+        </div>
+
+        <div class="member-card">
+            <h4>👤 Manuel &mdash; &Oacute;rdenes de Compra (parte 2) + Coordinaci&oacute;n</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> El cambio de estado de las &oacute;rdenes, el historial por usuario, la configuraci&oacute;n general del proyecto y la integraci&oacute;n de todas las partes.</p>
+            <p class="files">Archivos a su cargo:</p>
+            <ul>
+                <li><code>controller/OrdenCompraController.java</code> &mdash; endpoints de estado e historial</li>
+                <li><code>pom.xml</code> &mdash; gesti&oacute;n de dependencias</li>
+                <li><code>application.properties</code> &mdash; configuraci&oacute;n de la aplicaci&oacute;n</li>
+                <li><code>SerfagabApplication.java</code> &mdash; clase principal</li>
+                <li><code>config/DataSeeder.java</code> &mdash; datos de prueba iniciales</li>
+                <li>Pruebas en Postman de cambio de estado e historial</li>
+                <li>Integrar y verificar que todo funcione junto</li>
+            </ul>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> PUT <code>/api/ordenes-compra/1/estado?estado=ENVIADO</code> y GET <code>/api/ordenes-compra/usuario/1</code>.</p>
+        </div>
+
+        <div class="note">
+            <strong>Nota importante:</strong> Aunque cada integrante tiene archivos "propios", todos trabajan con la misma base de datos H2 y el mismo proyecto Maven. Cuando alguien modifique una entidad o repositorio, los dem&aacute;s deben actualizar su copia local. Se recomienda usar Git para mantener el c&oacute;digo sincronizado.
+        </div>
+    </section>
+
+    <!-- ===== 7. ENDPOINTS Y POSTMAN ===== -->
+    <section id="endpoints">
+        <h2>7. Endpoints y pruebas en Postman</h2>
+        <p>Antes de empezar, ejecuta la aplicaci&oacute;n con:</p>
+        <pre>mvn spring-boot:run</pre>
+        <p>O desde IntelliJ: haz clic en el bot&oacute;n de "Play" en la clase <code>SerfagabApplication</code>.</p>
+        <p>La aplicaci&oacute;n arrancar&aacute; en <code>http://localhost:8080</code>.</p>
+
+        <h3>Colecci&oacute;n de endpoints para Postman</h3>
+        
+        <table>
+            <tr>
+                <th>M&eacute;todo</th>
+                <th>URL</th>
+                <th>Body (JSON)</th>
+                <th>Respuesta esperada</th>
+                <th>&iquest;Qui&eacute;n prueba?</th>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/auth/login</code></td>
+                <td><pre>{"login":"admin","clave":"123"}</pre></td>
+                <td>200 + datos del usuario admin</td>
+                <td>Valerie</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/auth/login</code></td>
+                <td><pre>{"login":"admin","clave":"incorrecta"}</pre></td>
+                <td>401 "Credenciales invalidas"</td>
+                <td>Valerie</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/usuarios/registrar</code></td>
+                <td><pre>{"nombres":"Juan","apellidos":"Perez",
+ "login":"juanp","clave":"123",
+ "email":"juan@mail.com","tipo":{"idTipo":1}}</pre></td>
+                <td>200 + datos del nuevo usuario</td>
+                <td>Valerie</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/usuarios</code></td>
+                <td>&mdash;</td>
+                <td>200 + lista de usuarios</td>
+                <td>Valerie</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/proveedores</code></td>
+                <td><pre>{"razonSocial":"Nuevo Proveedor SAC",
+ "ruc":"20123456789","celular":"999888777",
+ "email":"info@nuevo.com",
+ "descripcion":"Proveedor de prueba"}</pre></td>
+                <td>200 + datos del proveedor creado</td>
+                <td>Carlos</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/proveedores</code></td>
+                <td>&mdash;</td>
+                <td>200 + lista de proveedores</td>
+                <td>Carlos</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/proveedores/1</code></td>
+                <td>&mdash;</td>
+                <td>200 + datos del proveedor con id=1</td>
+                <td>Carlos</td>
+            </tr>
+            <tr>
+                <td><code>PUT</code></td>
+                <td><code>http://localhost:8080/api/proveedores/1</code></td>
+                <td><pre>{"razonSocial":"Comercializadora Andina EIRL",
+ "ruc":"20605478931","celular":"999999999",
+ "email":"nuevo@andina.com.pe",
+ "descripcion":"Actualizado","activo":true}</pre></td>
+                <td>200 + datos actualizados</td>
+                <td>Carlos</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/tipos-material</code></td>
+                <td><pre>{"nombre":"Cable","descripcion":"Cables electricos"}</pre></td>
+                <td>200 + tipo creado</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/tipos-material</code></td>
+                <td>&mdash;</td>
+                <td>200 + lista de tipos</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/materiales/lote</code></td>
+                <td><pre>[{"nombre":"Tornillo 5mm",
+   "unidadMedida":"unidad",
+   "stockActual":100,
+   "precioReferencial":0.50,
+   "tipoMaterial":{"idTipoMaterial":1}},
+  {"nombre":"Pintura Blanca",
+   "unidadMedida":"galon",
+   "stockActual":20,
+   "precioReferencial":45.00,
+   "tipoMaterial":{"idTipoMaterial":2}}]</pre></td>
+                <td>200 "Materiales registrados satisfactoriamente."</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/materiales</code></td>
+                <td>&mdash;</td>
+                <td>200 + lista de todos los materiales</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/materiales/1</code></td>
+                <td>&mdash;</td>
+                <td>200 + material con id=1</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/materiales/buscar/Perno</code></td>
+                <td>&mdash;</td>
+                <td>200 + materiales que contengan "Perno"</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>PUT</code></td>
+                <td><code>http://localhost:8080/api/materiales/1</code></td>
+                <td><pre>{"nombre":"Perno 3x3",
+ "unidadMedida":"unidad",
+ "stockActual":50,
+ "precioReferencial":3.50,
+ "tipoMaterial":{"idTipoMaterial":1}}</pre></td>
+                <td>200 + material actualizado</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/1/crear</code></td>
+                <td><pre>{"proveedor":{"idProveedor":1},
+ "fecha":"2025-12-15",
+ "observaciones":"Pedido urgente"}</pre></td>
+                <td>200 + orden creada (estado PENDIENTE, total 0)</td>
+                <td>Isaac</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/1/agregar-detalle</code></td>
+                <td><pre>{"material":{"idMaterial":1},
+ "cantidad":10,
+ "precioUnitario":5.00}</pre></td>
+                <td>200 + detalle creado con subtotal = 50</td>
+                <td>Isaac</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/1/agregar-detalle</code></td>
+                <td><pre>{"material":{"idMaterial":2},
+ "cantidad":5,
+ "precioUnitario":8.00}</pre></td>
+                <td>200 + detalle (subtotal 40). Total de OC ahora = 90</td>
+                <td>Isaac</td>
+            </tr>
+            <tr>
+                <td><code>PUT</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/1/estado?estado=ENVIADO</code></td>
+                <td>&mdash;</td>
+                <td>200 + orden con estado cambiado a ENVIADO</td>
+                <td>Manuel</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/usuario/1</code></td>
+                <td>&mdash;</td>
+                <td>200 + lista de &oacute;rdenes del usuario 1</td>
+                <td>Manuel</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/1</code></td>
+                <td>&mdash;</td>
+                <td>200 + orden con id=1 y sus detalles</td>
+                <td>Manuel</td>
+            </tr>
+        </table>
+
+        <h3>Flujo completo de prueba (paso a paso)</h3>
+        <ol>
+            <li><strong>Login:</strong> <code>POST /api/auth/login</code> con admin/123 &rarr; obtienes el usuario con id=1</li>
+            <li><strong>Crear proveedor</strong> (opcional, ya hay 2 precargados)</li>
+            <li><strong>Crear tipo material</strong> (opcional, ya hay 2 precargados)</li>
+            <li><strong>Crear materiales</strong> (opcional, ya hay 2 precargados)</li>
+            <li><strong>Crear orden:</strong> <code>POST /api/ordenes-compra/1/crear</code> con proveedor=1</li>
+            <li><strong>Agregar detalles:</strong> <code>POST /api/ordenes-compra/1/agregar-detalle</code> varias veces</li>
+            <li><strong>Verificar:</strong> <code>GET /api/ordenes-compra/1</code> &rarr; ves la orden con los detalles y el total calculado</li>
+            <li><strong>Cambiar estado:</strong> <code>PUT /api/ordenes-compra/1/estado?estado=ENVIADO</code></li>
+            <li><strong>Historial:</strong> <code>GET /api/ordenes-compra/usuario/1</code> &rarr; ves todas las &oacute;rdenes del admin</li>
+        </ol>
+
+        <div class="note">
+            <strong>Tip para Postman:</strong> Crea una <strong>Colecci&oacute;n</strong> nueva llamada "SERFAGAB API" y dentro crea carpetas por m&oacute;dulo (Auth, Usuarios, Proveedores, Materiales, &Oacute;rdenes). Guarda cada petici&oacute;n para reutilizarlas.
+        </div>
+
+        <h3>Consola H2 (base de datos)</h3>
+        <p>Puedes ver los datos directamente en el navegador:</p>
+        <ul>
+            <li>URL: <code>http://localhost:8080/h2-console</code></li>
+            <li>JDBC URL: <code>jdbc:h2:mem:serfagabdb</code></li>
+            <li>Usuario: <code>sa</code> / Contrase&ntilde;a: <em>(vac&iacute;o)</em></li>
+            <li>Una vez dentro, ejecuta <code>SELECT * FROM TBL_USUARIO</code> para ver los usuarios</li>
+        </ul>
+    </section>
+
+    <!-- ===== 8. DATOS DE PRUEBA ===== -->
+    <section id="datos">
+        <h2>8. Datos de prueba (seed)</h2>
+        <p>Al arrancar la aplicaci&oacute;n, <code>DataSeeder</code> carga autom&aacute;ticamente estos datos:</p>
+        
+        <table>
+            <tr><th>Tabla</th><th>Datos precargados</th></tr>
+            <tr>
+                <td><code>tbl_tipo</code></td>
+                <td>id=1, descripci&oacute;n="administrador"</td>
+            </tr>
+            <tr>
+                <td><code>tbl_usuario</code></td>
+                <td>Valerie Cavero, login="admin", clave="123", email="vcavero@serfagab.com"</td>
+            </tr>
+            <tr>
+                <td><code>tbl_proveedor</code></td>
+                <td>1) Comercializadora Andina EIRL (RUC: 20605478931)<br>2) Distribuidora Industrial Peru E.I.R.L. (RUC: 20587412366)</td>
+            </tr>
+            <tr>
+                <td><code>tbl_tipo_material</code></td>
+                <td>1) Plancha &mdash; Materiales metalicos para tablero<br>2) Pintura &mdash; Gris ANSI 61</td>
+            </tr>
+            <tr>
+                <td><code>tbl_material</code></td>
+                <td>1) Perno 3x3 (unidad, stock=10, precio ref=3.00)<br>2) Perno 4x3 (unidad, stock=12, precio ref=4.00)</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ===== 9. PRÓXIMOS AVANCES ===== -->
+    <section id="avances">
+        <h2>9. Pr&oacute;ximos avances del proyecto</h2>
+        <p>Este primer avance cubre la API REST b&aacute;sica con H2 en memoria. Los pr&oacute;ximos pasos planificados son:</p>
+
+        <table>
+            <tr><th>Avance</th><th>Descripci&oacute;n</th><th>Prioridad</th></tr>
+            <tr>
+                <td><strong>Avance 2</strong></td>
+                <td>
+                    <strong>Migrar a MySQL:</strong> Cambiar de H2 en memoria a MySQL persistente. Se usar&aacute; el script SQL de referencia (<code>serfagab.sql</code>) para crear las tablas. Esto implica:
+                    <ul>
+                        <li>Cambiar <code>application.properties</code> (driver, URL, usuario/contrase&ntilde;a MySQL)</li>
+                        <li>Cambiar <code>ddl-auto=create</code> a <code>ddl-auto=none</code> (las tablas se crean con el script)</li>
+                        <li>Agregar dependencia de <code>mysql-connector-j</code> al pom.xml</li>
+                        <li>Ejecutar <code>serfagab.sql</code> en MySQL Workbench o consola</li>
+                        <li>Eliminar o modificar <code>DataSeeder</code> (los datos ya vendr&aacute;n del script SQL)</li>
+                    </ul>
+                </td>
+                <td>Alta</td>
+            </tr>
+            <tr>
+                <td><strong>Avance 3</strong></td>
+                <td>
+                    <strong>Interfaz web con Thymeleaf:</strong> Agregar una interfaz HTML para usuarios finales. Incluir&aacute;:
+                    <ul>
+                        <li>P&aacute;gina de login</li>
+                        <li>Dashboard con resumen de &oacute;rdenes, proveedores, materiales</li>
+                        <li>Formularios para crear/editar proveedores, materiales y &oacute;rdenes</li>
+                        <li>Tablas con DataTables para listar datos</li>
+                        <li>Notificaciones con SweetAlert2</li>
+                    </ul>
+                    Se usar&aacute;n Bootstrap 5 y Font Awesome para el dise&ntilde;o.
+                </td>
+                <td>Alta</td>
+            </tr>
+            <tr>
+                <td><strong>Avance 4</strong></td>
+                <td>
+                    <strong>Reportes PDF con JasperReports:</strong> Generar documentos PDF de las &oacute;rdenes de compra, con:
+                    <ul>
+                        <li>Encabezado con datos de SERFAGAB (logo, RUC, direcci&oacute;n)</li>
+                        <li>Datos del proveedor y n&uacute;mero de orden</li>
+                        <li>Tabla detallada con materiales, cantidades, precios y subtotales</li>
+                        <li>Total general de la orden</li>
+                    </ul>
+                    Se agregar&aacute; la dependencia de JasperReports al pom.xml y el archivo de plantilla <code>.jrxml</code>.
+                </td>
+                <td>Media</td>
+            </tr>
+            <tr>
+                <td><strong>Avance 5</strong></td>
+                <td>
+                    <strong>Seguridad y autenticaci&oacute;n con sesiones:</strong> Mejorar el sistema de login actual:
+                    <ul>
+                        <li>Uso de HttpSession para mantener la sesi&oacute;n del usuario</li>
+                        <li>Filtros para proteger rutas (redirigir al login si no hay sesi&oacute;n)</li>
+                        <li>Mensajes de validaci&oacute;n m&aacute;s robustos</li>
+                        <li>Roles de usuario (administrador, operador, etc.)</li>
+                    </ul>
+                </td>
+                <td>Media</td>
+            </tr>
+            <tr>
+                <td><strong>Avance 6</strong></td>
+                <td>
+                    <strong>Mejoras y funcionalidades adicionales:</strong>
+                    <ul>
+                        <li>Filtros de b&uacute;squeda en listados (por nombre, RUC, estado, fechas)</li>
+                        <li>Paginaci&oacute;n en listados grandes</li>
+                        <li>Validaci&oacute;n de duplicados (RUC, raz&oacute;n social, nombre de material)</li>
+                        <li>Control de stock (descontar material al crear orden)</li>
+                        <li>Pruebas unitarias con JUnit y Spring Boot Test</li>
+                    </ul>
+                </td>
+                <td>Baja</td>
+            </tr>
+        </table>
+    </section>
+
+</div>
+
+<footer>
+    <p>Grupo 5 &middot; Avance de Proyecto &middot; SERFAGAB S.A.C. &mdash; Sistema de Gesti&oacute;n de &Oacute;rdenes de Compra</p>
+</footer>
+
+</body>
+</html>
