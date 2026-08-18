@@ -37,6 +37,6 @@ public class MaterialService {
     }
 
     public List<Material> buscar(String nombre) {
-        return materialRepository.findByNombre(nombre);
+        return materialRepository.findByNombreContainingIgnoreCase(nombre);
     }
 }
