@@ -1,0 +1,106 @@
+<div class="mt-4">
+  <h3>Proveedores</h3>
+
+  <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
+
+  <div class="card p-3 mb-4">
+    <h5 class="mb-3">Nuevo proveedor</h5>
+    <div class="row g-2">
+      <div class="col-md-3">
+        <input class="form-control" [(ngModel)]="nuevo.razonSocial" placeholder="Razón social" />
+      </div>
+      <div class="col-md-2">
+        <input class="form-control" [(ngModel)]="nuevo.ruc" placeholder="RUC (11 dígitos)"
+               [class.is-invalid]="nuevo.ruc && !esRucValido()"
+               [class.is-valid]="nuevo.ruc && esRucValido()" />
+        <div class="invalid-feedback" *ngIf="nuevo.ruc && !esRucValido()">El RUC debe tener 11 dígitos</div>
+      </div>
+      <div class="col-md-2">
+        <input class="form-control" [(ngModel)]="nuevo.celular" placeholder="Celular (9 dígitos)"
+               [class.is-invalid]="nuevo.celular && !esCelularValido()"
+               [class.is-valid]="nuevo.celular && esCelularValido()" />
+        <div class="invalid-feedback" *ngIf="nuevo.celular && !esCelularValido()">El celular debe tener 9 dígitos</div>
+      </div>
+      <div class="col-md-3">
+        <input class="form-control" [(ngModel)]="nuevo.email" placeholder="Email"
+               [class.is-invalid]="nuevo.email && !esEmailValido()"
+               [class.is-valid]="nuevo.email && esEmailValido()" />
+        <div class="invalid-feedback" *ngIf="nuevo.email && !esEmailValido()">Ingresa un email válido</div>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="guardar()" [disabled]="!formularioValido()">Crear</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table class="table table-bordered" *ngIf="!cargando && proveedores.length > 0">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Razón social</th>
+        <th>RUC</th>
+        <th>Celular</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of proveedores">
+        <td>{{ p.idProveedor }}</td>
+        <td>{{ p.razonSocial }}</td>
+        <td>{{ p.ruc }}</td>
+        <td>{{ p.celular }}</td>
+        <td>{{ p.email }}</td>
+        <td>
+          <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(p)">Editar</button>
+          <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(p)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && proveedores.length == 0">No hay proveedores para mostrar</div>
+</div>
+
+<div *ngIf="editandoId !== null" class="modal-overlay">
+  <div class="modal-card">
+    <h5 class="mb-3">Editar proveedor</h5>
+
+    <div class="mb-2">
+      <label class="form-label">Razón social</label>
+      <input class="form-control" [(ngModel)]="nuevo.razonSocial" />
+    </div>
+    <div class="mb-2">
+      <label class="form-label">RUC</label>
+      <input class="form-control" [(ngModel)]="nuevo.ruc"
+             [class.is-invalid]="nuevo.ruc && !esRucValido()"
+             [class.is-valid]="nuevo.ruc && esRucValido()" />
+      <div class="invalid-feedback" *ngIf="nuevo.ruc && !esRucValido()">El RUC debe tener 11 dígitos</div>
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Celular</label>
+      <input class="form-control" [(ngModel)]="nuevo.celular"
+             [class.is-invalid]="nuevo.celular && !esCelularValido()"
+             [class.is-valid]="nuevo.celular && esCelularValido()" />
+      <div class="invalid-feedback" *ngIf="nuevo.celular && !esCelularValido()">El celular debe tener 9 dígitos</div>
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Email</label>
+      <input class="form-control" [(ngModel)]="nuevo.email"
+             [class.is-invalid]="nuevo.email && !esEmailValido()"
+             [class.is-valid]="nuevo.email && esEmailValido()" />
+      <div class="invalid-feedback" *ngIf="nuevo.email && !esEmailValido()">Ingresa un email válido</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <input class="form-control" [(ngModel)]="nuevo.descripcion" />
+    </div>
+
+    <div class="text-end">
+      <button class="btn btn-secondary me-2" (click)="cancelarEdicion()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardar()" [disabled]="!formularioValido()">Actualizar</button>
+    </div>
+  </div>
+</div>

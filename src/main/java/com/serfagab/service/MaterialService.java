@@ -33,12 +33,12 @@ public class MaterialService {
     }
 
     public List<Material> listarTodos() {
-        return em.createQuery("SELECT m FROM Material m", Material.class)
+        return em.createQuery("SELECT m FROM Material m WHERE m.activo = true", Material.class)
                 .setHint("org.hibernate.fetchSize", 5) // Trae todos, pero lee de 5 en 5
                 .getResultList();
     }
 
     public List<Material> buscar(String nombre) {
-        return materialRepository.findByNombreContainingIgnoreCase(nombre);
+        return materialRepository.findByNombreContainingIgnoreCaseAndActivoTrue(nombre);
     }
 }

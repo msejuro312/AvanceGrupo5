@@ -145,6 +145,7 @@
              <li><a href="#reparto">Reparto de trabajo entre los 4 integrantes</a></li>
             <li><a href="#endpoints">Endpoints y pruebas en Postman</a></li>
             <li><a href="#datos">Datos de prueba (seed)</a></li>
+            <li><a href="#frontend">Frontend Angular (frontend-angular)</a></li>
             <li><a href="#avances">Pr&oacute;ximos avances del proyecto</a></li>
         </ol>
     </section>
@@ -662,10 +663,31 @@ spring.jpa.show-sql=true</pre>
                 <td>Carlos</td>
             </tr>
             <tr>
+                <td><code>DELETE</code></td>
+                <td><code>http://localhost:8080/api/proveedores/2</code></td>
+                <td>&mdash;</td>
+                <td>200 + proveedor con <code>activo=false</code> (borrado l&oacute;gico; ya no aparece en <code>GET /api/proveedores</code>)</td>
+                <td>Carlos</td>
+            </tr>
+            <tr>
                 <td><code>POST</code></td>
                 <td><code>http://localhost:8080/api/tipos-material</code></td>
                 <td><pre>{"nombre":"Cable","descripcion":"Cables electricos"}</pre></td>
                 <td>200 + tipo creado</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>PUT</code></td>
+                <td><code>http://localhost:8080/api/tipos-material/1</code></td>
+                <td><pre>{"nombre":"Plancha","descripcion":"Materiales metalicos para tablero"}</pre></td>
+                <td>200 + tipo actualizado</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>DELETE</code></td>
+                <td><code>http://localhost:8080/api/tipos-material/1</code></td>
+                <td>&mdash;</td>
+                <td>200 + tipo con <code>activo=false</code> (borrado l&oacute;gico; ya no aparece en <code>GET /api/tipos-material</code>)</td>
                 <td>Oscar</td>
             </tr>
             <tr>
@@ -689,6 +711,16 @@ spring.jpa.show-sql=true</pre>
    "precioReferencial":45.00,
    "tipoMaterial":{"idTipoMaterial":2}}]</pre></td>
                 <td>200 "Materiales registrados satisfactoriamente."</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>http://localhost:8080/api/materiales</code></td>
+                <td><pre>{"nombre":"Tornillo 6mm",
+ "unidadMedida":"unidad","stockActual":30,
+ "precioReferencial":0.60,
+ "tipoMaterial":{"idTipoMaterial":1}}</pre></td>
+                <td>200 + material creado (creaci&oacute;n individual)</td>
                 <td>Oscar</td>
             </tr>
             <tr>
@@ -721,6 +753,13 @@ spring.jpa.show-sql=true</pre>
  "precioReferencial":3.50,
  "tipoMaterial":{"idTipoMaterial":1}}</pre></td>
                 <td>200 + material actualizado</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>DELETE</code></td>
+                <td><code>http://localhost:8080/api/materiales/2</code></td>
+                <td>&mdash;</td>
+                <td>200 + material con <code>activo=false</code> (borrado l&oacute;gico; ya no aparece en <code>GET /api/materiales</code>)</td>
                 <td>Oscar</td>
             </tr>
             <tr>
@@ -889,13 +928,165 @@ spring.jpa.show-sql=true</pre>
                 <td><code>tbl_material</code></td>
                 <td>1) Perno 3x3 (unidad, stock=10, precio ref=3.00)<br>2) Perno 4x3 (unidad, stock=12, precio ref=4.00)</td>
             </tr>
+            <tr>
+                <td><code>tbl_orden_compra</code></td>
+                <td><strong>7 &oacute;rdenes</strong> del usuario 1 (Valerie) contra los proveedores 1 y 2, con fechas variadas:
+                    <ul>
+                        <li>3 &oacute;rdenes en estado <code>ENVIADO</code></li>
+                        <li>4 &oacute;rdenes en estado <code>PENDIENTE</code></li>
+                        <li>La &uacute;ltima incluye 2 materiales en su detalle</li>
+                    </ul>
+                    As&iacute; la paginaci&oacute;n (<code>size=5</code>) muestra 2 p&aacute;ginas y el endpoint <code>/api/ordenes-compra/estado</code> tiene datos.
+                </td>
+            </tr>
+            <tr>
+                <td><code>tbl_detalle_orden_compra</code></td>
+                <td>Detalles con material, cantidad, precio unitario y subtotal; el total de cada orden se calcula sumando los subtotales.</td>
+            </tr>
         </table>
     </section>
 
-    <!-- ===== 9. PRÓXIMOS AVANCES ===== -->
+    <!-- ===== 9. FRONTEND ANGULAR ===== -->
+    <section id="frontend">
+        <h2>9. Frontend Angular (frontend-angular)</h2>
+        <p>SPA en <strong>Angular 21</strong> (standalone, sin SSR) que consume la API REST del backend en <code>http://localhost:8080</code>. Usa Bootstrap 5 y un <strong>interceptor</strong> que agrega el header HTTP Basic (<code>user/user123</code>) autom&aacute;ticamente a cada petici&oacute;n.</p>
+
+        <div class="note">
+            <strong>&iquest;Por qu&eacute; Angular 21 y sin SSR?</strong> El proyecto se genera con la versi&oacute;n global del CLI (21.2.21) para que funcione igual en cualquier PC. No se usa SSR: la app es una SPA simple que llama a la API. Ojo: el CLI de Angular 21 genera el proyecto <strong>zoneless por defecto</strong> (sin <code>zone.js</code>), y con <code>*ngIf</code>/<code>*ngFor</code> las listas quedaban en "Cargando..." hasta el segundo clic. El fix fue volver a la detecci&oacute;n por zonas:
+            <ul>
+                <li><code>npm install zone.js</code></li>
+                <li><code>src/app/app.config.ts</code> &rarr; importar y registrar <code>provideZoneChangeDetection()</code> en <code>providers</code></li>
+                <li><code>angular.json</code> &rarr; en <code>projects.*.architect.build.options.polyfills</code> dejar <code>"zone.js"</code></li>
+                <li>subir el l&iacute;mite de presupuesto de bundle: <code>"budgets": [{ "type": "initial", "maximumWarning": "600kB", "maximumError": "600kB" }]</code></li>
+            </ul>
+            Sin estos pasos, una app recreada con los comandos de abajo reproducir&aacute; el bug de "Cargando...".
+        </div>
+
+        <h3>Comandos para recrear el frontend manualmente</h3>
+        <p>Desde una terminal. En Windows usa <code>cmd</code> o la terminal de WebStorm/IntelliJ (PowerShell bloquea la ejecuci&oacute;n de los scripts <code>.ps1</code> de npm/ng):</p>
+        <pre>
+// 1) Crear el proyecto Angular (respuesta S a routing, CSS, y NO marcar SSR)
+ng new frontend-angular
+
+// 2) Entrar a la carpeta
+cd frontend-angular
+
+// 3) Instalar Bootstrap 5 (luego se importa en src/styles.css) y zone.js
+npm install bootstrap
+npm install zone.js
+
+// 3b) IMPORTANTE (ver nota de arriba): angular.json -> polyfills: ["zone.js"];
+//     app.config.ts -> provideZoneChangeDetection() en providers
+
+// 4) Generar los componentes (el .ts/.html luego se editan a mano)
+ng generate component components/login
+ng generate component components/materiales
+ng generate component components/tipos-material
+ng generate component components/proveedores
+ng generate component components/ordenes
+
+// 5) Generar los services (los metodos luego se completan a mano)
+ng generate service services/login
+ng generate service services/material
+ng generate service services/tipo-material
+ng generate service services/proveedor
+ng generate service services/orden
+
+// 6) Crear a mano (el CLI no genera interfaces):
+//    src/app/models/*.ts                     -> interfaces TypeScript
+//    src/app/services/auth.interceptor.ts    -> header Authorization Basic
+        </pre>
+
+        <h3>Archivos que se editan a mano tras generar el andamiaje</h3>
+        <ul>
+            <li><code>src/app/app.config.ts</code> &rarr; registrar <code>provideHttpClient(withInterceptors([authInterceptor]))</code>, <code>provideZoneChangeDetection()</code> y las rutas</li>
+            <li><code>src/app/app.routes.ts</code> &rarr; rutas <code>/login</code>, <code>/materiales</code>, <code>/tipos-material</code>, <code>/proveedores</code>, <code>/ordenes</code> + redirect a <code>/login</code></li>
+            <li><code>src/app/app.html</code> &rarr; navbar de Bootstrap (con enlace a Tipos de Material) + <code>&lt;router-outlet /&gt;</code></li>
+            <li><code>src/styles.css</code> &rarr; <code>@import 'bootstrap/dist/css/bootstrap.min.css';</code></li>
+            <li><code>src/index.html</code> &rarr; <code>lang="es"</code> y t&iacute;tulo "SERFAGAB - Gestión de Órdenes de Compra"</li>
+            <li>Cada componente <code>.ts</code> &rarr; <code>standalone: true</code>, imports <code>[CommonModule, FormsModule]</code>, inyecta su service y carga datos en <code>ngOnInit()</code></li>
+            <li>Cada service <code>.ts</code> &rarr; URL base <code>http://localhost:8080/api/...</code> y m&eacute;todos con <code>HttpClient</code></li>
+        </ul>
+
+        <h3>Estructura de carpetas del frontend</h3>
+        <pre>
+frontend-angular/
+|-- src/app/
+|   |-- app.config.ts             # HttpClient + interceptor + rutas
+|   |-- app.routes.ts             # definicion de rutas
+|   |-- app.ts / app.html         # componente raiz (navbar + router-outlet)
+|   |-- models/                   # interfaces TypeScript
+|   |   |-- login.ts  usuario.ts  tipo-material.ts  material.ts
+|   |   |-- proveedor.ts  detalle-orden.ts  orden-compra.ts
+|   |-- services/
+|   |   |-- auth.interceptor.ts   # header HTTP Basic (user/user123)
+|   |   |-- login.service.ts      # POST /api/auth/login
+|   |   |-- material.service.ts   # GET listar, GET buscarPorNombre, POST, PUT, DELETE
+|   |   |-- tipo-material.service.ts  # GET listar, POST, PUT, DELETE
+|   |   |-- proveedor.service.ts  # GET listar, POST crear, PUT, DELETE
+|   |   |-- orden.service.ts      # GET /usuario/1/paginado?page&size
+|   |-- components/
+|   |   |-- login/                # formulario login+clave -> navega a /materiales
+|   |   |-- materiales/           # tabla + busqueda + crear/editar/eliminar material
+|   |   |-- tipos-material/       # CRUD de tipos de material (pagina propia)
+|   |   |-- proveedores/          # tabla + formulario "nuevo proveedor" con validacion
+|   |   |-- ordenes/              # historial paginado + formulario "nueva orden"
+|-- package.json                  # bootstrap y zone.js quedan registrados tras npm install
+        </pre>
+
+        <h3>Validaciones y creaci&oacute;n de &oacute;rdenes en el frontend</h3>
+        <ul>
+            <li><strong>Validaci&oacute;n de proveedores (rojo/verde):</strong> el formulario valida en vivo el RUC (11 d&iacute;gitos), el celular (9 d&iacute;gitos) y el email (formato). Con las clases de Bootstrap <code>is-invalid</code>/<code>is-valid</code> el input se pinta rojo (no cumple) o verde (cumple) solo cuando el campo tiene contenido; el bot&oacute;n <em>Crear</em> queda deshabilitado mientras haya un campo inv&aacute;lido. Las validaciones son m&eacute;todos con <code>RegExp</code> en <code>proveedores.component.ts</code>.</li>
+            <li><strong>Crear &oacute;rdenes de compra:</strong> el formulario de <em>Nueva orden</em> elige proveedor (lista desde <code>GET /api/proveedores</code>), fecha, observaciones y filas de detalle (material desde <code>GET /api/materiales</code>, cantidad y precio). Al guardar se llama a <code>POST /api/ordenes-compra/1/crear</code> y luego <code>POST /api/ordenes-compra/{id}/agregar-detalle</code> por cada fila; se muestra el total estimado en vivo y al final se refresca el listado. El interceptor ya env&iacute;a <code>user/user123</code> (rol USER), por lo que la creaci&oacute;n funciona con cualquier login.</li>
+            <li><strong>Editar y eliminar (borrado l&oacute;gico):</strong> proveedores y materiales tienen botones <em>Editar</em> (abre un modal con el formulario cargado) y <em>Eliminar</em> (pide confirmaci&oacute;n y llama a <code>DELETE</code>, que solo pone <code>activo=false</code> en la base de datos). Las listas de <code>GET /api/proveedores</code> y <code>GET /api/materiales</code> devuelven solo los registros activos, por lo que los eliminados desaparecen (pero se conservan en BD).</li>
+            <li><strong>Crear material:</strong> el bot&oacute;n <em>+ Nuevo material</em> reutiliza el mismo modal de edici&oacute;n (llama a <code>POST /api/materiales</code>); el bot&oacute;n del modal cambia entre <em>Crear</em> y <em>Actualizar</em>. La columna "Versi&oacute;n" se ocult&oacute; de la tabla (el campo <code>@Version</code> se sigue usando internamente para la concurrencia optimista).</li>
+            <li><strong>Tipos de Material (p&aacute;gina propia):</strong> ruta <code>/tipos-material</code> con enlace en la navbar. Tabla (Id, Nombre, Descripci&oacute;n, Acciones) con modal para crear/editar y eliminar con borrado l&oacute;gico. <code>GET /api/tipos-material</code> solo devuelve los activos, por lo que el select de tipo al crear/editar un material solo ofrece tipos vigentes.</li>
+            <li><strong>Detalles y estado de &oacute;rdenes:</strong> cada fila del historial tiene un bot&oacute;n <em>Detalles</em> (modal con <code>GET /api/ordenes-compra/{id}</code> que muestra la tabla de materiales/cantidades/subtotales y el total) y un <em>select de estado</em> (PENDIENTE / ENVIADO / ANULADO) que llama a <code>PUT /api/ordenes-compra/{id}/estado?estado=...</code>.</li>
+        </ul>
+
+        <h3>C&oacute;mo arrancar el proyecto completo (desde cualquier PC)</h3>
+        <h4>Requisitos previos</h4>
+        <ul>
+            <li><strong>Backend:</strong> JDK 24 + Maven (o IntelliJ IDEA) y XAMPP con MySQL activo</li>
+            <li><strong>Frontend:</strong> Node.js 20+ con npm y Angular CLI global: <code>npm install -g @angular/cli</code></li>
+        </ul>
+
+        <h4>1) Base de datos (solo la primera vez)</h4>
+        <pre>
+// En phpMyAdmin (http://localhost/phpmyadmin) crear la base vacia:
+CREATE DATABASE serfagab_db;
+
+// Hibernate crea las tablas y el DataSeeder carga los datos en cada arranque
+        </pre>
+
+        <h4>2) Backend (puerto 8080)</h4>
+        <pre>
+// Desde la raiz del backend (carpeta AvanceGrupo5):
+mvn spring-boot:run
+// o abrir el proyecto en IntelliJ y ejecutar SerfagabApplication
+
+// Verificar: GET http://localhost:8080/api/materiales con user/user123 -> 200
+        </pre>
+
+        <h4>3) Frontend (puerto 4200)</h4>
+        <pre>
+// Desde la carpeta frontend-angular:
+npm install   // instala todas las dependencias del package.json (incluye bootstrap)
+npm start     // equivale a ng serve -> abre http://localhost:4200
+        </pre>
+
+        <h4>Desde otra PC</h4>
+        <ul>
+            <li>Copiar las dos carpetas (<code>AvanceGrupo5</code> y <code>frontend-angular</code>) o clonar el repositorio git, y repetir los pasos 1-3 en la nueva m&aacute;quina.</li>
+            <li>Si backend y frontend corren en m&aacute;quinas <strong>distintas</strong>: cambiar la URL base de los services (<code>src/app/services/*.service.ts</code>) de <code>http://localhost:8080</code> a <code>http://IP_DEL_BACKEND:8080</code> y permitir ese origen en el CORS del <code>SecurityConfig</code> (hoy solo acepta <code>localhost:4200</code>).</li>
+            <li>Credenciales: login de la app <code>admin</code> / <code>123</code> (se valida contra la tabla <code>tbl_usuario</code>); las llamadas a la API llevan HTTP Basic <code>user/user123</code> autom&aacute;ticamente v&iacute;a interceptor.</li>
+        </ul>
+    </section>
+
+    <!-- ===== 10. PRÓXIMOS AVANCES ===== -->
     <section id="avances">
-        <h2>9. Pr&oacute;ximos avances del proyecto</h2>
-        <p>Este avance ya incorpora los temas avanzados vistos en clase (MySQL, Spring Security, paginaci&oacute;n, consultas <code>@Query</code>, <code>@Version</code> e interceptores). Los pr&oacute;ximos pasos planificados son:</p>
+        <h2>10. Pr&oacute;ximos avances del proyecto</h2>
+        <p>Este avance ya incorpora los temas avanzados vistos en clase: MySQL, Spring Security, paginaci&oacute;n, consultas <code>@Query</code>, <code>@Version</code>, interceptores y el <strong>frontend Angular</strong> que consume la API. Los pr&oacute;ximos pasos planificados son:</p>
 
         <table>
             <tr><th>Avance</th><th>Descripci&oacute;n</th><th>Estado</th></tr>
@@ -928,14 +1119,15 @@ spring.jpa.show-sql=true</pre>
             <tr>
                 <td><strong>Avance 3</strong></td>
                 <td>
-                    <strong>Frontend Angular:</strong> Crear el frontend <code>frontend-angular</code> (Angular 22) que consuma la API:
+                    <strong>Frontend Angular:</strong> Crear el frontend <code>frontend-angular</code> (Angular 21, sin SSR) que consuma la API:
                     <ul>
                         <li>Componentes de login, listado de materiales, proveedores y &oacute;rdenes</li>
-                        <li>Services con <code>HttpClient</code> y modelos TypeScript</li>
+                        <li>Services con <code>HttpClient</code>, interceptor de HTTP Basic y modelos TypeScript</li>
                         <li>Rutas, Bootstrap 5 y CORS habilitado para <code>localhost:4200</code></li>
                     </ul>
+                    Ver la <a href="#frontend">secci&oacute;n 9</a> para los comandos y c&oacute;mo arrancarlo.
                 </td>
-                <td>Pendiente</td>
+                <td><span class="badge" style="background:#4CAF50;color:white;">HECHO</span></td>
             </tr>
             <tr>
                 <td><strong>Avance 4</strong></td>

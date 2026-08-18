@@ -17,12 +17,23 @@ public class ProveedorController {
 
     @PostMapping
     public ResponseEntity<Proveedor> crear(@RequestBody Proveedor proveedor) {
+        proveedor.setIdProveedor(null);
         return ResponseEntity.ok(proveedorRepository.save(proveedor));
     }
 
     @GetMapping
     public List<Proveedor> listar() {
-        return proveedorRepository.findAll();
+        return proveedorRepository.findByActivoTrue();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Proveedor> eliminar(@PathVariable Integer id) {
+        return proveedorRepository.findById(id)
+                .map(p -> {
+                    p.setActivo(false);
+                    return ResponseEntity.ok(proveedorRepository.save(p));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")

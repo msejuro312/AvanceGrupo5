@@ -24,6 +24,13 @@ public class MaterialController {
         return ResponseEntity.ok("Materiales registrados satisfactoriamente.");
     }
 
+    @PostMapping
+    public ResponseEntity<Material> crear(@RequestBody Material material) {
+        material.setIdMaterial(null);
+        material.setVersion(null);
+        return ResponseEntity.ok(materialRepository.save(material));
+    }
+
     @GetMapping
     public List<Material> listar() {
         return materialService.listarTodos();
@@ -48,6 +55,16 @@ public class MaterialController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(resultados);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Material> eliminar(@PathVariable Integer id) {
+        return materialRepository.findById(id)
+                .map(m -> {
+                    m.setActivo(false);
+                    return ResponseEntity.ok(materialRepository.save(m));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")

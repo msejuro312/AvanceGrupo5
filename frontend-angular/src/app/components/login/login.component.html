@@ -1,0 +1,22 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <h3 class="mb-4">Iniciar sesión - SERFAGAB</h3>
+
+    <div *ngIf="error" class="alert alert-danger">
+      Credenciales inválidas. Verifica login y clave.
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Login</label>
+      <input class="form-control" type="text" [(ngModel)]="login" placeholder="Login" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Clave</label>
+      <input class="form-control" type="password" [(ngModel)]="clave" placeholder="Clave"
+             (keyup.enter)="iniciarSesion()" />
+    </div>
+
+    <button class="btn btn-primary" (click)="iniciarSesion()">Iniciar sesión</button>
+  </div>
+</div>

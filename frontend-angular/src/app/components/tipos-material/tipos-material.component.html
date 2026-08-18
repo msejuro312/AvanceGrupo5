@@ -1,0 +1,53 @@
+<div class="mt-4">
+  <h3>Tipos de Material</h3>
+
+  <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
+
+  <button class="btn btn-primary mb-3" (click)="abrirNuevo()">+ Nuevo tipo de material</button>
+
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table class="table table-bordered" *ngIf="!cargando && tipos.length > 0">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of tipos">
+        <td>{{ t.idTipoMaterial }}</td>
+        <td>{{ t.nombre }}</td>
+        <td>{{ t.descripcion }}</td>
+        <td>
+          <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(t)">Editar</button>
+          <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(t)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && tipos.length == 0">No hay tipos de material para mostrar</div>
+</div>
+
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <div class="modal-card">
+    <h5 class="mb-3">{{ editandoId !== null ? 'Editar tipo de material' : 'Nuevo tipo de material' }}</h5>
+
+    <div class="mb-2">
+      <label class="form-label">Nombre</label>
+      <input class="form-control" [(ngModel)]="nuevo.nombre" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <input class="form-control" [(ngModel)]="nuevo.descripcion" />
+    </div>
+
+    <div class="text-end">
+      <button class="btn btn-secondary me-2" (click)="cancelarEdicion()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardar()">Guardar</button>
+    </div>
+  </div>
+</div>

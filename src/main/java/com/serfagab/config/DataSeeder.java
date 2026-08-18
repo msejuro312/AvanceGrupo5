@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.serfagab.entities.*;
 import com.serfagab.repository.*;
+import com.serfagab.service.OrdenCompraService;
 import java.time.LocalDate;
 
 @Component
@@ -13,15 +14,20 @@ public class DataSeeder implements CommandLineRunner {
     private final ProveedorRepository proveedorRepository;
     private final TipoMaterialRepository tipoMaterialRepository;
     private final MaterialRepository materialRepository;
+    private final OrdenCompraService ordenCompraService;
+    private final OrdenCompraRepository ordenCompraRepository;
 
     public DataSeeder(TipoRepository tipoRepository, UsuarioRepository usuarioRepository,
                       ProveedorRepository proveedorRepository, TipoMaterialRepository tipoMaterialRepository,
-                      MaterialRepository materialRepository) {
+                      MaterialRepository materialRepository,
+                      OrdenCompraService ordenCompraService, OrdenCompraRepository ordenCompraRepository) {
         this.tipoRepository = tipoRepository;
         this.usuarioRepository = usuarioRepository;
         this.proveedorRepository = proveedorRepository;
         this.tipoMaterialRepository = tipoMaterialRepository;
         this.materialRepository = materialRepository;
+        this.ordenCompraService = ordenCompraService;
+        this.ordenCompraRepository = ordenCompraRepository;
     }
 
     @Override
@@ -92,5 +98,38 @@ public class DataSeeder implements CommandLineRunner {
         m2.setDescripcion("para tablero");
         m2.setActivo(true);
         materialRepository.save(m2);
+
+        seedOrdenes();
+    }
+
+    private void seedOrdenes() {
+        crearOrden(1, 1, 1, LocalDate.now().minusDays(5), 10.0, 3.0, "ENVIADO", "Compra de pernos para tablero");
+        crearOrden(1, 2, 2, LocalDate.now().minusDays(4), 8.0, 4.0, "ENVIADO", "Compra de pernos 4x3");
+        crearOrden(1, 1, 1, LocalDate.now().minusDays(3), 15.0, 3.0, "ENVIADO", "Reposicion de stock");
+        crearOrden(1, 2, 2, LocalDate.now().minusDays(2), 5.0, 4.0, "PENDIENTE", "Orden en espera");
+        crearOrden(1, 1, 2, LocalDate.now().minusDays(1), 20.0, 4.0, "PENDIENTE", "Pedido urgente");
+        crearOrden(1, 2, 1, LocalDate.now(), 6.0, 3.0, "PENDIENTE", "Orden de hoy");
+        crearOrdenConDosDetalles();
+    }
+
+    private void crearOrden(int idUsuario, int idProveedor, int idMaterial, LocalDate fecha,
+                            double cantidad, double precio, String estado, String observaciones) {
+        OrdenCompra orden = ordenCompraService.crearOrden(idUsuario, idProveedor, fecha, observaciones);
+        ordenCompraService.agregarDetalle(orden.getIdOrdenCompra(), idMaterial, cantidad, precio);
+        cambiarEstado(orden.getIdOrdenCompra(), estado);
+    }
+
+    private void crearOrdenConDosDetalles() {
+        OrdenCompra orden = ordenCompraService.crearOrden(1, 1, LocalDate.now(), "Orden con dos materiales");
+        ordenCompraService.agregarDetalle(orden.getIdOrdenCompra(), 1, 12.0, 3.0);
+        ordenCompraService.agregarDetalle(orden.getIdOrdenCompra(), 2, 3.0, 4.0);
+        cambiarEstado(orden.getIdOrdenCompra(), "PENDIENTE");
+    }
+
+    private void cambiarEstado(Integer idOrden, String estado) {
+        ordenCompraRepository.findById(idOrden).ifPresent(orden -> {
+            orden.setEstado(estado);
+            ordenCompraRepository.save(orden);
+        });
     }
 }

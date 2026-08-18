@@ -1,0 +1,95 @@
+<div class="mt-4">
+  <h3>Materiales</h3>
+
+  <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input class="form-control" [(ngModel)]="textoBusqueda" placeholder="Buscar por nombre..."
+             (keyup.enter)="buscar()" />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-primary" (click)="buscar()">Buscar</button>
+    </div>
+    <div class="col-md-3 text-end">
+      <button class="btn btn-primary" (click)="abrirNuevo()">+ Nuevo material</button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table class="table table-bordered" *ngIf="!cargando && materiales.length > 0">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Unidad</th>
+        <th>Stock</th>
+        <th>Precio Ref.</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of materiales">
+        <td>{{ m.idMaterial }}</td>
+        <td>{{ m.nombre }}</td>
+        <td>{{ m.unidadMedida }}</td>
+        <td>{{ m.stockActual }}</td>
+        <td>{{ m.precioReferencial }}</td>
+        <td>{{ m.tipoMaterial?.nombre }}</td>
+        <td>
+          <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(m)">Editar</button>
+          <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(m)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && materiales.length == 0">No hay materiales para mostrar</div>
+</div>
+
+<div *ngIf="mostrarModal" class="modal-overlay">
+  <div class="modal-card">
+    <h5 class="mb-3">{{ editandoId !== null ? 'Editar material' : 'Nuevo material' }}</h5>
+
+    <div class="mb-2">
+      <label class="form-label">Nombre</label>
+      <input class="form-control" [(ngModel)]="edicion.nombre" />
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label">Tipo de material</label>
+        <select class="form-select" [(ngModel)]="edicion.tipoMaterial">
+          <option [ngValue]="null">-- Selecciona un tipo --</option>
+          <option *ngFor="let t of tiposMaterial" [ngValue]="t">{{ t.nombre }}</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label">Unidad de medida</label>
+        <input class="form-control" [(ngModel)]="edicion.unidadMedida" />
+      </div>
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label">Stock actual</label>
+        <input type="number" class="form-control" [(ngModel)]="edicion.stockActual" />
+      </div>
+      <div class="col-6">
+        <label class="form-label">Precio referencial</label>
+        <input type="number" step="0.01" class="form-control" [(ngModel)]="edicion.precioReferencial" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <input class="form-control" [(ngModel)]="edicion.descripcion" />
+    </div>
+
+    <div class="text-end">
+      <button class="btn btn-secondary me-2" (click)="cancelarEdicion()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardar()">
+        {{ editandoId !== null ? 'Actualizar' : 'Crear' }}
+      </button>
+    </div>
+  </div>
+</div>

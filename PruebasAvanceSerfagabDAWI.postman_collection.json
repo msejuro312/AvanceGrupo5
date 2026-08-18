@@ -1,0 +1,841 @@
+{
+  "info": {
+    "_postman_id": "332401f9-ef21-404f-aa66-99467f47df7e",
+    "name": "PruebasAvanceSerfagabDAWI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56716807",
+    "_collection_link": "https://go.postman.co/collection/56716807-332401f9-ef21-404f-aa66-99467f47df7e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET",
+      "item": [
+        {
+          "name": "Ver usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver proveedores",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/proveedores",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "proveedores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Proveedores por ID",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/proveedores/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "proveedores",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Veo los tipos de material",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Veo lista de materiales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/materiales",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "materiales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Veo orden de compra del usuario 1",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/usuario/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "usuario",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Orden con id 1 y sus detalles",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar con perno",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/materiales/buscarPorNombre?texto=perno",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "materiales",
+                "buscarPorNombre"
+              ],
+              "query": [
+                {
+                  "key": "texto",
+                  "value": "perno"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver page de OC",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/usuario/1/paginado?page=0&size=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "usuario",
+                "1",
+                "paginado"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver page de OC ordenadas",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/usuario/1/paginado/ordenado?page=0&size=5&sortBy=fecha&order=desc",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "usuario",
+                "1",
+                "paginado",
+                "ordenado"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "fecha"
+                },
+                {
+                  "key": "order",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscas OC enviadas",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/estado?estado=ENVIADO",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "estado"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "ENVIADO"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "POST",
+      "item": [
+        {
+          "name": "Logeo Correcto",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"login\":\"admin\",\"clave\":\"123\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logeo Incorrecto",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"login\":\"admin\",\"clave\":\"incorrecta\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Nuevo usuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombres\":\"Juan\",\"apellidos\":\"Perez\",\r\n \"login\":\"juanp\",\"clave\":\"123\",\r\n \"email\":\"juan@mail.com\",\"tipo\":{\"idTipo\":1}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/usuarios/registrar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "usuarios",
+                "registrar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Creo proveedor",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"razonSocial\":\"Nuevo Proveedor SAC\",\r\n \"ruc\":\"20123456789\",\"celular\":\"999888777\",\r\n \"email\":\"info@nuevo.com\",\r\n \"descripcion\":\"Proveedor de prueba\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/proveedores",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "proveedores"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Creo tipo material",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Cable\",\"descripcion\":\"Cables electricos\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tipos-material",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "tipos-material"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agrego  materiales por lote",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[{\"nombre\":\"Tornillo 5mm\",\r\n   \"unidadMedida\":\"unidad\",\r\n   \"stockActual\":100,\r\n   \"precioReferencial\":0.50,\r\n   \"tipoMaterial\":{\"idTipoMaterial\":1}},\r\n  {\"nombre\":\"Pintura Blanca\",\r\n   \"unidadMedida\":\"galon\",\r\n   \"stockActual\":20,\r\n   \"precioReferencial\":45.00,\r\n   \"tipoMaterial\":{\"idTipoMaterial\":2}}]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/materiales/lote",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "materiales",
+                "lote"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Creo orden de compra",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"proveedor\":{\"idProveedor\":1},\r\n \"fecha\":\"2025-12-15\",\r\n \"observaciones\":\"Pedido urgente\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/1/crear",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "1",
+                "crear"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agrego detalle",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"material\":{\"idMaterial\":1},\r\n  \"cantidad\":10,\r\n  \"precioUnitario\":5.00}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/1/agregar-detalle",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "1",
+                "agregar-detalle"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agrego otro detalle",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"material\":{\"idMaterial\":2},\r\n  \"cantidad\":5,\r\n  \"precioUnitario\":8.00}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/1/agregar-detalle",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "1",
+                "agregar-detalle"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PUT",
+      "item": [
+        {
+          "name": "Actualizar datos de proveedor",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"razonSocial\":\"Comercializadora Andina EIRL\",\r\n \"ruc\":\"20605478931\",\"celular\":\"999999999\",\r\n \"email\":\"nuevo@andina.com.pe\",\r\n \"descripcion\":\"Actualizado\",\"activo\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/proveedores/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "proveedores",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizo material",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Perno 3x3\",\r\n \"unidadMedida\":\"unidad\",\r\n \"stockActual\":50,\r\n \"precioReferencial\":3.50,\r\n \"tipoMaterial\":{\"idTipoMaterial\":1}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/materiales/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "materiales",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizado OC a enviado",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "user123",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/ordenes-compra/1/estado?estado=ENVIADO",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordenes-compra",
+                "1",
+                "estado"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "ENVIADO"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
