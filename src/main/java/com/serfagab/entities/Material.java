@@ -33,4 +33,7 @@ public class Material {
 
     @Column(name = "activo")
     private Boolean activo = true;
+
+    @Version
+    private Integer version; // Control de concurrencia optimista
 }

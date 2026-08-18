@@ -163,7 +163,7 @@
             <li>Consultar el historial de &oacute;rdenes por usuario</li>
         </ul>
         <div class="note">
-            <strong>Tecnolog&iacute;as:</strong> Java 24 &middot; Spring Boot 4.0.7 &middot; Spring Data JPA &middot; H2 (base en memoria) &middot; Lombok &middot; Maven
+            <strong>Tecnolog&iacute;as:</strong> Java 24 &middot; Spring Boot 4.0.7 &middot; Spring Data JPA &middot; Spring Security &middot; MySQL &middot; Lombok &middot; Maven
         </div>
     </section>
 
@@ -206,8 +206,8 @@
                         │
                         ▼
   ┌─────────────────────────────────────────────────────────────┐
-  │  Base de datos H2 en memoria                                │
-  │  (jdbc:h2:mem:serfagabdb)                                   │
+  │  Base de datos MySQL                                        │
+  │  (jdbc:mysql://localhost:3306/serfagab_db)                  │
   └─────────────────────────────────────────────────────────────┘</pre>
         </div>
         <h3>Flujo de una petici&oacute;n (ejemplo: login)</h3>
@@ -234,8 +234,11 @@
     │   │
     │   ├── SerfagabApplication.java    ← Punto de entrada de la aplicaci&oacute;n
     │   │
-    │   ├── config/
-    │   │   └── DataSeeder.java         ← Carga datos de prueba al iniciar
+    │   ├── config/                    ← Configuraci&oacute;n avanzada
+    │   │   ├── DataSeeder.java         ← Carga datos de prueba al iniciar
+    │   │   ├── SecurityConfig.java     ← Seguridad (Basic Auth, roles, CORS)
+    │   │   ├── WebConfig.java          ← Registra el LogInterceptor
+    │   │   └── LogInterceptor.java     ← Log de cada petici&oacute;n
     │   │
     │   ├── controller/                 ← 6 controladores REST
     │   │   ├── AuthController.java
@@ -562,12 +565,29 @@ spring.jpa.show-sql=true</pre>
     <!-- ===== 7. ENDPOINTS Y POSTMAN ===== -->
     <section id="endpoints">
         <h2>7. Endpoints y pruebas en Postman</h2>
-        <p>Antes de empezar, ejecuta la aplicaci&oacute;n con:</p>
-        <pre>mvn spring-boot:run</pre>
-        <p>O desde IntelliJ: haz clic en el bot&oacute;n de "Play" en la clase <code>SerfagabApplication</code>.</p>
-        <p>La aplicaci&oacute;n arrancar&aacute; en <code>http://localhost:8080</code>.</p>
+
+        <h3>Requisitos antes de ejecutar</h3>
+        <ol>
+            <li><strong>MySQL corriendo (XAMPP):</strong> abre XAMPP y pulsa <em>Start</em> en MySQL (puerto 3306).</li>
+            <li><strong>Crear la base de datos:</strong> en phpMyAdmin crea la base <code>serfagab_db</code> (solo la BD, <em>sin tablas</em>). Las tablas las genera Hibernate al arrancar la aplicaci&oacute;n gracias a <code>ddl-auto=create</code>.</li>
+            <li><strong>Ejecutar la aplicaci&oacute;n:</strong> desde IntelliJ, pulsa "Play" en la clase <code>SerfagabApplication</code> (o <code>mvn spring-boot:run</code>). Arrancar&aacute; en <code>http://localhost:8080</code>.</li>
+            <li><strong>Verificar:</strong> al arrancar se crean las tablas y el <code>DataSeeder</code> inserta los datos de prueba autom&aacute;ticamente.</li>
+        </ol>
+
+        <div class="note">
+            <strong>Seguridad (agregada en la Fase 2):</strong> la API usa <strong>HTTP Basic</strong> con usuarios en memoria:
+            <code>admin/admin123</code> (rol ADMIN) y <code>user/user123</code> (rol USER).
+            En Postman, pesta&ntilde;a <em>Authorization</em> &rarr; tipo <em>Basic Auth</em> y coloca esas credenciales.
+            <br><br>
+            <strong>Rutas p&uacute;blicas (sin autenticaci&oacute;n):</strong> <code>/api/auth/login</code>, <code>/api/usuarios/**</code>,
+            <code>/api/materiales/**</code> y <code>/api/tipos-material/**</code>.
+            <strong>Rutas protegidas:</strong> <code>/api/proveedores/**</code> (cualquier usuario autenticado) y
+            <code>/api/ordenes-compra/**</code> (solo rol USER).
+            Si pruebas las rutas protegidas sin credenciales obtendr&aacute;s <code>401 Unauthorized</code>.
+        </div>
 
         <h3>Colecci&oacute;n de endpoints para Postman</h3>
+        <p><em>Nota:</em> salvo que se indique, los endpoints p&uacute;blicos no requieren credenciales.</p>
         
         <table>
             <tr>
@@ -751,6 +771,34 @@ spring.jpa.show-sql=true</pre>
                 <td>200 + orden con id=1 y sus detalles</td>
                 <td>Manuel</td>
             </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/materiales/buscarPorNombre?texto=perno</code></td>
+                <td>&mdash;</td>
+                <td>200 + materiales que contengan "perno" (consulta <code>@Query</code>)</td>
+                <td>Oscar</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/usuario/1/paginado?page=0&size=5</code></td>
+                <td>&mdash;</td>
+                <td>200 + <code>Page</code> de &oacute;rdenes (content, totalElements, totalPages...)</td>
+                <td>Manuel</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/usuario/1/paginado/ordenado?page=0&size=5&sortBy=fecha&order=desc</code></td>
+                <td>&mdash;</td>
+                <td>200 + &oacute;rdenes paginadas y ordenadas por fecha</td>
+                <td>Manuel</td>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>http://localhost:8080/api/ordenes-compra/estado?estado=ENVIADO</code></td>
+                <td>&mdash;</td>
+                <td>200 + todas las &oacute;rdenes con estado ENVIADO (requiere rol USER)</td>
+                <td>Manuel</td>
+            </tr>
         </table>
 
         <h3>Flujo completo de prueba (paso a paso)</h3>
@@ -770,14 +818,48 @@ spring.jpa.show-sql=true</pre>
             <strong>Tip para Postman:</strong> Crea una <strong>Colecci&oacute;n</strong> nueva llamada "SERFAGAB API" y dentro crea carpetas por m&oacute;dulo (Auth, Usuarios, Proveedores, Materiales, &Oacute;rdenes). Guarda cada petici&oacute;n para reutilizarlas.
         </div>
 
-        <h3>Consola H2 (base de datos)</h3>
-        <p>Puedes ver los datos directamente en el navegador:</p>
+        <h3>Verificar los datos en phpMyAdmin</h3>
+        <p>Como ahora se usa MySQL, puedes revisar las tablas y datos directamente en phpMyAdmin:</p>
         <ul>
-            <li>URL: <code>http://localhost:8080/h2-console</code></li>
-            <li>JDBC URL: <code>jdbc:h2:mem:serfagabdb</code></li>
-            <li>Usuario: <code>sa</code> / Contrase&ntilde;a: <em>(vac&iacute;o)</em></li>
-            <li>Una vez dentro, ejecuta <code>SELECT * FROM TBL_USUARIO</code> para ver los usuarios</li>
+            <li>URL: <code>http://localhost/phpmyadmin</code> &rarr; base <code>serfagab_db</code></li>
+            <li>Tablas generadas por Hibernate: <code>tbl_tipo</code>, <code>tbl_usuario</code>, <code>tbl_proveedor</code>, <code>tbl_tipo_material</code>, <code>tbl_material</code>, <code>tbl_orden_compra</code>, <code>tbl_detalle_orden_compra</code></li>
+            <li>El <code>DataSeeder</code> inserta los datos de prueba en cada arranque (con <code>ddl-auto=create</code> las tablas se regeneran cada vez que ejecutas la app)</li>
         </ul>
+
+        <h3>Novedades de las Fases 2-4 (para demostrar en clase)</h3>
+        <table>
+            <tr><th>Tema</th><th>Qu&eacute; se hizo</th><th>C&oacute;mo probarlo</th></tr>
+            <tr>
+                <td><strong>Seguridad</strong></td>
+                <td>HTTP Basic, usuarios en memoria (admin/user), rutas <code>permitAll</code>, CORS para Angular</td>
+                <td>Pedir una ruta protegida (ej. <code>GET /api/ordenes-compra/usuario/1/paginado?page=0&size=5</code>) sin credenciales &rarr; 401. Con <code>user/user123</code> &rarr; 200</td>
+            </tr>
+            <tr>
+                <td><strong>Paginaci&oacute;n</strong></td>
+                <td>Endpoint <code>/paginado</code> y <code>/paginado/ordenado</code> con <code>Page</code>/<code>Pageable</code>/<code>Sort</code></td>
+                <td>Crear varias &oacute;rdenes y consultar con <code>page=0&size=2</code>; observar <code>totalElements</code> y <code>content</code></td>
+            </tr>
+            <tr>
+                <td><strong>Consultas <code>@Query</code></strong></td>
+                <td>JPQL con <code>LIKE</code> en <code>MaterialRepository.buscarPorNombre</code> y <code>OrdenCompraRepository.findByEstado</code></td>
+                <td><code>GET /api/materiales/buscarPorNombre?texto=perno</code> y <code>GET /api/ordenes-compra/estado?estado=ENVIADO</code></td>
+            </tr>
+            <tr>
+                <td><strong><code>@Version</code></strong></td>
+                <td>Concurrencia optimista en <code>Material</code> (columna <code>version</code> autogenerada)</td>
+                <td>Al listar un material en la respuesta JSON aparece el campo <code>version</code>; en phpMyAdmin hay una columna <code>version</code> en <code>tbl_material</code></td>
+            </tr>
+            <tr>
+                <td><strong>Query hint</strong></td>
+                <td><code>MaterialService.listarTodos()</code> lee con <code>fetchSize=5</code> usando <code>EntityManager</code></td>
+                <td>En la consola de IntelliJ se ven los <code>SELECT</code> con la config avanzada de Hibernate (batch_size, statistics)</td>
+            </tr>
+            <tr>
+                <td><strong>Interceptores</strong></td>
+                <td><code>LogInterceptor</code> registrado en <code>WebConfig</code></td>
+                <td>En la consola de IntelliJ, cada petici&oacute;n imprime <code>-> Pre-Handle: GET /api/...</code> y <code><- Post-Completion</code></td>
+            </tr>
+        </table>
     </section>
 
     <!-- ===== 8. DATOS DE PRUEBA ===== -->
@@ -813,38 +895,47 @@ spring.jpa.show-sql=true</pre>
     <!-- ===== 9. PRÓXIMOS AVANCES ===== -->
     <section id="avances">
         <h2>9. Pr&oacute;ximos avances del proyecto</h2>
-        <p>Este primer avance cubre la API REST b&aacute;sica con H2 en memoria. Los pr&oacute;ximos pasos planificados son:</p>
+        <p>Este avance ya incorpora los temas avanzados vistos en clase (MySQL, Spring Security, paginaci&oacute;n, consultas <code>@Query</code>, <code>@Version</code> e interceptores). Los pr&oacute;ximos pasos planificados son:</p>
 
         <table>
-            <tr><th>Avance</th><th>Descripci&oacute;n</th><th>Prioridad</th></tr>
+            <tr><th>Avance</th><th>Descripci&oacute;n</th><th>Estado</th></tr>
             <tr>
                 <td><strong>Avance 2</strong></td>
                 <td>
-                    <strong>Migrar a MySQL:</strong> Cambiar de H2 en memoria a MySQL persistente. Se usar&aacute; el script SQL de referencia (<code>serfagab.sql</code>) para crear las tablas. Esto implica:
+                    <strong>Migrar a MySQL:</strong> Cambiar de H2 en memoria a MySQL persistente.
                     <ul>
-                        <li>Cambiar <code>application.properties</code> (driver, URL, usuario/contrase&ntilde;a MySQL)</li>
-                        <li>Cambiar <code>ddl-auto=create</code> a <code>ddl-auto=none</code> (las tablas se crean con el script)</li>
                         <li>Agregar dependencia de <code>mysql-connector-j</code> al pom.xml</li>
-                        <li>Ejecutar <code>serfagab.sql</code> en MySQL Workbench o consola</li>
-                        <li>Eliminar o modificar <code>DataSeeder</code> (los datos ya vendr&aacute;n del script SQL)</li>
+                        <li>Configurar <code>application.properties</code> (URL <code>jdbc:mysql://localhost:3306/serfagab_db</code>, dialecto MySQL)</li>
+                        <li>Agregar config avanzada de Hibernate (batch_size, order_inserts, statistics)</li>
                     </ul>
                 </td>
-                <td>Alta</td>
+                <td><span class="badge" style="background:#4CAF50;color:white;">HECHO</span></td>
+            </tr>
+            <tr>
+                <td><strong>Avance 2b</strong></td>
+                <td>
+                    <strong>Seguridad + JPA avanzado:</strong>
+                    <ul>
+                        <li>Spring Security: HTTP Basic, roles ADMIN/USER, rutas <code>permitAll</code>, CORS</li>
+                        <li>Paginaci&oacute;n y ordenamiento con <code>Page</code>/<code>Sort</code></li>
+                        <li>Consultas <code>@Query</code>/<code>@Param</code> (LIKE y por estado)</li>
+                        <li><code>@Version</code> (concurrencia optimista) y query hints (<code>fetchSize</code>)</li>
+                        <li>Interceptores de log</li>
+                    </ul>
+                </td>
+                <td><span class="badge" style="background:#4CAF50;color:white;">HECHO</span></td>
             </tr>
             <tr>
                 <td><strong>Avance 3</strong></td>
                 <td>
-                    <strong>Interfaz web con Thymeleaf:</strong> Agregar una interfaz HTML para usuarios finales. Incluir&aacute;:
+                    <strong>Frontend Angular:</strong> Crear el frontend <code>frontend-angular</code> (Angular 22) que consuma la API:
                     <ul>
-                        <li>P&aacute;gina de login</li>
-                        <li>Dashboard con resumen de &oacute;rdenes, proveedores, materiales</li>
-                        <li>Formularios para crear/editar proveedores, materiales y &oacute;rdenes</li>
-                        <li>Tablas con DataTables para listar datos</li>
-                        <li>Notificaciones con SweetAlert2</li>
+                        <li>Componentes de login, listado de materiales, proveedores y &oacute;rdenes</li>
+                        <li>Services con <code>HttpClient</code> y modelos TypeScript</li>
+                        <li>Rutas, Bootstrap 5 y CORS habilitado para <code>localhost:4200</code></li>
                     </ul>
-                    Se usar&aacute;n Bootstrap 5 y Font Awesome para el dise&ntilde;o.
                 </td>
-                <td>Alta</td>
+                <td>Pendiente</td>
             </tr>
             <tr>
                 <td><strong>Avance 4</strong></td>
@@ -858,7 +949,7 @@ spring.jpa.show-sql=true</pre>
                     </ul>
                     Se agregar&aacute; la dependencia de JasperReports al pom.xml y el archivo de plantilla <code>.jrxml</code>.
                 </td>
-                <td>Media</td>
+                <td>Pendiente</td>
             </tr>
             <tr>
                 <td><strong>Avance 5</strong></td>
@@ -871,7 +962,7 @@ spring.jpa.show-sql=true</pre>
                         <li>Roles de usuario (administrador, operador, etc.)</li>
                     </ul>
                 </td>
-                <td>Media</td>
+                <td>Pendiente</td>
             </tr>
             <tr>
                 <td><strong>Avance 6</strong></td>
@@ -885,7 +976,7 @@ spring.jpa.show-sql=true</pre>
                         <li>Pruebas unitarias con JUnit y Spring Boot Test</li>
                     </ul>
                 </td>
-                <td>Baja</td>
+                <td>Pendiente</td>
             </tr>
         </table>
     </section>

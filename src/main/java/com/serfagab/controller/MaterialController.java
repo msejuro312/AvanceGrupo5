@@ -41,6 +41,15 @@ public class MaterialController {
         return materialService.buscar(nombre);
     }
 
+    @GetMapping("/buscarPorNombre")
+    public ResponseEntity<List<Material>> buscarPorNombreParam(@RequestParam String texto) {
+        List<Material> resultados = materialRepository.buscarPorNombre(texto);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Material> actualizar(@PathVariable Integer id, @RequestBody Material material) {
         return materialRepository.findById(id)

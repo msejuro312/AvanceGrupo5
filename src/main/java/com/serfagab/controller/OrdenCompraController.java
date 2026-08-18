@@ -1,5 +1,9 @@
 package com.serfagab.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.serfagab.entities.DetalleOrdenCompra;
@@ -58,6 +62,36 @@ public class OrdenCompraController {
     @GetMapping("/usuario/{idUsuario}")
     public List<OrdenCompra> historial(@PathVariable Integer idUsuario) {
         return ordenCompraService.listarPorUsuario(idUsuario);
+    }
+
+    @GetMapping("/usuario/{idUsuario}/paginado")
+    public Page<OrdenCompra> historialPaginado(@PathVariable Integer idUsuario, @RequestParam int page, @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ordenCompraRepository.findByUsuarioIdUsuario(idUsuario, pageable);
+    }
+
+    @GetMapping("/usuario/{idUsuario}/paginado/ordenado")
+    public Page<OrdenCompra> historialPaginadoOrdenado(
+            @PathVariable Integer idUsuario,
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(defaultValue = "fecha") String sortBy,
+            @RequestParam(defaultValue = "desc") String order
+    ) {
+        Sort sort = order.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ordenCompraRepository.findByUsuarioIdUsuario(idUsuario, pageable);
+    }
+
+    @GetMapping("/estado")
+    public ResponseEntity<List<OrdenCompra>> listarPorEstado(@RequestParam String estado) {
+        List<OrdenCompra> ordenes = ordenCompraRepository.findByEstado(estado);
+        if (ordenes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(ordenes);
     }
 
     @GetMapping("/{idOrden}")
