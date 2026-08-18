@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Exposici&oacute;n - SERFAGAB S.A.C.</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            line-height: 1.7;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 5px solid #e94560;
+        }
+        header h1 { font-size: 2em; margin-bottom: 6px; }
+        header p { font-size: 1em; opacity: 0.85; }
+
+        section {
+            background: white;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .section-header {
+            background: #0f3460;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .section-body { padding: 25px; }
+        h3 { color: #16213e; margin: 20px 0 10px; font-size: 1.15em; }
+        h4 { color: #0f3460; margin: 15px 0 8px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.92em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #0f3460;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .order-table th:first-child { width: 10%; }
+        .order-table th:nth-child(2) { width: 12%; }
+        .order-table th:nth-child(3) { width: 55%; }
+        .order-table th:nth-child(4) { width: 8%; }
+
+        pre {
+            background: #1a1a2e;
+            color: #f0e6d3;
+            padding: 12px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            margin: 8px 0;
+            font-family: 'Consolas', monospace;
+            line-height: 1.5;
+        }
+        code {
+            background: #1a1a2e;
+            color: #f0e6d3;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            font-family: 'Consolas', monospace;
+        }
+        .inline-code { background: #e8eaf6; color: #283593; padding: 1px 5px; border-radius: 3px; font-size: 0.88em; }
+
+        .member-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .badge-val { background: #E91E63; color: white; }
+        .badge-car { background: #FF9800; color: white; }
+        .badge-osc { background: #2196F3; color: white; }
+        .badge-man { background: #4CAF50; color: white; }
+
+        .explanation { background: #e3f2fd; padding: 12px 16px; border-radius: 8px; margin: 8px 0; font-size: 0.93em; }
+        .explanation strong { color: #0f3460; }
+
+        ul { margin: 8px 0; padding-left: 22px; }
+        li { margin: 4px 0; }
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.4em; }
+            .section-body { padding: 15px; }
+        }
+        .endpoint-url { font-family: 'Consolas', monospace; font-size: 0.92em; color: #1565C0; }
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.78em;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+        .tag-get { background: #4CAF50; color: white; }
+        .tag-post { background: #FF9800; color: white; }
+        .tag-put { background: #2196F3; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>Plan de Exposici&oacute;n</h1>
+        <p>SERFAGAB S.A.C. &mdash; Sistema de Gesti&oacute;n de &Oacute;rdenes de Compra</p>
+        <p style="margin-top:8px;font-size:0.85em;opacity:0.7;">Desarrollo de Aplicaciones Web &middot; Grupo 5 &middot; Julio 2026</p>
+    </header>
+
+    <!-- ===== 1. ORDEN DE EXPOSICIÓN ===== -->
+    <section>
+        <div class="section-header">1. Orden de exposici&oacute;n</div>
+        <div class="section-body">
+            <table class="order-table">
+                <tr>
+                    <th>Orden</th>
+                    <th>Integrante</th>
+                    <th>Actividad</th>
+                    <th>Tiempo</th>
+                </tr>
+                <tr>
+                    <td><strong>1&ordm;</strong></td>
+                    <td><span class="member-badge badge-val">Valerie</span></td>
+                    <td>Presentaci&oacute;n del PPT &laquo;SISTEMA WEB DE GESTI&Oacute;N DE COMPRAS&raquo; &mdash; 15 diapositivas: empresa, diagn&oacute;stico, soluci&oacute;n, objetivos, arquitectura t&eacute;cnica.</td>
+                    <td>~3 min</td>
+                </tr>
+                <tr>
+                    <td><strong>2&ordm;</strong></td>
+                    <td><span class="member-badge badge-val">Valerie</span></td>
+                    <td>Pruebas Postman: <strong>Autenticaci&oacute;n y Usuarios</strong> &mdash; login exitoso, login fallido, registrar usuario, listar usuarios.</td>
+                    <td>~3 min</td>
+                </tr>
+                <tr>
+                    <td><strong>3&ordm;</strong></td>
+                    <td><span class="member-badge badge-car">Carlos</span></td>
+                    <td>Pruebas Postman: <strong>Proveedores y &Oacute;rdenes de Compra (parte 1)</strong> &mdash; CRUD proveedores, crear orden, agregar detalles.</td>
+                    <td>~4 min</td>
+                </tr>
+                <tr>
+                    <td><strong>4&ordm;</strong></td>
+                    <td><span class="member-badge badge-osc">Oscar</span></td>
+                    <td>Pruebas Postman: <strong>Tipos de Material y Materiales</strong> &mdash; CRUD tipos de material, CRUD materiales, registro por lote, b&uacute;squeda.</td>
+                    <td>~4 min</td>
+                </tr>
+                <tr>
+                    <td><strong>5&ordm;</strong></td>
+                    <td><span class="member-badge badge-man">Manuel</span></td>
+                    <td>Pruebas Postman: <strong>&Oacute;rdenes de Compra (parte 2) + Cierre</strong> &mdash; cambio de estado, historial, detalle de OC. Conclusiones y ronda de preguntas.</td>
+                    <td>~3 min</td>
+                </tr>
+            </table>
+            <div class="note">
+                <strong>Total estimado:</strong> ~17 minutos de exposici&oacute;n + ronda de preguntas.
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 2. PRUEBAS POSTMAN ===== -->
+    <section>
+        <div class="section-header">2. Pruebas Postman &mdash; Detalle por integrante</div>
+        <div class="section-body">
+
+            <!-- ==================== VALERIE ==================== -->
+            <h3 style="color:#E91E63; border-bottom: 2px solid #E91E63; padding-bottom:5px;">Valerie &mdash; Autenticaci&oacute;n y Usuarios</h3>
+
+            <h4>PRUEBA 1: Login exitoso</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/auth/login</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"login":"admin","clave":"123"}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + datos del usuario admin (Valerie Cavero, idTipo=1)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> El <code>AuthController</code> recibe el JSON, lo convierte en un objeto <code>LoginRequest</code> (anotado con <code>@RequestBody</code>). Llama al repositorio <code>UsuarioRepository.findByLoginAndClave()</code>, que Spring Data JPA traduce autom&aacute;ticamente a <code>WHERE login = ? AND clave = ?</code>. Como el DataSeeder precarg&oacute; al usuario admin/123, lo encuentra y lo devuelve. Si no lo encuentra, <code>Optional.orElse(null)</code> retorna null y responde con 401.
+            </div>
+            <pre>// AuthController.java
+@PostMapping("/login")
+public ResponseEntity&lt;?&gt; login(@RequestBody LoginRequest loginRequest) {
+    Usuario usuario = usuarioRepository
+        .findByLoginAndClave(loginRequest.getLogin(), loginRequest.getClave())
+        .orElse(null);
+    if (usuario == null)
+        return ResponseEntity.status(401).body("Credenciales invalidas");
+    return ResponseEntity.ok(usuario);
+}
+
+// UsuarioRepository.java
+public interface UsuarioRepository extends JpaRepository&lt;Usuario, Integer&gt; {
+    Optional&lt;Usuario&gt; findByLoginAndClave(String login, String clave);
+}</pre>
+
+            <h4>PRUEBA 2: Login fallido (credenciales incorrectas)</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/auth/login</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"login":"admin","clave":"incorrecta"}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>401 Unauthorized + <code>"Credenciales invalidas"</code></td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> Misma l&oacute;gica que la prueba anterior. Al no coincidir la clave, <code>findByLoginAndClave</code> retorna un <code>Optional.empty()</code>. El <code>orElse(null)</code> devuelve null, y el controller responde con 401. Esto demuestra que el sistema rechaza accesos no autorizados.
+            </div>
+
+            <h4>PRUEBA 3: Registrar nuevo usuario</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/usuarios/registrar</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"nombres":"Juan","apellidos":"Perez",
+ "login":"juanp","clave":"123",
+ "email":"juan@mail.com","tipo":{"idTipo":1}}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + datos del nuevo usuario con id generado autom&aacute;ticamente</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>UsuarioController.registrar()</code> recibe el JSON, Spring convierte autom&aacute;ticamente las relaciones (como <code>tipo.idTipo</code>) en objetos JPA. Llama a <code>usuarioRepository.save(usuario)</code>, que ejecuta un <code>INSERT</code> SQL. Como <code>idUsuario</code> tiene <code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code>, la base de datos asigna autom&aacute;ticamente el ID.
+            </div>
+            <pre>// UsuarioController.java
+@PostMapping("/registrar")
+public ResponseEntity&lt;Usuario&gt; registrar(@RequestBody Usuario usuario) {
+    return ResponseEntity.ok(usuarioRepository.save(usuario));
+}
+
+// Usuario.java (fragmento)
+@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+private Integer idUsuario;
+@ManyToOne @JoinColumn(name = "id_tipo")
+private Tipo tipo;</pre>
+
+            <h4>PRUEBA 4: Listar usuarios</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/usuarios</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + lista de todos los usuarios registrados (admin + Juan)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>UsuarioController.listar()</code> llama a <code>usuarioRepository.findAll()</code>, m&eacute;todo heredado de <code>JpaRepository</code> que ejecuta un <code>SELECT * FROM tbl_usuario</code>. Devuelve la lista completa como JSON.
+            </div>
+            <pre>// UsuarioController.java
+@GetMapping
+public List&lt;Usuario&gt; listar() {
+    return usuarioRepository.findAll();
+}</pre>
+
+            <hr style="margin:30px 0; border: none; border-top: 2px dashed #ddd;">
+
+            <!-- ==================== CARLOS ==================== -->
+            <h3 style="color:#FF9800; border-bottom: 2px solid #FF9800; padding-bottom:5px;">Carlos &mdash; Proveedores y &Oacute;rdenes de Compra (parte 1)</h3>
+
+            <h4>PRUEBA 5: Crear proveedor</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/proveedores</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"razonSocial":"Nuevo Proveedor SAC",
+ "ruc":"20123456789","celular":"999888777",
+ "email":"info@nuevo.com",
+ "descripcion":"Proveedor de prueba"}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + datos del proveedor creado (con id autogenerado, activo = true por defecto)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>ProveedorController.crear()</code> usa <code>@RequestBody</code> para convertir el JSON en un objeto <code>Proveedor</code>. Al no enviar <code>activo</code>, el campo toma el valor por defecto definido en la entidad: <code>private Boolean activo = true</code>. <code>proveedorRepository.save()</code> ejecuta el INSERT.
+            </div>
+            <pre>// ProveedorController.java
+@PostMapping
+public ResponseEntity&lt;Proveedor&gt; crear(@RequestBody Proveedor proveedor) {
+    return ResponseEntity.ok(proveedorRepository.save(proveedor));
+}
+
+// Proveedor.java (fragmento)
+@Column(name = "activo")
+private Boolean activo = true;  // valor por defecto</pre>
+
+            <h4>PRUEBA 6: Listar proveedores</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/proveedores</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + lista de proveedores (2 precargados + 1 creado = 3)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>findAll()</code> de <code>JpaRepository</code> selecciona todos los registros de <code>tbl_proveedor</code>. El DataSeeder precarg&oacute; 2 proveedores, m&aacute;s el que creamos en la prueba anterior.
+            </div>
+
+            <h4>PRUEBA 7: Obtener proveedor por ID</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/proveedores/1</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + datos del proveedor con id=1</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>@PathVariable Integer id</code> extrae el valor <code>1</code> de la URL. <code>findById(1)</code> ejecuta <code>SELECT * FROM tbl_proveedor WHERE id_proveedor = 1</code>. Si existe, devuelve 200; si no, 404 gracias a <code>.orElse(ResponseEntity.notFound().build())</code>.
+            </div>
+
+            <h4>PRUEBA 8: Actualizar proveedor</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-put">PUT</span> <span class="endpoint-url">http://localhost:8080/api/proveedores/1</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"razonSocial":"Comercializadora Andina EIRL",
+ "ruc":"20605478931","celular":"999999999",
+ "email":"nuevo@andina.com.pe",
+ "descripcion":"Actualizado","activo":true}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + datos actualizados (celular=999999999, email cambiado)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> El m&eacute;todo primero busca el proveedor por ID. Si existe, obtiene el objeto manejado por JPA (persistente) y actualiza sus campos con los del JSON recibido. Luego <code>save(p)</code> ejecuta un <code>UPDATE</code>. Como el objeto es persistente, JPA detecta los cambios autom&aacute;ticamente (dirty checking).
+            </div>
+            <pre>// ProveedorController.java - actualizar
+@PutMapping("/{id}")
+public ResponseEntity&lt;Proveedor&gt; actualizar(@PathVariable Integer id,
+        @RequestBody Proveedor proveedor) {
+    return proveedorRepository.findById(id)
+            .map(p -> {
+                p.setRazonSocial(proveedor.getRazonSocial());
+                p.setRuc(proveedor.getRuc());
+                p.setCelular(proveedor.getCelular());
+                p.setEmail(proveedor.getEmail());
+                p.setDescripcion(proveedor.getDescripcion());
+                p.setActivo(proveedor.getActivo());
+                return ResponseEntity.ok(proveedorRepository.save(p));
+            })
+            .orElse(ResponseEntity.notFound().build());
+}</pre>
+
+            <h4>PRUEBA 9: Crear orden de compra</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/ordenes-compra/1/crear</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"proveedor":{"idProveedor":1},
+ "fecha":"2025-12-15",
+ "observaciones":"Pedido urgente"}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + orden creada con estado "PENDIENTE", total=0.0</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>OrdenCompraController.crear()</code> recibe el idUsuario=1 desde la URL y extrae el proveedor del JSON. Delega en <code>OrdenCompraService.crearOrden()</code>, que: 1) busca Usuario y Proveedor por ID, 2) crea una nueva OrdenCompra con estado "PENDIENTE" y total 0.0, 3) la guarda. La anotaci&oacute;n <code>@Transactional</code> asegura que todo se ejecute en una sola transacci&oacute;n.
+            </div>
+            <pre>// OrdenCompraService.java - crearOrden
+@Transactional
+public OrdenCompra crearOrden(Integer idUsuario, Integer idProveedor,
+        LocalDate fecha, String observaciones) {
+    Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow();
+    Proveedor proveedor = proveedorRepository.findById(idProveedor).orElseThrow();
+    OrdenCompra orden = new OrdenCompra();
+    orden.setUsuario(usuario);
+    orden.setProveedor(proveedor);
+    orden.setFecha(fecha);
+    orden.setEstado("PENDIENTE");
+    orden.setTotal(0.0);
+    orden.setObservaciones(observaciones);
+    return ordenCompraRepository.save(orden);
+}</pre>
+
+            <h4>PRUEBA 10: Agregar detalle a la orden (x2)</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/ordenes-compra/1/agregar-detalle</span></td></tr>
+                <tr><th>Body 1</th><td><pre>{"material":{"idMaterial":1},
+ "cantidad":10, "precioUnitario":5.00}</pre></td></tr>
+                <tr><th>Respuesta 1</th><td>200 OK + detalle creado con subtotal=50. Total de OC actualizado a 50.</td></tr>
+                <tr><th>Body 2</th><td><pre>{"material":{"idMaterial":2},
+ "cantidad":5, "precioUnitario":8.00}</pre></td></tr>
+                <tr><th>Respuesta 2</th><td>200 OK + detalle con subtotal=40. Total de OC ahora = 90.</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>agregarDetalle()</code> en el Service: 1) busca la orden y el material por ID, 2) calcula <code>subtotal = cantidad * precioUnitario</code>, 3) crea y guarda el <code>DetalleOrdenCompra</code>, 4) <strong>acumula</strong> el subtotal al total de la orden y la vuelve a guardar. Esto demuestra la l&oacute;gica de negocio: cada detalle actualiza el total de la orden autom&aacute;ticamente.
+            </div>
+            <pre>// OrdenCompraService.java - agregarDetalle
+@Transactional
+public DetalleOrdenCompra agregarDetalle(Integer idOrden, Integer idMaterial,
+        Double cantidad, Double precioUnitario) {
+    OrdenCompra orden = ordenCompraRepository.findById(idOrden).orElseThrow();
+    Material material = materialRepository.findById(idMaterial).orElseThrow();
+    Double subtotal = cantidad * precioUnitario;
+    DetalleOrdenCompra detalle = new DetalleOrdenCompra();
+    detalle.setOrdenCompra(orden);
+    detalle.setMaterial(material);
+    detalle.setCantidad(cantidad);
+    detalle.setPrecioUnitario(precioUnitario);
+    detalle.setSubtotal(subtotal);
+    detalleRepository.save(detalle);
+    orden.setTotal(orden.getTotal() + subtotal);  // acumula al total
+    ordenCompraRepository.save(orden);
+    return detalle;
+}</pre>
+
+            <hr style="margin:30px 0; border: none; border-top: 2px dashed #ddd;">
+
+            <!-- ==================== OSCAR ==================== -->
+            <h3 style="color:#2196F3; border-bottom: 2px solid #2196F3; padding-bottom:5px;">Oscar &mdash; Tipos de Material y Materiales</h3>
+
+            <h4>PRUEBA 11: Crear tipo de material</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/tipos-material</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"nombre":"Cable","descripcion":"Cables electricos"}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + tipo de material creado (con id autogenerado, activo=true)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> Misma l&oacute;gica que la creaci&oacute;n de proveedores. <code>@RequestBody</code> convierte el JSON, <code>save()</code> ejecuta INSERT. El campo <code>activo</code> tiene valor por defecto <code>true</code> en la entidad.
+            </div>
+
+            <h4>PRUEBA 12: Listar tipos de material</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/tipos-material</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + lista (Plancha, Pintura + Cable si se cre&oacute;)</td></tr>
+            </table>
+
+            <h4>PRUEBA 13: Registrar materiales por lote</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-post">POST</span> <span class="endpoint-url">http://localhost:8080/api/materiales/lote</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>[{"nombre":"Tornillo 5mm",
+   "unidadMedida":"unidad",
+   "stockActual":100,
+   "precioReferencial":0.50,
+   "tipoMaterial":{"idTipoMaterial":1}},
+  {"nombre":"Pintura Blanca",
+   "unidadMedida":"galon",
+   "stockActual":20,
+   "precioReferencial":45.00,
+   "tipoMaterial":{"idTipoMaterial":2}}]</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + <code>"Materiales registrados satisfactoriamente."</code></td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> El controller recibe un <strong>array JSON</strong> que Spring convierte en <code>List&lt;Material&gt;</code>. Delega en <code>MaterialService.registrarLote()</code>, que hace <strong>batch insert</strong>: itera los materiales, los persiste con <code>em.persist()</code> y cada 10 inserciones hace <code>flush()</code> y <code>clear()</code> para liberar memoria. Esto es clave cuando se importan muchos materiales.
+            </div>
+            <pre>// MaterialService.java - registrarLote
+@Transactional
+public void registrarLote(List&lt;Material&gt; materiales) {
+    int i = 0;
+    for (Material m : materiales) {
+        em.persist(m);
+        i++;
+        if (i % 10 == 0) { em.flush(); em.clear(); }
+    }
+}</pre>
+
+            <h4>PRUEBA 14: Listar materiales</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/materiales</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + lista de todos los materiales</td></tr>
+            </table>
+
+            <h4>PRUEBA 15: Obtener material por ID</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/materiales/1</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + material con id=1 (Perno 3x3)</td></tr>
+            </table>
+
+            <h4>PRUEBA 16: Buscar material por nombre</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/materiales/buscar/Perno</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + materiales que contengan "Perno" en el nombre (Perno 3x3, Perno 4x3)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> El m&eacute;todo <code>MaterialRepository.findByNombreContainingIgnoreCase(String nombre)</code> genera autom&aacute;ticamente: <code>WHERE UPPER(nombre) LIKE UPPER(CONCAT('%', ?, '%'))</code>. Esto permite b&uacute;squeda parcial sin importar may&uacute;sculas/min&uacute;sculas. Si buscamos "Perno", encuentra "Perno 3x3" y "Perno 4x3".
+            </div>
+            <pre>// MaterialRepository.java
+public interface MaterialRepository extends JpaRepository&lt;Material, Integer&gt; {
+    List&lt;Material&gt; findByNombreContainingIgnoreCase(String nombre);
+}
+
+// MaterialService.java
+public List&lt;Material&gt; buscar(String nombre) {
+    return materialRepository.findByNombreContainingIgnoreCase(nombre);
+}</pre>
+
+            <h4>PRUEBA 17: Actualizar material</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-put">PUT</span> <span class="endpoint-url">http://localhost:8080/api/materiales/1</span></td></tr>
+                <tr><th>Body (JSON)</th><td><pre>{"nombre":"Perno 3x3",
+ "unidadMedida":"unidad",
+ "stockActual":50,
+ "precioReferencial":3.50,
+ "tipoMaterial":{"idTipoMaterial":1}}</pre></td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + material actualizado (stock=50, precio=3.50)</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> Mismo patr&oacute;n que actualizar proveedor: busca por ID, actualiza campos del objeto persistente, guarda. Demuestra la capacidad de modificar cualquier atributo del material.
+            </div>
+
+            <hr style="margin:30px 0; border: none; border-top: 2px dashed #ddd;">
+
+            <!-- ==================== MANUEL ==================== -->
+            <h3 style="color:#4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom:5px;">Manuel &mdash; &Oacute;rdenes de Compra (parte 2) + Cierre</h3>
+
+            <h4>PRUEBA 18: Cambiar estado de orden de compra</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-put">PUT</span> <span class="endpoint-url">http://localhost:8080/api/ordenes-compra/1/estado?estado=ENVIADO</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + orden con estado cambiado a "ENVIADO"</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>@RequestParam String estado</code> captura el par&aacute;metro <code>?estado=ENVIADO</code> de la URL. El controller busca la orden por ID, actualiza su estado y la guarda. El campo <code>estado</code> en la entidad <code>OrdenCompra</code> tiene valor por defecto <code>"PENDIENTE"</code>, y se puede cambiar a cualquier valor (ENVIADO, ANULADO, etc.).
+            </div>
+            <pre>// OrdenCompraController.java - cambiarEstado
+@PutMapping("/{idOrden}/estado")
+public ResponseEntity&lt;?&gt; cambiarEstado(@PathVariable Integer idOrden,
+        @RequestParam String estado) {
+    return ordenCompraRepository.findById(idOrden)
+            .map(orden -> {
+                orden.setEstado(estado);
+                return ResponseEntity.ok(ordenCompraRepository.save(orden));
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
+
+// OrdenCompra.java (fragmento)
+@Column(name = "estado")
+private String estado = "PENDIENTE";</pre>
+
+            <h4>PRUEBA 19: Historial de &oacute;rdenes por usuario</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/ordenes-compra/usuario/1</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + lista de todas las &oacute;rdenes del usuario con id=1</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>OrdenCompraRepository.findByUsuarioIdUsuario()</code> genera autom&aacute;ticamente <code>WHERE id_usuario = ?</code>. Muestra el historial completo de compras realizadas por un usuario.
+            </div>
+            <pre>// OrdenCompraRepository.java
+public interface OrdenCompraRepository extends JpaRepository&lt;OrdenCompra, Integer&gt; {
+    List&lt;OrdenCompra&gt; findByUsuarioIdUsuario(Integer idUsuario);
+}
+
+// OrdenCompraService.java
+public List&lt;OrdenCompra&gt; listarPorUsuario(Integer idUsuario) {
+    return ordenCompraRepository.findByUsuarioIdUsuario(idUsuario);
+}</pre>
+
+            <h4>PRUEBA 20: Obtener detalle de orden de compra</h4>
+            <table>
+                <tr><th>M&eacute;todo</th><td><span class="tag tag-get">GET</span> <span class="endpoint-url">http://localhost:8080/api/ordenes-compra/1</span></td></tr>
+                <tr><th>Body</th><td>&mdash;</td></tr>
+                <tr><th>Respuesta esperada</th><td>200 OK + orden con id=1 incluyendo su lista de detalles, total calculado y estado actual</td></tr>
+            </table>
+            <div class="explanation">
+                <strong>&iquest;Por qu&eacute; funciona?</strong> <code>findById(1)</code> obtiene la orden. Gracias a la relaci&oacute;n <code>@OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL)</code> y <code>@JsonIgnore</code> en DetalleOrdenCompra.ordenCompra (para evitar bucle infinito), Jackson serializa la orden con sus detalles embebidos. La respuesta JSON muestra: idOrdenCompra, proveedor, usuario, fecha, estado, total, observaciones y la lista de detalles con material, cantidad, precioUnitario, subtotal.
+            </div>
+            <pre>// OrdenCompraController.java
+@GetMapping("/{idOrden}")
+public ResponseEntity&lt;OrdenCompra&gt; detalle(@PathVariable Integer idOrden) {
+    return ordenCompraRepository.findById(idOrden)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
+// OrdenCompra.java (fragmento)
+@OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL, orphanRemoval = true)
+private List&lt;DetalleOrdenCompra&gt; detalles;
+
+// DetalleOrdenCompra.java (fragmento)
+@ManyToOne @JoinColumn(name = "id_orden_compra")
+@JsonIgnore  // evita bucle infinito al serializar
+private OrdenCompra ordenCompra;</pre>
+
+        </div>
+    </section>
+
+    <!-- ===== 3. RECOMENDACIONES PARA LA EXPOSICIÓN ===== -->
+    <section>
+        <div class="section-header">3. Recomendaciones para la exposici&oacute;n</div>
+        <div class="section-body">
+            <ul>
+                <li><strong>PPT (Valerie):</strong> Enfocarse en el problema de SERFAGAB (registro manual) y c&oacute;mo la soluci&oacute;n web lo resuelve. No profundizar en c&oacute;digo en el PPT, eso viene en las pruebas.</li>
+                <li><strong>Pruebas Postman:</strong> Tener Postman abierto y la colecci&oacute;n lista. Mostrar primero el JSON de entrada, luego enviar, luego mostrar la respuesta. Explicar brevemente el fragmento de c&oacute;digo asociado.</li>
+                <li><strong>Errores comunes:</strong> Si la aplicaci&oacute;n no responde, verificar que est&eacute; corriendo (<code>mvn spring-boot:run</code>). Si los datos seed no aparecen, revisar que <code>ddl-auto=create</code> est&eacute; en application.properties.</li>
+                <li><strong>Consola H2:</strong> Mostrar opcionalmente en <code>http://localhost:8080/h2-console</code> para verificar que los datos se persisten en memoria.</li>
+                <li><strong>Preguntas frecuentes del docente:</strong>
+                    <ul>
+                        <li>&iquest;C&oacute;mo Spring Boot sabe qu&eacute; SQL ejecutar? &rarr; Spring Data JPA interpreta los nombres de los m&eacute;todos del Repository.</li>
+                        <li>&iquest;Por qu&eacute; no escribieron SQL? &rarr; JPA genera autom&aacute;ticamente las consultas seg&uacute;n los nombres de los m&eacute;todos.</li>
+                        <li>&iquest;C&oacute;mo funciona @Transactional? &rarr; Agrupa varias operaciones en una sola transacci&oacute;n; si algo falla, se deshace todo.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>Grupo 5 &middot; Desarrollo de Aplicaciones Web &middot; SERFAGAB S.A.C.</p>
+    </footer>
+
+</div>
+</body>
+</html>

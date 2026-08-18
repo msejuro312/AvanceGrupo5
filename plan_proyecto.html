@@ -142,7 +142,7 @@
             <li><a href="#estructura">Estructura de carpetas y archivos</a></li>
             <li><a href="#entidades">Las entidades y la base de datos</a></li>
             <li><a href="#capas">Recorrido por las capas del c&oacute;digo</a></li>
-            <li><a href="#reparto">Reparto de trabajo entre los 5 integrantes</a></li>
+             <li><a href="#reparto">Reparto de trabajo entre los 4 integrantes</a></li>
             <li><a href="#endpoints">Endpoints y pruebas en Postman</a></li>
             <li><a href="#datos">Datos de prueba (seed)</a></li>
             <li><a href="#avances">Pr&oacute;ximos avances del proyecto</a></li>
@@ -388,9 +388,9 @@ public class SerfagabApplication {
 }
 
 public interface MaterialRepository extends JpaRepository&lt;Material, Integer&gt; {
-    List&lt;Material&gt; findByNombre(String nombre);
+    List&lt;Material&gt; findByNombreContainingIgnoreCase(String nombre);
 }</pre>
-        <p>Spring Data JPA interpreta el nombre del m&eacute;todo y genera la consulta: <code>findByLoginAndClave</code> se traduce a <code>WHERE login = ? AND clave = ?</code>. <code>Optional&lt;T&gt;</code> es un contenedor que puede o no tener valor, evitando errores de null.</p>
+        <p>Spring Data JPA interpreta el nombre del m&eacute;todo y genera la consulta: <code>findByLoginAndClave</code> se traduce a <code>WHERE login = ? AND clave = ?</code>. <code>findByNombreContainingIgnoreCase</code> genera <code>WHERE UPPER(nombre) LIKE UPPER(CONCAT('%', ?, '%'))</code>, permitiendo b&uacute;squedas parciales sin distinci&oacute;n de may&uacute;sculas. <code>Optional&lt;T&gt;</code> es un contenedor que puede o no tener valor, evitando errores de null.</p>
 
         <h3>5.3 Capa de servicio: l&oacute;gica de negocio</h3>
         
@@ -481,7 +481,7 @@ spring.jpa.show-sql=true</pre>
 
     <!-- ===== 6. REPARTO DE TRABAJO ===== -->
     <section id="reparto">
-        <h2>6. Reparto de trabajo entre los 5 integrantes</h2>
+        <h2>6. Reparto de trabajo entre los 4 integrantes</h2>
         <p>Cada integrante se encargar&aacute; de un grupo de archivos que forman una unidad funcional completa. Al ser capas separadas, el trabajo de cada uno se integra naturalmente sin conflictos.</p>
 
         <div class="member-card">
@@ -502,16 +502,19 @@ spring.jpa.show-sql=true</pre>
         </div>
 
         <div class="member-card">
-            <h4>👤 Carlos &mdash; Proveedores</h4>
-            <p><strong>&iquest;Qu&eacute; hace?</strong> El CRUD completo de proveedores.</p>
+            <h4>👤 Carlos &mdash; Proveedores y &Oacute;rdenes de Compra (parte 1)</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> El CRUD completo de proveedores, m&aacute;s la creaci&oacute;n de &oacute;rdenes de compra y el agregado de detalles (la parte modular del sistema).</p>
             <p class="files">Archivos a su cargo:</p>
             <ul>
                 <li><code>entities/Proveedor.java</code> &mdash; la entidad Proveedor</li>
+                <li><code>entities/OrdenCompra.java</code> &mdash; entidad OrdenCompra</li>
+                <li><code>entities/DetalleOrdenCompra.java</code> &mdash; entidad DetalleOrdenCompra</li>
                 <li><code>repository/ProveedorRepository.java</code> &mdash; acceso a datos</li>
+                <li><code>repository/OrdenCompraRepository.java</code></li>
                 <li><code>controller/ProveedorController.java</code> &mdash; endpoints CRUD</li>
-                <li>Pruebas en Postman de proveedores</li>
+                <li>Pruebas en Postman de proveedores y creaci&oacute;n de OC</li>
             </ul>
-            <p><strong>&iquest;C&oacute;mo probar?</strong> POST para crear, GET para listar/obtener, PUT para actualizar en <code>/api/proveedores</code>.</p>
+            <p><strong>&iquest;C&oacute;mo probar?</strong> POST para crear, GET para listar/obtener, PUT para actualizar en <code>/api/proveedores</code>. POST <code>/api/ordenes-compra/1/crear</code> y POST <code>/api/ordenes-compra/1/agregar-detalle</code>.</p>
         </div>
 
         <div class="member-card">
@@ -531,27 +534,16 @@ spring.jpa.show-sql=true</pre>
             <p><strong>&iquest;C&oacute;mo probar?</strong> POST <code>/api/materiales/lote</code> para carga masiva, GET/PUT para consultas y actualizaciones.</p>
         </div>
 
-        <div class="member-card">
-            <h4>👤 Isaac &mdash; &Oacute;rdenes de Compra (parte 1)</h4>
-            <p><strong>&iquest;Qu&eacute; hace?</strong> La creaci&oacute;n de &oacute;rdenes de compra y el agregado de detalles (la parte medular del sistema).</p>
-            <p class="files">Archivos a su cargo:</p>
-            <ul>
-                <li><code>entities/OrdenCompra.java</code> &mdash; entidad OrdenCompra</li>
-                <li><code>entities/DetalleOrdenCompra.java</code> &mdash; entidad DetalleOrdenCompra</li>
-                <li><code>repository/OrdenCompraRepository.java</code></li>
-                <li><code>repository/DetalleOrdenCompraRepository.java</code></li>
-                <li><code>service/OrdenCompraService.java</code> &mdash; l&oacute;gica de crear orden y agregar detalle</li>
-                <li>Pruebas en Postman de creaci&oacute;n de OC y agregado de detalles</li>
-            </ul>
-            <p><strong>&iquest;C&oacute;mo probar?</strong> POST <code>/api/ordenes-compra/1/crear</code> y POST <code>/api/ordenes-compra/1/agregar-detalle</code>.</p>
-        </div>
+
 
         <div class="member-card">
-            <h4>👤 Manuel &mdash; &Oacute;rdenes de Compra (parte 2) + Coordinaci&oacute;n</h4>
-            <p><strong>&iquest;Qu&eacute; hace?</strong> El cambio de estado de las &oacute;rdenes, el historial por usuario, la configuraci&oacute;n general del proyecto y la integraci&oacute;n de todas las partes.</p>
+            <h4>👤 Manuel &mdash; &Oacute;rdenes de Compra (parte 2) + Servicios + Coordinaci&oacute;n</h4>
+            <p><strong>&iquest;Qu&eacute; hace?</strong> El cambio de estado de las &oacute;rdenes, el historial por usuario, la l&oacute;gica de negocio de &oacute;rdenes, la configuraci&oacute;n general del proyecto y la integraci&oacute;n de todas las partes.</p>
             <p class="files">Archivos a su cargo:</p>
             <ul>
                 <li><code>controller/OrdenCompraController.java</code> &mdash; endpoints de estado e historial</li>
+                <li><code>repository/DetalleOrdenCompraRepository.java</code></li>
+                <li><code>service/OrdenCompraService.java</code> &mdash; l&oacute;gica de crear orden y agregar detalle</li>
                 <li><code>pom.xml</code> &mdash; gesti&oacute;n de dependencias</li>
                 <li><code>application.properties</code> &mdash; configuraci&oacute;n de la aplicaci&oacute;n</li>
                 <li><code>SerfagabApplication.java</code> &mdash; clase principal</li>
@@ -718,25 +710,25 @@ spring.jpa.show-sql=true</pre>
  "fecha":"2025-12-15",
  "observaciones":"Pedido urgente"}</pre></td>
                 <td>200 + orden creada (estado PENDIENTE, total 0)</td>
-                <td>Isaac</td>
+                <td>Carlos</td>
             </tr>
             <tr>
                 <td><code>POST</code></td>
                 <td><code>http://localhost:8080/api/ordenes-compra/1/agregar-detalle</code></td>
                 <td><pre>{"material":{"idMaterial":1},
- "cantidad":10,
- "precioUnitario":5.00}</pre></td>
+  "cantidad":10,
+  "precioUnitario":5.00}</pre></td>
                 <td>200 + detalle creado con subtotal = 50</td>
-                <td>Isaac</td>
+                <td>Carlos</td>
             </tr>
             <tr>
                 <td><code>POST</code></td>
                 <td><code>http://localhost:8080/api/ordenes-compra/1/agregar-detalle</code></td>
                 <td><pre>{"material":{"idMaterial":2},
- "cantidad":5,
- "precioUnitario":8.00}</pre></td>
+  "cantidad":5,
+  "precioUnitario":8.00}</pre></td>
                 <td>200 + detalle (subtotal 40). Total de OC ahora = 90</td>
-                <td>Isaac</td>
+                <td>Carlos</td>
             </tr>
             <tr>
                 <td><code>PUT</code></td>
