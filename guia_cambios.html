@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Cambios - Proyecto SERFAGAB Grupo 5</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6fb;
+    color: #2b2b2b;
+    line-height: 1.65;
+  }
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2rem; letter-spacing: 1px; margin-bottom: 8px; }
+  .hero p { opacity: .85; max-width: 720px; margin: 0 auto; }
+  .hero .meta { margin-top: 14px; font-size: .85rem; opacity: .7; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(22,33,62,.08);
+    padding: 28px 30px;
+    margin-bottom: 28px;
+  }
+  h2 {
+    color: #16213e;
+    font-size: 1.35rem;
+    border-left: 5px solid #16213e;
+    padding-left: 12px;
+    margin-bottom: 16px;
+  }
+  h3 { color: #1a1a2e; font-size: 1.05rem; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; }
+  ul, ol { margin: 8px 0 12px 24px; }
+  li { margin-bottom: 6px; }
+
+  code {
+    background: #eef1f8;
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .88em;
+    color: #16213e;
+  }
+  pre {
+    background: #1a1a2e;
+    color: #d7dcf0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .85rem;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  pre .com { color: #7ee787; }
+  pre .str { color: #ffd479; }
+  pre .kw { color: #79b8ff; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .92rem; }
+  th {
+    background: #16213e; color: #fff; text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .5px; padding: 10px 12px; text-align: left;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #e6e9f2; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f9fd; }
+
+  .badge {
+    display: inline-block; border-radius: 20px; padding: 2px 11px;
+    font-size: .74rem; font-weight: 600; letter-spacing: .3px;
+  }
+  .b-backend  { background: #e3ecff; color: #1d4ed8; }
+  .b-frontend { background: #e2f7e9; color: #15803d; }
+  .b-visual   { background: #fdf0dd; color: #b45309; }
+  .b-nuevo    { background: #fde3e3; color: #b91c1c; }
+  .b-fix      { background: #ede9fe; color: #6d28d9; }
+
+  .alerta {
+    background: #fff8e6; border-left: 5px solid #f0a500;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .ok {
+    background: #e8f7ee; border-left: 5px solid #22a05a;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .paso {
+    display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px;
+  }
+  .num {
+    background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff;
+    min-width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; margin-top: 2px;
+  }
+  footer {
+    text-align: center; color: #8a90a5; font-size: .82rem; padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SERFAGAB &mdash; Guía de Cambios del Proyecto</h1>
+  <p>Resumen de todo lo que se arregló y agregó en <b>AvanceGrupo5</b>: login con roles,
+     PDF de órdenes de compra, dashboard, edición/eliminación de OC y la nueva apariencia
+     basada en el proyecto PROYECTO_LP2_GRUPO_B.</p>
+  <div class="meta">Commit local: 10f6e44 &middot; Rama: master &middot; Backend: Spring Boot 4 (Java 24) &middot; Frontend: Angular 21 + Bootstrap 5</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= RESUMEN ================= -->
+  <div class="card">
+    <h2>1. El problema que teníamos</h2>
+    <p>No se podía ingresar al sistema con usuario y clave. La causa era doble:</p>
+    <ul>
+      <li>La base de datos solo tenía sembrado un usuario (<code>admin / 123</code>) que nadie conocía, mientras que
+          Spring Security tenía <i>otros</i> usuarios internos (<code>admin/admin123</code>, <code>user/user123</code>)
+          que no servían en el formulario web.</li>
+      <li>El frontend enviaba siempre las mismas credenciales fijas (<code>user:user123</code>) en todas las peticiones,
+          sin importar quién había iniciado sesión.</li>
+    </ul>
+    <div class="ok"><b>Solución:</b> ahora la base de datos siembra los dos usuarios oficiales con sus roles,
+        el login valida contra la BD, y cada petición viaja con las credenciales del usuario real que inició sesión.</div>
+
+    <h3>Credenciales de acceso (sembradas automáticamente al arrancar el backend)</h3>
+    <table>
+      <tr><th>Usuario</th><th>Clave</th><th>Rol (tipo)</th><th>Puede hacer</th></tr>
+      <tr>
+        <td><code>admin</code></td><td><code>admin123</code></td><td>administrador</td>
+        <td>Crear, editar, eliminar, cambiar estado de OC, ver PDF y dashboard</td>
+      </tr>
+      <tr>
+        <td><code>user</code></td><td><code>user123</code></td><td>usuario</td>
+        <td>Solo consultar: listados, filtros de búsqueda, detalles y PDF</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ================= BACKEND ================= -->
+  <div class="card">
+    <h2>2. Lo que cambiamos en el Backend <span class="badge b-backend">Spring Boot</span></h2>
+
+    <h3>a) DataSeeder &mdash; <code>src/main/java/com/serfagab/config/DataSeeder.java</code></h3>
+    <p>Es la clase que llena la base de datos cuando arranca el proyecto (solo si está vacía).
+       Ahora crea <b>dos tipos de usuario</b> y <b>dos cuentas</b>:</p>
+    <pre>
+Tipo admin   = <span class="kw">new</span> Tipo();   <span class="com">// id 1, descripción "administrador"</span>
+Tipo usuario = <span class="kw">new</span> Tipo();   <span class="com">// id 2, descripción "usuario"</span>
+
+Usuario adminUser = ...      <span class="com">// login "admin", clave "admin123", tipo administrador</span>
+Usuario userConsulta = ...   <span class="com">// login "user", clave "user123", tipo usuario</span>
+    </pre>
+    <p>Como <code>application.properties</code> usa <code>ddl-auto=create</code>, cada vez que se levanta el backend
+       la BD se recrea y estos usuarios vuelven a existir. Por eso el login <b>siempre</b> funciona.</p>
+
+    <h3>b) SecurityConfig &mdash; <code>src/main/java/com/serfagab/config/SecurityConfig.java</code></h3>
+    <p>Define quién puede entrar a cada endpoint. Regla nueva: <b>leer es libre, escribir es solo del admin</b>.</p>
+    <table>
+      <tr><th>Método HTTP</th><th>Rutas</th><th>Quién puede</th></tr>
+      <tr><td><code>GET</code></td><td>materiales, tipos-material, proveedores, ordenes-compra</td><td>Todos (por eso el rol user sí puede usar filtros y ver listados)</td></tr>
+      <tr><td><code>POST / PUT / DELETE</code></td><td>las mismas rutas</td><td>Solo <code>ROLE_ADMIN</code></td></tr>
+      <tr><td>cualquiera</td><td><code>/api/auth/login</code>, <code>/api/usuarios/**</code></td><td>Libre (login y registro)</td></tr>
+    </table>
+    <p>Los usuarios internos de Spring Security ya coinciden con los de la BD
+       (<code>admin/admin123</code> = ADMIN, <code>user/user123</code> = USER), así que la validación por HTTP Basic funciona con cualquiera de las dos cuentas.</p>
+
+    <h3>c) OrdenCompraService &mdash; <code>.../service/OrdenCompraService.java</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Se agregaron dos métodos:</p>
+    <ul>
+      <li><code>actualizarOrden(idOrden, idProveedor, fecha, observaciones)</code> &mdash; busca la orden, reemplaza proveedor/fecha/observaciones y guarda.</li>
+      <li><code>eliminarOrden(idOrden)</code> &mdash; borra la orden; los detalles se eliminan solos porque la relación usa <code>CascadeType.ALL</code>.</li>
+    </ul>
+
+    <h3>d) OrdenCompraController &mdash; <code>.../controller/OrdenCompraController.java</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <table>
+      <tr><th>Endpoint</th><th>Método</th><th>Qué hace</th></tr>
+      <tr><td><code>/api/ordenes-compra/{id}</code></td><td><code>PUT</code></td><td>Edita proveedor, fecha y observaciones de la orden</td></tr>
+      <tr><td><code>/api/ordenes-compra/{id}</code></td><td><code>DELETE</code></td><td>Elimina la orden y sus detalles</td></tr>
+      <tr><td><code>/api/ordenes-compra/{id}/pdf</code></td><td><code>GET</code></td><td>Genera y descarga el PDF de la orden</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= PDF ================= -->
+  <div class="card">
+    <h2>3. Cómo hicimos el PDF de la Orden de Compra <span class="badge b-backend">OpenPDF</span></h2>
+
+    <h3>Paso 1 &mdash; Agregamos la librería al <code>pom.xml</code></h3>
+    <pre>&lt;dependency&gt;
+    &lt;groupId&gt;com.github.librepdf&lt;/groupId&gt;
+    &lt;artifactId&gt;<span class="str">openpdf</span>&lt;/artifactId&gt;
+    &lt;version&gt;<span class="str">1.3.43</span>&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+    <p>OpenPDF es gratuita (LGPL) y su API es casi idéntica a iText 5: trabaja con objetos como
+       <code>Document</code>, <code>Paragraph</code>, <code>PdfPTable</code> y <code>PdfWriter</code>.</p>
+
+    <h3>Paso 2 &mdash; Creamos la clase utilitaria <code>src/main/java/com/serfagab/util/OrdenCompraPdf.java</code></h3>
+    <p>Es una clase con un único método estático <code>generar(orden)</code> que recibe la entidad
+       <code>OrdenCompra</code> y devuelve el PDF como un arreglo de bytes (<code>byte[]</code>):</p>
+    <ol>
+      <li>Crea un <code>Document</code> tamaño A4 y un <code>PdfWriter</code> que escribe sobre un
+          <code>ByteArrayOutputStream</code> (el PDF se arma en memoria, no en disco).</li>
+      <li>Agrega el encabezado: nombre del sistema, número de orden y fecha.</li>
+      <li>Arma una tabla de información general (tabla de 2 columnas): fecha, estado, razón social del proveedor,
+          RUC, celular, email, usuario que registró y observaciones.</li>
+      <li>Arma la tabla de <b>detalles</b> (5 columnas): material, unidad, cantidad, precio unitario y subtotal,
+          recorriendo <code>orden.getDetalles()</code>.</li>
+      <li>Agrega el <b>TOTAL</b> en S/ y un pie con la fecha de generación.</li>
+      <li>Cierra el documento y retorna <code>salida.toByteArray()</code>.</li>
+    </ol>
+
+    <h3>Paso 3 &mdash; El endpoint lo entrega como descarga</h3>
+    <pre><span class="kw">@GetMapping</span>(<span class="str">"/{idOrden}/pdf"</span>)
+<span class="kw">public</span> ResponseEntity&lt;byte[]&gt; descargarPdf(<span class="kw">@PathVariable</span> Integer idOrden) {
+    <span class="kw">return</span> ordenCompraRepository.findById(idOrden)
+        .map(orden -&gt; {
+            byte[] pdf = OrdenCompraPdf.generar(orden);
+            <span class="kw">return</span> ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)          <span class="com">// dice "esto es un PDF"</span>
+                .header(HttpHeaders.CONTENT_DISPOSITION,          <span class="com">// dice "descárgalo así"</span>
+                        <span class="str">"attachment; filename=orden-compra-"</span> + idOrden + <span class="str">".pdf"</span>)
+                .body(pdf);
+        })
+        .orElse(ResponseEntity.notFound().build());
+}</pre>
+
+    <h3>Paso 4 &mdash; El botón en Angular</h3>
+    <p>En <code>orden.service.ts</code> se pide el PDF como <b>blob</b> (archivo binario) y en
+       <code>ordenes.component.ts</code> se crea un enlace temporal para descargarlo con el nombre
+       <code>orden-compra-N.pdf</code>. El botón tiene el ícono de PDF de Font Awesome y lo ven
+       tanto <code>admin</code> como <code>user</code> (es solo lectura).</p>
+  </div>
+
+  <!-- ================= FRONTEND ================= -->
+  <div class="card">
+    <h2>4. Lo que cambiamos en el Frontend <span class="badge b-frontend">Angular</span></h2>
+
+    <h3>a) Sesión de usuario &mdash; <code>src/app/services/sesion.service.ts</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Guarda el usuario logeado en <code>sessionStorage</code> (dura mientras la pestaña esté abierta):
+       <code>guardarUsuario()</code>, <code>obtenerUsuario()</code>, <code>esAdministrador()</code>
+       (revisa si <code>tipo.descripcion == 'administrador'</code>) y <code>cerrarSesion()</code>.</p>
+
+    <h3>b) Guard de rutas &mdash; <code>src/app/services/sesion.guard.ts</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Si alguien intenta entrar a <code>/materiales</code>, <code>/ordenes</code>, etc. sin haber iniciado sesión,
+       lo regresa automáticamente a <code>/login</code>. Está puesto en todas las rutas protegidas de
+       <code>app.routes.ts</code>.</p>
+
+    <h3>c) Interceptor &mdash; <code>src/app/services/auth.interceptor.ts</code> <span class="badge b-fix">CORREGIDO</span></h3>
+    <p>Antes mandaba fijo <code>user:user123</code>. Ahora toma el usuario de la sesión y arma el header
+       <code>Authorization: Basic usuario:clave</code> con <b>sus</b> credenciales. Así el backend sabe
+       de verdad quién es y puede aplicar los roles.</p>
+
+    <h3>d) Login &mdash; <code>src/app/components/login/*</code> <span class="badge b-fix">CORREGIDO</span></h3>
+    <ul>
+      <li>Al ingresar bien: guarda el usuario en la sesión y navega al <b>dashboard</b>.</li>
+      <li>Mensajes de error claros: distingue credenciales inválidas (401) de servidor apagado (error de red).</li>
+      <li>Botón INGRESAR con spinner mientras consulta.</li>
+    </ul>
+
+    <h3>e) Roles en pantalla</h3>
+    <p>Cada componente CRUD pregunta <code>esAdmin</code> al construirse. Si no eres admin:
+       se ocultan los botones Nuevo / Editar / Eliminar, la columna Acciones, el formulario de nueva orden
+       y el selector de estado (en su lugar se muestra una etiqueta de color). Los <b>filtros de búsqueda
+       siguen visibles para todos</b>.</p>
+
+    <h3>f) Órdenes de compra &mdash; <code>src/app/components/ordenes/*</code></h3>
+    <ul>
+      <li><b>Editar</b>: abre un modal con proveedor, fecha y observaciones (usa el PUT nuevo).</li>
+      <li><b>Eliminar</b>: pide confirmación con SweetAlert2 antes de borrar.</li>
+      <li><b>PDF</b>: botón por fila.</li>
+      <li><span class="badge b-fix">FIX</span> El selector de estado no refrescaba: el atributo
+          <code>[value]</code> se aplicaba antes de que existieran las opciones. Se corrigió marcando la opción
+          correcta con <code>[selected]="e === o.estado"</code>.</li>
+    </ul>
+
+    <h3>g) Mensajes de éxito <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Al crear/editar/eliminar materiales, tipos de material, proveedores u órdenes aparece un
+       <b>toast verde</b> de SweetAlert2 en la esquina superior derecha (mismo estilo que usaba el proyecto LP2),
+       por ejemplo: <i>"Material creado correctamente"</i>.</p>
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <div class="card">
+    <h2>5. Dashboard nuevo <span class="badge b-nuevo">NUEVO</span> <span class="badge b-visual">estilo LP2</span></h2>
+    <p>Carpeta: <code>src/app/components/dashboard/</code> &mdash; ruta <code>/dashboard</code>.
+       Es lo primero que ves tras iniciar sesión (antes entrabas directo a Materiales).</p>
+    <ul>
+      <li><b>4 tarjetas de estadísticas</b>: total de materiales, proveedores, tipos de material y órdenes.
+          Cada una con su ícono de Font Awesome, animación de entrada <code>fadeInUp</code> escalonada
+          (0.1s, 0.2s, 0.3s...) y efecto de elevación al pasar el mouse, igual que el dashboard del LP2.</li>
+      <li><b>Tabla "Últimas órdenes de compra"</b>: las 5 más recientes con su estado en colores
+          (PENDIENTE amarillo, ENVIADO verde, ANULADO gris).</li>
+      <li><b>Tarjeta de pendientes</b>: contador grande de órdenes PENDIENTE con botón directo a Órdenes.</li>
+      <li>En el menú lateral es el enlace <b>"Inicio"</b>.</li>
+    </ul>
+  </div>
+
+  <!-- ================= VISUAL ================= -->
+  <div class="card">
+    <h2>6. La nueva apariencia (copiada del PROYECTO_LP2_GRUPO_B) <span class="badge b-visual">Visual</span></h2>
+    <table>
+      <tr><th>Elemento</th><th>Cómo quedó</th><th>Dónde</th></tr>
+      <tr><td>Fondo de pantalla</td><td>Fotografía <code>laser.jpg</code> a pantalla completa, fija al hacer scroll</td><td><code>frontend-angular/public/imagenes/laser.jpg</code> + <code>styles.css</code></td></tr>
+      <tr><td>Barra superior</td><td>Fija, color <code>#1c1c1c</code>, con menú hamburguesa y "Bienvenido, [nombre]"</td><td><code>app.html</code> / <code>app.css</code></td></tr>
+      <tr><td>Menú lateral</td><td>Deslizante desde la izquierda (250px), fondo oscuro, borde izquierdo al pasar el mouse; se cierra con la X o al elegir una opción</td><td><code>app.html</code> / <code>app.css</code></td></tr>
+      <tr><td>Velo oscuro</td><td>Capa negra translúcida con desenfoque detrás del contenido</td><td><code>main</code> en <code>app.css</code></td></tr>
+      <tr><td>Login</td><td>Tarjeta blanca centrada (450px), bordes redondeados 20px, cabecera y botón con gradiente azul marino <code>#1a1a2e &rarr; #16213e</code>, iconos en los campos, animación de entrada</td><td><code>login.component.*</code></td></tr>
+      <tr><td>Listados y formularios</td><td>Tarjetas blancas con sombra (<code>shadow-lg</code>), tablas con cabecera oscura, recuadro "Filtros", botones outline</td><td>los 4 componentes CRUD</td></tr>
+      <tr><td>Cerrar sesión</td><td>Ventana de confirmación de SweetAlert2 ("¿Deseas cerrar sesión?")</td><td><code>app.ts</code></td></tr>
+    </table>
+    <p>En <code>index.html</code> se agregaron los CDN de <b>Font Awesome 6.5.1</b> (iconos) y
+       <b>SweetAlert2 v11</b> (ventanas emergentes), igual que en el proyecto LP2.</p>
+  </div>
+
+  <!-- ================= ARCHIVOS ================= -->
+  <div class="card">
+    <h2>7. Resumen de todos los archivos tocados</h2>
+    <table>
+      <tr><th>Archivo</th><th>Cambio</th></tr>
+      <tr><td><code>pom.xml</code></td><td>+ dependencia OpenPDF 1.3.43</td></tr>
+      <tr><td><code>config/DataSeeder.java</code></td><td>+ tipo "usuario", cuentas admin/admin123 y user/user123</td></tr>
+      <tr><td><code>config/SecurityConfig.java</code></td><td>reglas por rol: GET libre, escrituras solo ADMIN</td></tr>
+      <tr><td><code>service/OrdenCompraService.java</code></td><td>+ actualizarOrden(), eliminarOrden()</td></tr>
+      <tr><td><code>controller/OrdenCompraController.java</code></td><td>+ PUT /{id}, DELETE /{id}, GET /{id}/pdf</td></tr>
+      <tr><td><code>util/OrdenCompraPdf.java</code></td><td>NUEVO: genera el PDF con OpenPDF</td></tr>
+      <tr><td><code>services/sesion.service.ts</code></td><td>NUEVO: sesión en sessionStorage</td></tr>
+      <tr><td><code>services/sesion.guard.ts</code></td><td>NUEVO: protege las rutas</td></tr>
+      <tr><td><code>services/auth.interceptor.ts</code></td><td>credenciales dinámicas del usuario logeado</td></tr>
+      <tr><td><code>services/orden.service.ts</code></td><td>+ actualizarOrden(), eliminarOrden(), descargarPdf()</td></tr>
+      <tr><td><code>components/dashboard/*</code></td><td>NUEVO: dashboard con estadísticas</td></tr>
+      <tr><td><code>components/login/*</code></td><td>diseño LP2, sesión, mensajes de error claros</td></tr>
+      <tr><td><code>components/materiales/*</code>, <code>tipos-material/*</code>, <code>proveedores/*</code></td><td>diseño LP2, botones según rol, toasts de éxito</td></tr>
+      <tr><td><code>components/ordenes/*</code></td><td>editar, eliminar, PDF, fix del estado, diseño LP2</td></tr>
+      <tr><td><code>app.ts / app.html / app.css</code></td><td>header oscuro, menú lateral, logout con confirmación</td></tr>
+      <tr><td><code>app.routes.ts</code></td><td>ruta dashboard + guard en rutas privadas</td></tr>
+      <tr><td><code>styles.css</code> / <code>index.html</code></td><td>fondo laser.jpg + CDNs Font Awesome y SweetAlert2</td></tr>
+      <tr><td><code>angular.json</code></td><td>presupuesto de bundle ampliado (800kB)</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= EJECUTAR ================= -->
+  <div class="card">
+    <h2>8. Cómo ejecutar el proyecto paso a paso</h2>
+    <div class="paso"><div class="num">1</div><div><b>MySQL con XAMPP:</b> abre el Panel de XAMPP y dale Start a MySQL.
+      Ojo: si tienen instalado además el servicio Windows "MySQL80", hay que detenerlo primero
+      (services.msc &rarr; MySQL80 &rarr; Detener) porque ocupa el puerto 3306 y genera
+      "Access denied for user 'root'".</div></div>
+    <div class="paso"><div class="num">2</div><div><b>Crear la base de datos</b> (una sola vez) en phpMyAdmin:
+      <code>CREATE DATABASE serfagab_db;</code> &mdash; las tablas y los usuarios las crea solos el backend al arrancar.</div></div>
+    <div class="paso"><div class="num">3</div><div><b>Backend:</b> abrir el proyecto en IntelliJ y ejecutarlo.
+      Esperar el mensaje de que Tomcat inició en el puerto 8080. Si sale "Port 8080 was already in use",
+      hay otra instancia corriendo: detenerla primero (botón Stop rojo).</div></div>
+    <div class="paso"><div class="num">4</div><div><b>Frontend:</b> en una terminal dentro de la carpeta
+      <code>frontend-angular</code>:<br>
+      <code>npm install</code> (solo la primera vez) y luego <code>npm start</code>.
+      Abrir <code>http://localhost:4200</code>.</div></div>
+    <div class="paso"><div class="num">5</div><div><b>Probar:</b> ingresar con
+      <code>admin / admin123</code> (todo habilitado) y con <code>user / user123</code>
+      (solo consultas, filtros y PDF). En Órdenes: crear, editar, eliminar, cambiar estado y descargar PDF.</div></div>
+  </div>
+
+  <!-- ================= PENDIENTE ================= -->
+  <div class="card">
+    <h2>9. Pendiente: subir los cambios a GitHub</h2>
+    <p>Todo el trabajo ya está guardado en el commit local <code>10f6e44</code>, pero el push fue rechazado:
+       la cuenta <b>Valerie-Giulisa</b> no tiene permiso de escritura en
+       <code>msejuro312/AvanceGrupo5</code>. Para subirlo:</p>
+    <div class="alerta"><b>Opción A (recomendada):</b> msejuro312 entra al repo en GitHub &rarr;
+      Settings &rarr; Collaborators &rarr; Add people &rarr; agrega a <b>Valerie-Giulisa</b>.
+      Ella acepta la invitación (llega al correo) y luego se ejecuta:<br>
+      <code>git push origin master</code></div>
+    <div class="alerta"><b>Opción B:</b> Valerie hace un fork del repo en su cuenta, agrega su fork como remoto
+      (<code>git remote add mifork https://github.com/Valerie-Giulisa/AvanceGrupo5.git</code>),
+      sube ahí (<code>git push mifork master</code>) y abre un Pull Request hacia el repo del grupo.</div>
+  </div>
+
+</div>
+
+<footer>Guía generada para el equipo 5 &mdash; Desarrollo de Aplicaciones Web I &mdash; Sistema SERFAGAB</footer>
+
+</body>
+</html>
