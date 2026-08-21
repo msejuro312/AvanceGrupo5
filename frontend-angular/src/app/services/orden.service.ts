@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { OrdenCompra } from '../models/orden-compra';
@@ -23,11 +23,26 @@ export class OrdenService {
     return this.http.post<OrdenCompra>(`${this.apiUrl}/${idUsuario}/crear`, orden);
   }
 
+  actualizarOrden(idOrden: number, orden: any): Observable<OrdenCompra> {
+    return this.http.put<OrdenCompra>(`${this.apiUrl}/${idOrden}`, orden);
+  }
+
+  eliminarOrden(idOrden: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${idOrden}`);
+  }
+
   agregarDetalle(idOrden: number, detalle: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${idOrden}/agregar-detalle`, detalle);
   }
 
   cambiarEstado(idOrden: number, estado: string): Observable<OrdenCompra> {
     return this.http.put<OrdenCompra>(`${this.apiUrl}/${idOrden}/estado?estado=${estado}`, null);
+  }
+
+  descargarPdf(idOrden: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(`${this.apiUrl}/${idOrden}/pdf`, {
+      responseType: 'blob',
+      observe: 'response'
+    });
   }
 }

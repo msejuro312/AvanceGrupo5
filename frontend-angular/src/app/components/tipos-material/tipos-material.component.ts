@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { TipoMaterial } from '../../models/tipo-material';
 import { TipoMaterialService } from '../../services/tipo-material.service';
+import { SesionService } from '../../services/sesion.service';
 
 @Component({
   selector: 'app-tipos-material',
@@ -18,6 +19,7 @@ export class TiposMaterialComponent implements OnInit {
   errorMensaje = '';
   editandoId: number | null = null;
   mostrarModal = false;
+  esAdmin = false;
   nuevo: TipoMaterial = {
     idTipoMaterial: 0,
     nombre: '',
@@ -25,7 +27,9 @@ export class TiposMaterialComponent implements OnInit {
     activo: true
   };
 
-  constructor(private tipoMaterialService: TipoMaterialService) {}
+  constructor(private tipoMaterialService: TipoMaterialService, private sesionService: SesionService) {
+    this.esAdmin = this.sesionService.esAdministrador();
+  }
 
   ngOnInit(): void {
     this.listar();
@@ -58,6 +62,9 @@ export class TiposMaterialComponent implements OnInit {
 
     accion.subscribe({
       next: () => {
+        this.mostrarToast('success', this.editandoId !== null
+          ? 'Tipo de material actualizado correctamente'
+          : 'Tipo de material creado correctamente');
         this.cancelarEdicion();
         this.listar();
       },
@@ -95,12 +102,27 @@ export class TiposMaterialComponent implements OnInit {
   eliminar(t: TipoMaterial) {
     if (confirm(`¿Inactivar el tipo de material "${t.nombre}"?`)) {
       this.tipoMaterialService.eliminar(t.idTipoMaterial).subscribe({
-        next: () => this.listar(),
+        next: () => {
+          this.mostrarToast('success', 'Tipo de material eliminado correctamente');
+          this.listar();
+        },
         error: (err) => {
           console.error('Error al eliminar tipo de material', err);
           this.errorMensaje = 'No se pudo eliminar el tipo de material.';
         }
       });
     }
+  }
+
+  private mostrarToast(icono: string, titulo: string) {
+    const Swal = (window as any).Swal;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+    Toast.fire({ icon: icono, title: titulo });
   }
 }

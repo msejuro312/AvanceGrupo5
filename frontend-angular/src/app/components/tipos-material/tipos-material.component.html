@@ -1,35 +1,41 @@
 <div class="mt-4">
-  <h3>Tipos de Material</h3>
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h1 class="card-title h3 mb-4">Tipos de Material</h1>
 
-  <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
+      <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
 
-  <button class="btn btn-primary mb-3" (click)="abrirNuevo()">+ Nuevo tipo de material</button>
+      <button *ngIf="esAdmin" class="btn btn-success mb-3" (click)="abrirNuevo()">
+        <i class="fa-solid fa-plus me-1"></i>Nuevo tipo de material
+      </button>
 
-  <div *ngIf="cargando">Cargando...</div>
+      <div *ngIf="cargando">Cargando...</div>
 
-  <table class="table table-bordered" *ngIf="!cargando && tipos.length > 0">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let t of tipos">
-        <td>{{ t.idTipoMaterial }}</td>
-        <td>{{ t.nombre }}</td>
-        <td>{{ t.descripcion }}</td>
-        <td>
-          <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(t)">Editar</button>
-          <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(t)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="table table-hover table-responsive" *ngIf="!cargando && tipos.length > 0">
+        <thead class="table-dark text-center">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th *ngIf="esAdmin">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of tipos">
+            <td>{{ t.idTipoMaterial }}</td>
+            <td>{{ t.nombre }}</td>
+            <td>{{ t.descripcion }}</td>
+            <td *ngIf="esAdmin" class="text-center">
+              <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(t)">Editar</button>
+              <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(t)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-  <div *ngIf="!cargando && tipos.length == 0">No hay tipos de material para mostrar</div>
+      <div *ngIf="!cargando && tipos.length == 0">No hay tipos de material para mostrar</div>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="mostrarModal" class="modal-overlay">

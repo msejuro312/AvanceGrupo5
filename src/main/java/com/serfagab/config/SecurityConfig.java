@@ -2,6 +2,7 @@ package com.serfagab.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -51,12 +52,32 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/public/**",
                                 "/api/auth/login",
-                                "/api/usuarios/**",
-                                "/api/materiales/**",
-                                "/api/tipos-material/**"
+                                "/api/usuarios/**"
                         ).permitAll()
-                        .requestMatchers("/api/ordenes-compra/**").hasAllRoles("USER")
-                        .requestMatchers("/api/proveedores/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/materiales/**",
+                                "/api/tipos-material/**",
+                                "/api/proveedores/**",
+                                "/api/ordenes-compra/**"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/materiales/**",
+                                "/api/tipos-material/**",
+                                "/api/proveedores/**",
+                                "/api/ordenes-compra/**"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/materiales/**",
+                                "/api/tipos-material/**",
+                                "/api/proveedores/**",
+                                "/api/ordenes-compra/**"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/materiales/**",
+                                "/api/tipos-material/**",
+                                "/api/proveedores/**",
+                                "/api/ordenes-compra/**"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

@@ -1,16 +1,48 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/materiales">SERFAGAB</a>
-    <div class="navbar-nav">
-      <a class="nav-link" routerLink="/materiales" routerLinkActive="active">Materiales</a>
-      <a class="nav-link" routerLink="/tipos-material" routerLinkActive="active">Tipos de Material</a>
-      <a class="nav-link" routerLink="/proveedores" routerLinkActive="active">Proveedores</a>
-      <a class="nav-link" routerLink="/ordenes" routerLinkActive="active">Órdenes de Compra</a>
-      <a class="nav-link" routerLink="/login">Cerrar sesión</a>
+@if (!esLogin) {
+  <header class="header">
+    <div class="container-fluid d-flex justify-content-between align-items-center py-2">
+      <div class="btn-menu">
+        <label for="btn-menu"><i class="fa-solid fa-bars"></i></label>
+      </div>
+      <div class="text-white">
+        <h1 class="h5 m-0">SERFAGAB - Bienvenido, {{ nombreUsuario }}</h1>
+      </div>
+    </div>
+  </header>
+
+  <input type="checkbox" id="btn-menu">
+
+  <div class="container-menu">
+    <div class="cont-menu">
+      <nav>
+        <a routerLink="/dashboard" routerLinkActive="activo" (click)="cerrarMenu()">
+          <i class="fa-solid fa-house me-2"></i> Inicio
+        </a>
+        <a routerLink="/materiales" routerLinkActive="activo" (click)="cerrarMenu()">
+          <i class="fa-solid fa-boxes-stacked me-2"></i> Materiales
+        </a>
+        <a routerLink="/tipos-material" routerLinkActive="activo" (click)="cerrarMenu()">
+          <i class="fa-solid fa-tags me-2"></i> Tipo Material
+        </a>
+        <a routerLink="/proveedores" routerLinkActive="activo" (click)="cerrarMenu()">
+          <i class="fa-solid fa-truck me-2"></i> Proveedores
+        </a>
+        <a routerLink="/ordenes" routerLinkActive="activo" (click)="cerrarMenu()">
+          <i class="fa-solid fa-file-lines me-2"></i> Órdenes de Compra
+        </a>
+        <a href="#" (click)="$event.preventDefault(); cerrarSesion()">
+          <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión
+        </a>
+      </nav>
+      <label for="btn-menu"><i class="fa-solid fa-xmark"></i></label>
     </div>
   </div>
-</nav>
 
-<div class="container">
+  <main>
+    <div class="container mt-5 pt-3 pb-4">
+      <router-outlet />
+    </div>
+  </main>
+} @else {
   <router-outlet />
-</div>
+}

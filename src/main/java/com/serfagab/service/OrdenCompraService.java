@@ -71,6 +71,22 @@ public class OrdenCompraService {
         return detalle;
     }
 
+    @Transactional
+    public OrdenCompra actualizarOrden(Integer idOrden, Integer idProveedor, LocalDate fecha, String observaciones) {
+        OrdenCompra orden = ordenCompraRepository.findById(idOrden).orElseThrow();
+        Proveedor proveedor = proveedorRepository.findById(idProveedor).orElseThrow();
+
+        orden.setProveedor(proveedor);
+        orden.setFecha(fecha);
+        orden.setObservaciones(observaciones);
+        return ordenCompraRepository.save(orden);
+    }
+
+    @Transactional
+    public void eliminarOrden(Integer idOrden) {
+        ordenCompraRepository.deleteById(idOrden);
+    }
+
     public List<OrdenCompra> listarPorUsuario(Integer idUsuario) {
         return ordenCompraRepository.findByUsuarioIdUsuario(idUsuario);
     }

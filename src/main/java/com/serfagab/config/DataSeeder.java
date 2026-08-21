@@ -39,15 +39,30 @@ public class DataSeeder implements CommandLineRunner {
         admin.setDescripcion("administrador");
         tipoRepository.save(admin);
 
-        Usuario user = new Usuario();
-        user.setNombres("Valerie");
-        user.setApellidos("Cavero");
-        user.setLogin("admin");
-        user.setClave("123");
-        user.setEmail("vcavero@serfagab.com");
-        user.setActivo(true);
-        user.setTipo(admin);
-        usuarioRepository.save(user);
+        Tipo usuario = new Tipo();
+        usuario.setIdTipo(2);
+        usuario.setDescripcion("usuario");
+        tipoRepository.save(usuario);
+
+        Usuario adminUser = new Usuario();
+        adminUser.setNombres("Valerie");
+        adminUser.setApellidos("Cavero");
+        adminUser.setLogin("admin");
+        adminUser.setClave("admin123");
+        adminUser.setEmail("vcavero@serfagab.com");
+        adminUser.setActivo(true);
+        adminUser.setTipo(admin);
+        usuarioRepository.save(adminUser);
+
+        Usuario userConsulta = new Usuario();
+        userConsulta.setNombres("Usuario");
+        userConsulta.setApellidos("De Consulta");
+        userConsulta.setLogin("user");
+        userConsulta.setClave("user123");
+        userConsulta.setEmail("consulta@serfagab.com");
+        userConsulta.setActivo(true);
+        userConsulta.setTipo(usuario);
+        usuarioRepository.save(userConsulta);
 
         Proveedor p1 = new Proveedor();
         p1.setRazonSocial("Comercializadora Andina EIRL");

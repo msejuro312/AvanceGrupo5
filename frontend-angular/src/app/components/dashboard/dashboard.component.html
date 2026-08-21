@@ -1,0 +1,117 @@
+<div class="mt-4">
+  <h1 class="h3 mb-1 text-white">Bienvenido, {{ nombreUsuario }}</h1>
+  <p class="text-white-50 mb-4">Panel principal - Sistema de Gestión de Compras</p>
+
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+      <div class="card card-dashboard shadow-sm border-0 h-100" style="animation-delay: 0.1s">
+        <div class="card-body d-flex align-items-center">
+          <div class="icono-dashboard text-primary">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </div>
+          <div>
+            <div class="h3 mb-0">{{ totalMateriales }}</div>
+            <small class="text-muted">Materiales</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card card-dashboard shadow-sm border-0 h-100" style="animation-delay: 0.2s">
+        <div class="card-body d-flex align-items-center">
+          <div class="icono-dashboard text-info">
+            <i class="fa-solid fa-truck"></i>
+          </div>
+          <div>
+            <div class="h3 mb-0">{{ totalProveedores }}</div>
+            <small class="text-muted">Proveedores</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card card-dashboard shadow-sm border-0 h-100" style="animation-delay: 0.3s">
+        <div class="card-body d-flex align-items-center">
+          <div class="icono-dashboard text-warning">
+            <i class="fa-solid fa-tags"></i>
+          </div>
+          <div>
+            <div class="h3 mb-0">{{ totalTiposMaterial }}</div>
+            <small class="text-muted">Tipos de Material</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+      <div class="card card-dashboard shadow-sm border-0 h-100" style="animation-delay: 0.4s">
+        <div class="card-body d-flex align-items-center">
+          <div class="icono-dashboard text-success">
+            <i class="fa-solid fa-file-lines"></i>
+          </div>
+          <div>
+            <div class="h3 mb-0">{{ totalOrdenes }}</div>
+            <small class="text-muted">Órdenes de Compra</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-8">
+      <div class="card card-dashboard shadow-lg" style="animation-delay: 0.5s">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="fa-solid fa-clock-rotate-left me-2"></i>Últimas órdenes de compra
+          </h5>
+
+          <table class="table table-hover" *ngIf="ultimasOrdenes.length > 0">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>N°</th>
+                <th>Proveedor</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let o of ultimasOrdenes">
+                <td>{{ o.idOrdenCompra }}</td>
+                <td>{{ o.proveedor.razonSocial }}</td>
+                <td>{{ o.fecha }}</td>
+                <td class="text-center">
+                  <span class="badge" [class.bg-warning]="o.estado === 'PENDIENTE'"
+                        [class.text-dark]="o.estado === 'PENDIENTE'"
+                        [class.bg-success]="o.estado === 'ENVIADO'"
+                        [class.bg-secondary]="o.estado === 'ANULADO'">
+                    {{ o.estado }}
+                  </span>
+                </td>
+                <td>S/ {{ o.total }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div *ngIf="ultimasOrdenes.length == 0" class="text-muted">Aún no hay órdenes registradas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card card-dashboard shadow-lg" style="animation-delay: 0.6s">
+        <div class="card-body text-center py-5">
+          <i class="fa-solid fa-hourglass-half fa-2x text-warning mb-3"></i>
+          <div class="display-4 fw-bold">{{ ordenesPendientes }}</div>
+          <p class="text-muted mb-4">Órdenes pendientes</p>
+          <a routerLink="/ordenes" class="btn btn-dark w-100">
+            <i class="fa-solid fa-file-lines me-2"></i>Ir a Órdenes de Compra
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

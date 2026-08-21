@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Proveedor } from '../../models/proveedor';
 import { ProveedorService } from '../../services/proveedor.service';
+import { SesionService } from '../../services/sesion.service';
 
 @Component({
   selector: 'app-proveedores',
@@ -17,6 +18,7 @@ export class ProveedoresComponent implements OnInit {
   cargando = true;
   errorMensaje = '';
   editandoId: number | null = null;
+  esAdmin = false;
   nuevo: Proveedor = {
     idProveedor: null,
     razonSocial: '',
@@ -27,7 +29,9 @@ export class ProveedoresComponent implements OnInit {
     activo: true
   };
 
-  constructor(private proveedorService: ProveedorService) {}
+  constructor(private proveedorService: ProveedorService, private sesionService: SesionService) {
+    this.esAdmin = this.sesionService.esAdministrador();
+  }
 
   ngOnInit(): void {
     this.listar();
@@ -55,6 +59,9 @@ export class ProveedoresComponent implements OnInit {
 
     accion.subscribe({
       next: () => {
+        this.mostrarToast('success', this.editandoId !== null
+          ? 'Proveedor actualizado correctamente'
+          : 'Proveedor creado correctamente');
         this.cancelarEdicion();
         this.listar();
       },
@@ -89,13 +96,28 @@ export class ProveedoresComponent implements OnInit {
     if (p.idProveedor == null) return;
     if (confirm(`¿Inactivar el proveedor "${p.razonSocial}"?`)) {
       this.proveedorService.eliminar(p.idProveedor).subscribe({
-        next: () => this.listar(),
+        next: () => {
+          this.mostrarToast('success', 'Proveedor eliminado correctamente');
+          this.listar();
+        },
         error: (err) => {
           console.error('Error al eliminar proveedor', err);
           this.errorMensaje = 'No se pudo eliminar el proveedor.';
         }
       });
     }
+  }
+
+  private mostrarToast(icono: string, titulo: string) {
+    const Swal = (window as any).Swal;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+    Toast.fire({ icon: icono, title: titulo });
   }
 
   esRucValido(): boolean {

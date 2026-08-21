@@ -4,12 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.serfagab.entities.DetalleOrdenCompra;
 import com.serfagab.entities.OrdenCompra;
 import com.serfagab.repository.OrdenCompraRepository;
 import com.serfagab.service.OrdenCompraService;
+import com.serfagab.util.OrdenCompraPdf;
 import java.util.List;
 
 @RestController
@@ -47,6 +50,32 @@ public class OrdenCompraController {
                 detalle.getCantidad(),
                 detalle.getPrecioUnitario());
         return ResponseEntity.ok(guardado);
+    }
+
+    @PutMapping("/{idOrden}")
+    public ResponseEntity<?> actualizar(@PathVariable Integer idOrden, @RequestBody OrdenCompra datos) {
+        if (datos.getProveedor() == null || datos.getProveedor().getIdProveedor() == null) {
+            return ResponseEntity.badRequest().body("Debe especificar un proveedor");
+        }
+        try {
+            OrdenCompra actualizada = ordenCompraService.actualizarOrden(
+                    idOrden,
+                    datos.getProveedor().getIdProveedor(),
+                    datos.getFecha(),
+                    datos.getObservaciones());
+            return ResponseEntity.ok(actualizada);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{idOrden}")
+    public ResponseEntity<?> eliminar(@PathVariable Integer idOrden) {
+        if (!ordenCompraRepository.existsById(idOrden)) {
+            return ResponseEntity.notFound().build();
+        }
+        ordenCompraService.eliminarOrden(idOrden);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{idOrden}/estado")
@@ -98,6 +127,20 @@ public class OrdenCompraController {
     public ResponseEntity<OrdenCompra> detalle(@PathVariable Integer idOrden) {
         return ordenCompraRepository.findById(idOrden)
                 .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{idOrden}/pdf")
+    public ResponseEntity<byte[]> descargarPdf(@PathVariable Integer idOrden) {
+        return ordenCompraRepository.findById(idOrden)
+                .map(orden -> {
+                    byte[] pdf = OrdenCompraPdf.generar(orden);
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.APPLICATION_PDF)
+                            .header(HttpHeaders.CONTENT_DISPOSITION,
+                                    "attachment; filename=orden-compra-" + idOrden + ".pdf")
+                            .body(pdf);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 }

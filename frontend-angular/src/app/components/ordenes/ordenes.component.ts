@@ -8,6 +8,7 @@ import { Material } from '../../models/material';
 import { OrdenService } from '../../services/orden.service';
 import { ProveedorService } from '../../services/proveedor.service';
 import { MaterialService } from '../../services/material.service';
+import { SesionService } from '../../services/sesion.service';
 
 interface FilaDetalle {
   materialId: number | null;
@@ -37,19 +38,27 @@ export class OrdenesComponent implements OnInit {
   fecha: string = new Date().toISOString().substring(0, 10);
   observaciones = '';
   detalles: FilaDetalle[] = [];
-  mensajeExito = '';
   mensajeError = '';
   guardando = false;
 
   detalleOrden: OrdenCompra | null = null;
   mostrarDetalle = false;
   estados = ['PENDIENTE', 'ENVIADO', 'ANULADO'];
+  esAdmin = false;
+
+  editandoId: number | null = null;
+  edicionProveedor: number | null = null;
+  edicionFecha = '';
+  edicionObservaciones = '';
 
   constructor(
     private ordenService: OrdenService,
     private proveedorService: ProveedorService,
-    private materialService: MaterialService
-  ) {}
+    private materialService: MaterialService,
+    private sesionService: SesionService
+  ) {
+    this.esAdmin = this.sesionService.esAdministrador();
+  }
 
   ngOnInit(): void {
     this.cargar();
@@ -117,7 +126,6 @@ export class OrdenesComponent implements OnInit {
   }
 
   guardar() {
-    this.mensajeExito = '';
     this.mensajeError = '';
 
     if (!this.idProveedor || !this.fecha || this.detalles.length === 0) {
@@ -147,7 +155,7 @@ export class OrdenesComponent implements OnInit {
   private agregarDetallesSecuenciales(idOrden: number, index: number) {
     if (index >= this.detalles.length) {
       this.guardando = false;
-      this.mensajeExito = 'Orden de compra creada correctamente.';
+      this.mostrarToast('success', 'Orden de compra creada correctamente');
       this.limpiarFormulario();
       this.page = 0;
       this.cargar();
@@ -207,13 +215,107 @@ export class OrdenesComponent implements OnInit {
     this.ordenService.cambiarEstado(o.idOrdenCompra, estado).subscribe({
       next: () => {
         this.mensajeError = '';
-        this.mensajeExito = `Estado de la orden #${o.idOrdenCompra} actualizado a ${estado}.`;
+        this.mostrarToast('success', `Orden #${o.idOrdenCompra} actualizada a ${estado}`);
         this.cargar();
       },
       error: (err) => {
         console.error('Error al cambiar estado', err);
-        this.mensajeExito = '';
         this.mensajeError = 'No se pudo cambiar el estado de la orden.';
+      }
+    });
+  }
+
+  abrirEditar(o: OrdenCompra) {
+    this.editandoId = o.idOrdenCompra;
+    this.edicionProveedor = o.proveedor?.idProveedor ?? null;
+    this.edicionFecha = o.fecha ?? new Date().toISOString().substring(0, 10);
+    this.edicionObservaciones = o.observaciones ?? '';
+  }
+
+  cancelarEdicion() {
+    this.editandoId = null;
+  }
+
+  guardarEdicion() {
+    if (!this.editandoId || !this.edicionProveedor || !this.edicionFecha) {
+      this.mensajeError = 'Selecciona un proveedor y una fecha.';
+      return;
+    }
+
+    const orden = {
+      proveedor: { idProveedor: this.edicionProveedor },
+      fecha: this.edicionFecha,
+      observaciones: this.edicionObservaciones
+    };
+
+    this.ordenService.actualizarOrden(this.editandoId, orden).subscribe({
+      next: () => {
+        this.mostrarToast('success', `Orden #${this.editandoId} actualizada correctamente`);
+        this.cancelarEdicion();
+        this.cargar();
+      },
+      error: (err) => {
+        console.error('Error al actualizar la orden', err);
+        this.mensajeError = 'No se pudo actualizar la orden.';
+      }
+    });
+  }
+
+  eliminar(o: OrdenCompra) {
+    const Swal = (window as any).Swal;
+    Swal.fire({
+      title: `¿Eliminar la orden #${o.idOrdenCompra}?`,
+      text: 'Se eliminará junto con todos sus detalles.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((resultado: any) => {
+      if (resultado.isConfirmed) {
+        this.ordenService.eliminarOrden(o.idOrdenCompra).subscribe({
+          next: () => {
+            this.mostrarToast('success', `Orden #${o.idOrdenCompra} eliminada`);
+            this.cargar();
+          },
+          error: (err) => {
+            console.error('Error al eliminar la orden', err);
+            this.mensajeError = 'No se pudo eliminar la orden.';
+          }
+        });
+      }
+    });
+  }
+
+  private mostrarToast(icono: string, titulo: string) {
+    const Swal = (window as any).Swal;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+    Toast.fire({ icon: icono, title: titulo });
+  }
+
+  descargarPdf(o: OrdenCompra) {
+    this.ordenService.descargarPdf(o.idOrdenCompra).subscribe({
+      next: (respuesta) => {
+        const contenido = respuesta.body;
+        if (!contenido) return;
+
+        const url = URL.createObjectURL(contenido);
+        const enlace = document.createElement('a');
+        enlace.href = url;
+        enlace.download = 'orden-compra-' + o.idOrdenCompra + '.pdf';
+        enlace.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al descargar el PDF', err);
+        this.mensajeError = 'No se pudo generar el PDF de la orden.';
       }
     });
   }
