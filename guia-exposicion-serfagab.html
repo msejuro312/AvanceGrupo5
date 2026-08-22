@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Exposición - Grupo 5 SERFAGAB (15 min · Carlos → Oscar → Manuel → Valerie)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #1e293b; line-height: 1.7; padding: 0; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 2rem; margin-bottom: 8px; color: #0f172a; }
+  h1 small { font-size: 1rem; font-weight: 400; color: #64748b; }
+  .subtitle { color: #475569; margin-bottom: 32px; font-size: 1.05rem; }
+  h2 { font-size: 1.5rem; margin-top: 48px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 3px solid #3b82f6; color: #0f172a; }
+  h3 { font-size: 1.2rem; margin-top: 32px; margin-bottom: 12px; color: #1e293b; }
+  h4 { font-size: 1.05rem; margin-top: 24px; margin-bottom: 8px; color: #334155; }
+  p, li { margin-bottom: 10px; color: #334155; }
+  ul, ol { padding-left: 24px; margin-bottom: 16px; }
+  code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace; color: #0f172a; word-break: break-word; }
+
+  .info-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px 20px; border-radius: 8px; margin: 16px 0 24px; }
+  .info-box strong { color: #1e40af; }
+  .warn-box { background: #fefce8; border-left: 4px solid #eab308; padding: 16px 20px; border-radius: 8px; margin: 16px 0 24px; }
+  .warn-box strong { color: #854d0e; }
+  .danger-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px 20px; border-radius: 8px; margin: 16px 0 24px; }
+  .danger-box strong { color: #991b1b; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; word-break: break-word; }
+  th { background: #f1f5f9; font-weight: 600; color: #0f172a; }
+  tr:hover td { background: #f8fafc; }
+
+  .toc { background: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .toc h2 { margin-top: 0; border-bottom: 0; }
+  .toc ol { margin-bottom: 0; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { display: block; padding: 4px 0; }
+
+  .section-card { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .badge { display: inline-block; background: #dbeafe; color: #1d4ed8; padding: 2px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 12px; }
+  .badge.green  { background: #dcfce7; color: #15803d; }
+  .badge.orange { background: #ffedd5; color: #c2410c; }
+  .badge.purple { background: #ede9fe; color: #6d28d9; }
+  .badge.red    { background: #fee2e2; color: #b91c1c; }
+
+  /* Tarjeta de integrante */
+  .speaker { border-left: 6px solid #3b82f6; }
+  .speaker h2 { border-bottom-color: #3b82f6; }
+  .speaker.carlos  { border-left-color: #3b82f6; } .speaker.carlos  h2 { border-bottom-color: #3b82f6; }
+  .speaker.oscar   { border-left-color: #10b981; } .speaker.oscar   h2 { border-bottom-color: #10b981; }
+  .speaker.manuel  { border-left-color: #f97316; } .speaker.manuel  h2 { border-bottom-color: #f97316; }
+  .speaker.valerie { border-left-color: #8b5cf6; } .speaker.valerie h2 { border-bottom-color: #8b5cf6; }
+
+  /* Línea de tiempo */
+  .timeline { list-style: none; padding: 0; margin: 16px 0 8px; position: relative; }
+  .timeline li { position: relative; padding: 0 0 22px 34px; margin: 0; border-left: 3px solid #cbd5e1; transform: translateX(1px); }
+  .timeline li:last-child { border-left-color: transparent; padding-bottom: 4px; }
+  .timeline li::before { content: ''; position: absolute; left: -10px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 4px solid #3b82f6; }
+  .timeline li.oscar::before   { border-color: #10b981; }
+  .timeline li.manuel::before  { border-color: #f97316; }
+  .timeline li.valerie::before { border-color: #8b5cf6; }
+  .timeline li.end::before     { border-color: #ef4444; }
+  .timeline .t-time { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.85rem; font-weight: 700; color: #0f172a; display: block; }
+  .timeline .t-name { font-weight: 700; color: #1d4ed8; }
+  .timeline li.oscar .t-name   { color: #047857; }
+  .timeline li.manuel .t-name  { color: #c2410c; }
+  .timeline li.valerie .t-name { color: #6d28d9; }
+
+  /* Frase de transición / guion hablado */
+  .quote { background: #f8fafc; border: 1px dashed #94a3b8; border-radius: 10px; padding: 14px 18px; margin: 12px 0; color: #334155; font-style: italic; }
+  .quote::before { content: '💬 '; font-style: normal; }
+  .quote.handoff { background: #f0fdf4; border-color: #22c55e; }
+  .quote.handoff::before { content: '🤝 '; font-style: normal; }
+
+  .checklist { list-style: none; padding-left: 0; counter-reset: paso; }
+  .checklist li { counter-increment: paso; position: relative; padding: 10px 14px 10px 52px; margin: 8px 0; background: #f8fafc; border-radius: 8px; }
+  .checklist li::before { content: counter(paso); position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; background: #3b82f6; color: #fff; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+
+  @media print {
+    .toc, .section-card { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; }
+    body { background: #ffffff; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Guía de Exposición en Clase &mdash; Grupo 5 SERFAGAB <small>15 minutos · 4 integrantes</small></h1>
+<p class="subtitle">Planificación simple y cronometrada de la exposición del <strong>Sistema Web de Gestión de Compras de SERFAGAB S.A.C.</strong> para el curso <strong>Desarrollo de Aplicaciones Web I</strong>. Orden de exposición: <strong>Carlos → Oscar → Manuel → Valerie</strong>. Cada sección incluye su bloque de tiempo, las diapositivas que le corresponden, un guion sugerido de qué decir y la frase exacta para entregarle la palabra al siguiente compañero.</p>
+
+<div class="toc">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#resumen">Resumen general de la exposición</a></li>
+    <li><a href="#tiempos">Línea de tiempo y puntos de control</a></li>
+    <li><a href="#carlos">Carlos (~4 min): el negocio y el problema</a></li>
+    <li><a href="#oscar">Oscar (~3 min): objetivos y alcance del sistema</a></li>
+    <li><a href="#manuel">Manuel (~4 min): arquitectura y backend</a></li>
+    <li><a href="#valerie">Valerie (~3.5 min): demo en vivo + impacto + cierre</a></li>
+    <li><a href="#consejos">Consejos prácticos y plan B</a></li>
+    <li><a href="#pptx">Ajustes pendientes al PPTX antes de exponer</a></li>
+    <li><a href="#preguntas">Posibles preguntas del profesor (y cómo responderlas)</a></li>
+  </ol>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card" id="resumen">
+  <span class="badge">Visión general</span>
+  <h2 style="margin-top:0;">1. Resumen general de la exposición</h2>
+  <table>
+    <tr><th>Dato</th><th>Detalle</th></tr>
+    <tr><td><strong>Duración total</strong></td><td>15 minutos (incluye demo; si hay ronda de preguntas, es aparte)</td></tr>
+    <tr><td><strong>Integrantes</strong></td><td>4 (todos exponen)</td></tr>
+    <tr><td><strong>Orden</strong></td><td>1º Carlos → 2º Oscar → 3º Manuel → 4º Valerie</td></tr>
+    <tr><td><strong>Estructura narrativa</strong></td><td>Negocio/problema → Objetivos → Cómo se construyó → Demo y resultados</td></tr>
+    <tr><td><strong>Material</strong></td><td><code>SERFAGAB_Presentacion.pptx</code> (15 slides) + app corriendo para la demo</td></tr>
+    <tr><td><strong>Colchón</strong></td><td>~30 segundos al final; si alguien se pasa, el que sigue recorta la demo o los ejemplos, <em>nunca</em> el cierre de Valerie</td></tr>
+  </table>
+
+  <div class="info-box"><strong>Idea fuerza del relato:</strong> "SERFAGAB llevaba sus compras en cuadernos y Excel; nosotros lo convertimos en una plataforma web con Angular y Spring Boot donde cada orden de compra queda registrada, trazable y descargable en PDF." Si cada integrante repite esa idea desde su ángulo, la exposición se sentirá cohesionada.</div>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card" id="tiempos">
+  <span class="badge">Cronometraje</span>
+  <h2 style="margin-top:0;">2. Línea de tiempo y puntos de control</h2>
+  <ul class="timeline">
+    <li>
+      <span class="t-time">00:00 – 04:00</span>
+      <span class="t-name">CARLOS</span> — Apertura, quién es SERFAGAB, diagnóstico y solución propuesta (slides 1–4).
+    </li>
+    <li class="oscar">
+      <span class="t-time">04:00 – 07:00</span>
+      <span class="t-name">OSCAR</span> — Objetivo general, metas específicas y módulos del sistema (slide 5 + módulos).
+    </li>
+    <li class="manuel">
+      <span class="t-time">07:00 – 11:00</span>
+      <span class="t-name">MANUEL</span> — Arquitectura, stack tecnológico, seguridad y backend (slides 6–7).
+    </li>
+    <li class="valerie">
+      <span class="t-time">11:00 – 14:30</span>
+      <span class="t-name">VALERIE</span> — Demo en vivo del sistema, impacto esperado y conclusiones (slides 8–12, 14–15).
+    </li>
+    <li class="end">
+      <span class="t-time">14:30 – 15:00</span>
+      <strong>Colchón final</strong> — cierre limpio dentro del tiempo, sin ser cortados.
+    </li>
+  </ul>
+  <table>
+    <tr><th>Punto de control</th><th>Si van atrasados…</th></tr>
+    <tr><td><strong>Minuto 4:</strong> Carlos debe estar entregando con Oscar ya de pie</td><td>Carlos salta el detalle del diagnóstico (slide 3) y resume en una frase.</td></tr>
+    <tr><td><strong>Minuto 7:</strong> Oscar debe estar entregando con Manuel listo</td><td>Oscar menciona solo 2 de las 4 metas específicas.</td></tr>
+    <tr><td><strong>Minuto 11:</strong> Manuel debe pasarle la palabra a Valerie</td><td>Manuel deja la seguridad en una frase ("login con contraseñas cifradas y roles") y no abre código.</td></tr>
+    <tr><td><strong>Minuto 13:</strong> Valerie debe estar mostrando una orden + PDF</td><td>Valerie salta crear una orden nueva y muestra una ya creada + su PDF.</td></tr>
+  </table>
+  <div class="info-box"><strong>Truco de ensayo:</strong> acuerden una señal silenciosa entre ustedes (el siguiente se pone de pie cuando quedan 30 segundos del actual). Ensayen 1 vez completa con cronómetro; casi siempre se pierde más tiempo en las transiciones que en el contenido.</div>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card speaker carlos" id="carlos">
+  <span class="badge">1er ponente · ~4 min · Slides 1 → 4</span>
+  <h2 style="margin-top:0;">3. CARLOS — El negocio y el problema</h2>
+
+  <h3>Tu misión</h3>
+  <p>Abrir la exposición con energía y dejarle al público claro <strong>quién es SERFAGAB, qué dolor tiene y qué proponemos</strong>. Al terminar tu bloque, todos deben entender el problema aunque no entiendan nada de tecnología todavía.</p>
+
+  <h3>Slide 1 — Portada (30 seg)</h3>
+  <ul>
+    <li>Saludo breve: buenos días/tardes profesor y compañeros.</li>
+    <li>Presenten al equipo completo de una sola vez (los 4 nombres) y digan qué curso es.</li>
+    <li>Anuncien el tema: <em>"Sistema Web de Gestión de Compras para SERFAGAB SAC"</em>.</li>
+    <li>Mencionen la agenda en una frase: <em>"Veremos primero la empresa y su problema, luego nuestros objetivos, cómo construimos el sistema, y terminaremos con una demostración en vivo"</em>.</li>
+  </ul>
+
+  <h3>Slide 2 — Quién es SERFAGAB (1 min)</h3>
+  <ul>
+    <li>Empresa peruana dedicada a la <strong>fabricación de tableros metálicos con integración eléctrica</strong>, atendiendo proyectos industriales y comerciales.</li>
+    <li>Citar el lema como gancho: <em>"Creado para dar Soluciones"</em> — y conectar: <em>"irónicamente, sus propias compras eran lo menos resuelto"</em>.</li>
+    <li>Cerrar la slide con el reto: como toda empresa en crecimiento, dependen de registros manuales que les restan velocidad y control frente a sus proveedores.</li>
+  </ul>
+
+  <h3>Slide 3 — Diagnóstico (1 min 15 seg)</h3>
+  <p>Recorrer los 4 dolores contándolos como historia (no leer la lista):</p>
+  <ul>
+    <li><strong>1. Registro manual:</strong> órdenes y cotizaciones en cuadernos o Excel.</li>
+    <li><strong>2. Información dispersa:</strong> cada área guarda sus propios datos de proveedores.</li>
+    <li><strong>3. Poco control:</strong> no existe historial centralizado de compras.</li>
+    <li><strong>4. Demoras y errores:</strong> el seguimiento manual retrasa la fabricación de los tableros.</li>
+  </ul>
+  <p>Frase puente recomendada: <em>"Imaginen que el área de producción necesita un gabinete urgente: hoy eso significa llamar por teléfono, buscar el número del proveedor en un cuaderno y rezar para que nadie haya duplicado la orden."</em></p>
+
+  <h3>Slide 4 — La solución propuesta (1 min 15 seg)</h3>
+  <ul>
+    <li>Un <strong>Sistema Web de Gestión de Compras</strong> que centraliza proveedores y órdenes de compra, reemplazando el registro manual por un flujo digital, trazable y rápido.</li>
+    <li>Explicar el flujo nuevo de 4 pasos: el proveedor envía cotización → el sistema registra la orden → compras hace seguimiento en línea → reportes centralizados.</li>
+    <li>Rematar con la comparación: <em>"de cuaderno a plataforma"</em>.</li>
+  </ul>
+
+  <div class="quote handoff"><strong>Entrega a Oscar:</strong> "Ese es el problema que nos planteamos resolver. Para hacerlo bien, primero definimos metas claras, y para explicarlas está Oscar."</div>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card speaker oscar" id="oscar">
+  <span class="badge green">2do ponente · ~3 min · Slide 5 (+ módulos)</span>
+  <h2 style="margin-top:0;">4. OSCAR — Objetivos y alcance del sistema</h2>
+
+  <h3>Tu misión</h3>
+  <p>Hacer el puente entre el problema que contó Carlos y la parte técnica de Manuel: <strong>qué nos propusimos lograr y qué incluye exactamente el sistema</strong>. Es el bloque corto: 3 minutos máximo.</p>
+
+  <h3>Slide 5 — Metas del proyecto (1 min 30 seg)</h3>
+  <ul>
+    <li><strong>Objetivo general:</strong> automatizar la gestión de compras de SERFAGAB mediante una plataforma web que centralice proveedores y órdenes de compra. Dígalo lento, es LA frase del proyecto.</li>
+    <li>Luego las 4 metas específicas, agrupadas de dos en dos:
+      <ol>
+        <li><strong>Automatizar procesos:</strong> reducir tareas manuales repetitivas.</li>
+        <li><strong>Reducir errores:</strong> minimizar inconsistencias por doble digitación.</li>
+        <li><strong>Centralizar información:</strong> proveedores y órdenes en una sola fuente de datos.</li>
+        <li><strong>Mejorar el control:</strong> visibilidad y trazabilidad de cada orden.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <h3>Módulos del sistema (sin slide propia, ~1 min)</h3>
+  <p>Enumerar de memoria lo que el sistema hace HOY (no prometer cosas futuras):</p>
+  <ul>
+    <li>Login de usuarios con <strong>roles</strong>: administrador y usuario de consulta.</li>
+    <li>Gestión de <strong>materiales</strong> y <strong>tipos de material</strong> (crear, editar, listar, buscar, paginar).</li>
+    <li>Gestión de <strong>proveedores</strong> con validación de RUC, celular y correo.</li>
+    <li><strong>Órdenes de compra</strong> con sus detalles, estados (pendiente/enviado/anulado) e <strong>historial filtrable</strong> por fecha y proveedor.</li>
+    <li><strong>Descarga en PDF</strong> de cada orden lista para enviar.</li>
+  </ul>
+
+  <div class="quote handoff"><strong>Entrega a Manuel:</strong> "Ese es el alcance funcional. Ahora bien, ¿cómo logramos construirlo? Para explicarlo está Manuel."</div>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card speaker manuel" id="manuel">
+  <span class="badge orange">3er ponente · ~4 min · Slides 6–7</span>
+  <h2 style="margin-top:0;">5. MANUEL — Arquitectura y backend</h2>
+
+  <h3>Tu misión</h3>
+  <p>Explicar <strong>cómo está construido el sistema</strong> de forma que un no-experto lo entienda con el diagrama, pero dando suficientes detalles técnicos para el profesor. Este bloque es el que más impresiona si lo dominas: habla con seguridad de capas y seguridad.</p>
+
+  <h3>Slide 6 — Arquitectura (2 min)</h3>
+  <ul>
+    <li>Contar el recorrido de una petición con el diagrama: <strong>navegador (Angular) → API REST (Spring Boot) → Controller → Service → Repository → MySQL</strong>.</li>
+    <li>Explicar cada capa en una frase sencilla:
+      <ul>
+        <li><strong>Controller:</strong> recibe las peticiones HTTP del frontend.</li>
+        <li><strong>Service:</strong> contiene las reglas del negocio (ej.: calcular el total de una orden).</li>
+        <li><strong>Repository:</strong> guarda y consulta los datos en la base.</li>
+      </ul>
+    </li>
+    <li><strong>Ojo:</strong> esta slide aún dice "Postman → H2". Explicar la versión real: probamos cada endpoint con Postman durante el desarrollo, pero el cliente final es la SPA de Angular y la base definitiva es MySQL.</li>
+  </ul>
+
+  <h3>Slide 7 — Stack tecnológico (1 min)</h3>
+  <ul>
+    <li><strong>Java 24 + Spring Boot 4:</strong> framework del backend y servicios REST.</li>
+    <li><strong>Angular 21 + Bootstrap 5:</strong> interfaz web moderna y responsiva.</li>
+    <li><strong>MySQL:</strong> base de datos relacional (vía XAMPP).</li>
+    <li><strong>Maven:</strong> gestión de dependencias · <strong>Git:</strong> control de versiones · <strong>OpenPDF:</strong> reportes PDF · <strong>Postman:</strong> pruebas de API.</li>
+  </ul>
+
+  <h3>Bonus si llevas el tiempo bien (1 min)</h3>
+  <ul>
+    <li><strong>Seguridad:</strong> contraseñas cifradas con BCrypt, autenticación y roles: solo el administrador crea/edita/elimina; el usuario de consulta solo ve.</li>
+    <li><strong>Datos de prueba:</strong> el sistema se auto-puebla al iniciar (DataSeeder) con 16 proveedores, 26 materiales y órdenes de ejemplo, ideal para la demo.</li>
+  </ul>
+
+  <div class="quote handoff"><strong>Entrega a Valerie:</strong> "Esa es la maquinaria detrás. Lo mejor es verlo funcionar: para la demostración en vivo, con ustedes Valerie."</div>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card speaker valerie" id="valerie">
+  <span class="badge purple">4ta ponente · ~3.5 min · Slides 8–12, 14–15</span>
+  <h2 style="margin-top:0;">6. VALERIE — Demo en vivo + impacto + cierre</h2>
+
+  <h3>Tu misión</h3>
+  <p>La parte más arriesgada y la más memorable: <strong>mostrar el sistema vivo</strong> y cerrar con broche de oro. Practica esta ruta varias veces hasta poder hacerla en 2 minutos sin dudar.</p>
+
+  <h3>Ruta de la demo (2 min, con la app corriendo de fondo)</h3>
+  <ol class="checklist">
+    <li><strong>Login como administrador</strong> (<code>admin / admin123</code>) — mostrar que entra al dashboard con tarjetas resumen.</li>
+    <li><strong>Dashboard:</strong> señalar KPIs (materiales, proveedores, órdenes) y las últimas órdenes.</li>
+    <li><strong>Proveedores:</strong> registrar uno nuevo en segundos (validaciones en vivo de RUC/celular/email = momento wow).</li>
+    <li><strong>Órdenes:</strong> abrir una orden existente, ver sus detalles y cambiar su estado a ENVIADO.</li>
+    <li><strong>PDF:</strong> descargar la orden en PDF y decir: <em>"este documento sale directo del sistema, listo para enviar al proveedor"</em>.</li>
+    <li>(Opcional si hay tiempo) login con usuario de consulta (<code>user / user123</code>) para mostrar que NO ve botones de administrador.</li>
+  </ol>
+  <div class="danger-box"><strong>Regla de oro de la demo:</strong> nunca depures errores en vivo. Si algo falla: sonríe, di <em>"esto lo vemos mejor en la captura"</em> y pasa a las screenshots del PPTX (slides 8–11).</div>
+
+  <h3>Slide 12 — Impacto esperado (45 seg)</h3>
+  <p>Contrastar ANTES vs DESPUÉS mirando al público, no la pantalla: de papel, hojas sueltas y Excel → a un solo sistema con información centralizada, seguimiento completo y procesos más ágiles y confiables.</p>
+
+  <h3>Slides 14–15 — Conclusiones y gracias (45 seg)</h3>
+  <ul>
+    <li><strong>Automatización real:</strong> flujo digital operable desde el primer día.</li>
+    <li><strong>Base sólida y escalable:</strong> la arquitectura permite ampliarlo a otras áreas de la empresa.</li>
+    <li><strong>Control y visibilidad:</strong> SERFAGAB por fin tiene control sobre sus compras.</li>
+    <li>Cierre: <em>"Esto fue el Grupo 5. Muchas gracias, quedamos atentos a sus preguntas."</em> (slide de Gracias).</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card" id="consejos">
+  <span class="badge red">Operación</span>
+  <h2 style="margin-top:0;">7. Consejos prácticos y plan B</h2>
+  <h3>Antes del día de la exposición</h3>
+  <ul>
+    <li><strong>Ensayo cronometrado completo</strong>, mínimo 1 vez, idealmente 2. Cronometrar a cada quien individualmente también ayuda.</li>
+    <li><strong>Definir quién maneja los slides:</strong> recomendado que cada quien avance su propia diapositiva con clic o control remoto, así nadie depende de otro.</li>
+    <li><strong>Levantar el entorno antes de clase:</strong> XAMPP (MySQL) arriba, backend corriendo en el puerto 8080, frontend en el 4200, navegador ya abierto en el login. Probar la demo completa 5 minutos antes de entrar.</li>
+    <li><strong>Capturas de pantalla listas</strong> (slides 8–11) como plan B por si falla algo en vivo.</li>
+    <li>Proyectar con <strong>zoom 125%+ en el navegador</strong> para que el texto de la app se lea desde el fondo del aula.</li>
+  </ul>
+  <h3>Durante la exposición</h3>
+  <ul>
+    <li>No leer las diapositivas: son apoyo visual, el contenido va de su boca.</li>
+    <li>Mirar al público (y alternar con el profesor), no a la pantalla ni a la laptop.</li>
+    <li>Las transiciones son parte de la nota: entregar mencionando por nombre al siguiente y recibir retomando lo último que se dijo.</li>
+    <li>Si alguien olvida algo, el siguiente lo rescata con naturalidad: <em>"como mencionaba Carlos…"</em>.</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card" id="pptx">
+  <span class="badge red">Pendiente</span>
+  <h2 style="margin-top:0;">8. Ajustes pendientes al PPTX antes de exponer</h2>
+  <div class="warn-box"><strong>El PPTX actual quedó desactualizado respecto al proyecto terminado.</strong> Corregir estas slides para que nadie del aula note contradicciones:</div>
+  <table>
+    <tr><th>Slide</th><th> dice hoy</th><th>Debe decir</th></tr>
+    <tr><td><strong>6 — Arquitectura</strong></td><td>Cliente → Postman → Spring Boot → … → <code>H2</code></td><td><strong>Navegador (Angular) → API REST (Spring Boot) → Controller → Service → Repository → MySQL</strong>; Postman solo como herramienta de pruebas.</td></tr>
+    <tr><td><strong>7 — Stack</strong></td><td>Java, Spring Boot, Maven, Postman, <code>H2</code>, Git</td><td>Agregar <strong>Angular 21 + Bootstrap 5</strong> y cambiar H2 por <strong>MySQL</strong> (mantener Postman/Git/OpenPDF).</td></tr>
+    <tr><td><strong>13 — Estado actual</strong></td><td>"60% completado", frontend pendiente, BD definitiva pendiente</td><td>Proyecto <strong>completado</strong>: frontend Angular terminado, MySQL conectado, PDF funcionando. O reemplazar la slide por capturas del producto final.</td></tr>
+    <tr><td><strong>8–11 — Prototipo</strong></td><td>Capturas viejas de login/menú</td><td>Actualizar con capturas actuales del dashboard, CRUDs y modal de órdenes (sirven también de plan B de demo).</td></tr>
+  </table>
+</div>
+
+<!-- ================================================================ -->
+<div class="section-card" id="preguntas">
+  <span class="badge">Preparación</span>
+  <h2 style="margin-top:0;">9. Posibles preguntas del profesor (y cómo responderlas)</h2>
+  <table>
+    <tr><th>Pregunta probable</th><th>Respuesta corta sugerida</th></tr>
+    <tr><td>¿Por qué Spring Boot y no otra tecnología?</td><td>Es el framework visto en el curso; maduro, con JPA/Hibernate incluido y genera APIs REST rápidamente.</td></tr>
+    <tr><td>¿Cómo funciona la seguridad?</td><td>Spring Security + BCrypt para cifrar contraseñas y roles ADMIN/USER que restringen los endpoints; el frontend además oculta los botones según el rol.</td></tr>
+    <tr><td>¿Qué pasa si dos usuarios editan el mismo material?</td><td>El material usa versionamiento optimista (<code>@Version</code>): Hibernate rechaza la edición desactualizada evitando pisar cambios.</td></tr>
+    <tr><td>¿Cómo generan el PDF?</td><td>Con OpenPDF: se arma el documento en el backend (tabla de detalles, totales) y el endpoint lo devuelve como archivo descargable.</td></tr>
+    <tr><td>¿Cómo probaron la API?</td><td>Cada endpoint se validó primero con Postman antes de conectarlo al frontend.</td></tr>
+    <tr><td>¿Cómo se dividió el trabajo?</td><td>Todos participamos en desarrollo y pruebas; para la exposición dividimos por fortalezas: negocio (Carlos/Oscar), arquitectura (Manuel) y producto/demo (Valerie).</td></tr>
+  </table>
+  <div class="info-box"><strong>Reparto de respuestas:</strong> acuerden de antemano quién responde qué (Manuel: técnico/backend · Oscar: objetivos/alcance · Carlos: negocio · Valerie: producto/UI). Responder con nombre propio ("esa me toca a mí") transmite equipo organizado.</div>
+</div>
+
+</div>
+</body>
+</html>
