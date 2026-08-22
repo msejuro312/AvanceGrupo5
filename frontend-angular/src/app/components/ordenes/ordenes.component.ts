@@ -41,6 +41,11 @@ export class OrdenesComponent implements OnInit {
   mensajeError = '';
   guardando = false;
 
+  filtroEstado: string | null = null;
+  filtroIdProveedor: number | null = null;
+  filtroFechaDesde = '';
+  filtroFechaHasta = '';
+
   detalleOrden: OrdenCompra | null = null;
   mostrarDetalle = false;
   estados = ['PENDIENTE', 'ENVIADO', 'ANULADO'];
@@ -68,7 +73,12 @@ export class OrdenesComponent implements OnInit {
 
   cargar() {
     this.cargando = true;
-    this.ordenService.historialPaginado(1, this.page, this.size).subscribe({
+    this.ordenService.historialPaginado(1, this.page, this.size, {
+      estado: this.filtroEstado,
+      idProveedor: this.filtroIdProveedor,
+      fechaDesde: this.filtroFechaDesde || null,
+      fechaHasta: this.filtroFechaHasta || null
+    }).subscribe({
       next: (data) => {
         this.ordenes = data.content;
         this.totalPages = data.totalPages;
@@ -80,6 +90,20 @@ export class OrdenesComponent implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  filtrar() {
+    this.page = 0;
+    this.cargar();
+  }
+
+  limpiarFiltros() {
+    this.filtroEstado = null;
+    this.filtroIdProveedor = null;
+    this.filtroFechaDesde = '';
+    this.filtroFechaHasta = '';
+    this.page = 0;
+    this.cargar();
   }
 
   cargarProveedores() {

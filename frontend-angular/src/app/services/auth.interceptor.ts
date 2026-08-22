@@ -5,10 +5,10 @@ import { SesionService } from './sesion.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const sesionService = inject(SesionService);
-  const usuario = sesionService.obtenerUsuario();
+  const credenciales = sesionService.obtenerCredenciales();
 
-  if (usuario) {
-    const credentials = btoa(usuario.login + ':' + usuario.clave);
+  if (credenciales) {
+    const credentials = btoa(credenciales.login + ':' + credenciales.clave);
     const authReq = req.clone({
       setHeaders: {
         Authorization: 'Basic ' + credentials

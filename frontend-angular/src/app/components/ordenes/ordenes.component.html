@@ -5,6 +5,40 @@
 
       <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
 
+      <fieldset class="border border-2 border-dark pb-2 px-3 mb-4">
+        <legend class="float-none w-auto px-2 h6 mb-0">Filtros</legend>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-3">
+            <select class="form-select" [(ngModel)]="filtroEstado">
+              <option [ngValue]="null">Estado: todos</option>
+              <option *ngFor="let e of estados" [ngValue]="e">{{ e }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <select class="form-select" [(ngModel)]="filtroIdProveedor">
+              <option [ngValue]="null">Proveedor: todos</option>
+              <option *ngFor="let p of proveedores" [ngValue]="p.idProveedor">{{ p.razonSocial }}</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input type="date" class="form-control" [(ngModel)]="filtroFechaDesde" title="Desde" />
+          </div>
+          <div class="col-md-2">
+            <input type="date" class="form-control" [(ngModel)]="filtroFechaHasta" title="Hasta" />
+          </div>
+          <div class="col-md-auto">
+            <button class="btn btn-outline-dark" (click)="filtrar()">
+              <i class="fa-solid fa-magnifying-glass me-1"></i>Filtrar
+            </button>
+          </div>
+          <div class="col-md-auto">
+            <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+              <i class="fa-solid fa-eraser me-1"></i>Limpiar
+            </button>
+          </div>
+        </div>
+      </fieldset>
+
       <div class="card p-3 mb-4" *ngIf="esAdmin">
         <h5 class="mb-3"><i class="fa-solid fa-cart-plus me-2"></i>Nueva orden de compra</h5>
 

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Material } from '../../models/material';
 import { TipoMaterial } from '../../models/tipo-material';
-import { MaterialService } from '../../services/material.service';
+import { MaterialService, MaterialFiltros } from '../../services/material.service';
 import { TipoMaterialService } from '../../services/tipo-material.service';
 import { SesionService } from '../../services/sesion.service';
 
@@ -19,7 +19,13 @@ export class MaterialesComponent implements OnInit {
   materiales: Material[] = [];
   tiposMaterial: TipoMaterial[] = [];
   cargando = true;
+  page = 0;
+  size = 5;
+  totalPages = 0;
+  totalElements = 0;
   textoBusqueda = '';
+  criterioBusqueda = 'nombre';
+  idTipoSeleccionado: number | null = null;
   editandoId: number | null = null;
   mostrarModal = false;
   errorMensaje = '';
@@ -58,34 +64,86 @@ export class MaterialesComponent implements OnInit {
 
   listar() {
     this.cargando = true;
-    this.materialService.listar().subscribe({
+    const filtros: MaterialFiltros = { criterio: this.criterioBusqueda };
+    if ((this.criterioBusqueda === 'nombre' || this.criterioBusqueda === 'descripcion') && this.textoBusqueda.trim()) {
+      filtros.texto = this.textoBusqueda.trim();
+    }
+    if (this.criterioBusqueda === 'tipo' && this.idTipoSeleccionado != null) {
+      filtros.idTipo = this.idTipoSeleccionado;
+    }
+    if (this.criterioBusqueda === 'id' && this.textoBusqueda.trim()) {
+      const id = Number(this.textoBusqueda);
+      if (!Number.isNaN(id)) {
+        this.buscarPorId(id);
+        return;
+      }
+    }
+    this.materialService.listarPaginado(this.page, this.size, filtros).subscribe({
       next: (data) => {
-        this.materiales = data;
+        this.materiales = data.content ?? [];
+        this.totalPages = data.totalPages ?? 0;
+        this.totalElements = data.totalElements ?? 0;
         this.cargando = false;
       },
       error: (err) => {
         console.error('Error al listar materiales', err);
+        this.materiales = [];
+        this.totalPages = 0;
+        this.totalElements = 0;
         this.cargando = false;
       }
     });
   }
 
   buscar() {
-    if (!this.textoBusqueda.trim()) {
-      this.listar();
-      return;
-    }
-    this.cargando = true;
-    this.materialService.buscar(this.textoBusqueda).subscribe({
-      next: (data) => {
-        this.materiales = data;
+    this.page = 0;
+    this.listar();
+  }
+
+  private buscarPorId(id: number) {
+    this.materialService.obtener(id).subscribe({
+      next: (m) => {
+        this.materiales = [m];
+        this.totalPages = 1;
+        this.totalElements = 1;
         this.cargando = false;
       },
-      error: (err) => {
-        console.error('Error al buscar materiales', err);
+      error: () => {
+        this.materiales = [];
+        this.totalPages = 0;
+        this.totalElements = 0;
         this.cargando = false;
       }
     });
+  }
+
+  alCambiarCriterio() {
+    this.textoBusqueda = '';
+    this.idTipoSeleccionado = null;
+    this.page = 0;
+    this.listar();
+  }
+
+  limpiarFiltros() {
+    this.criterioBusqueda = 'nombre';
+    this.textoBusqueda = '';
+    this.idTipoSeleccionado = null;
+    this.page = 0;
+    this.listar();
+  }
+
+  anterior() {
+    if (this.page > 0) {
+      this.page--;
+      this.listar();
+    }
+  }
+
+  siguiente() {
+    if (this.page < this.totalPages - 1) {
+      this.page++;
+      this.listar();
+    }
   }
 
   abrirNuevo() {
@@ -132,6 +190,7 @@ export class MaterialesComponent implements OnInit {
           ? 'Material actualizado correctamente'
           : 'Material creado correctamente');
         this.cancelarEdicion();
+        this.page = 0;
         this.listar();
       },
       error: (err) => {
@@ -146,6 +205,9 @@ export class MaterialesComponent implements OnInit {
       this.materialService.eliminar(m.idMaterial).subscribe({
         next: () => {
           this.mostrarToast('success', 'Material eliminado correctamente');
+          if (this.materiales.length === 1 && this.page > 0) {
+            this.page--;
+          }
           this.listar();
         },
         error: (err) => {

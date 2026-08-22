@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Cambios - Paginación y Órdenes por Fecha - SERFAGAB Grupo 5</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6fb;
+    color: #2b2b2b;
+    line-height: 1.65;
+  }
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2rem; letter-spacing: 1px; margin-bottom: 8px; }
+  .hero p { opacity: .85; max-width: 720px; margin: 0 auto; }
+  .hero .meta { margin-top: 14px; font-size: .85rem; opacity: .7; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(22,33,62,.08);
+    padding: 28px 30px;
+    margin-bottom: 28px;
+  }
+  h2 {
+    color: #16213e;
+    font-size: 1.35rem;
+    border-left: 5px solid #16213e;
+    padding-left: 12px;
+    margin-bottom: 16px;
+  }
+  h3 { color: #1a1a2e; font-size: 1.05rem; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; }
+  ul, ol { margin: 8px 0 12px 24px; }
+  li { margin-bottom: 6px; }
+
+  code {
+    background: #eef1f8;
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .88em;
+    color: #16213e;
+  }
+  pre {
+    background: #1a1a2e;
+    color: #d7dcf0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .85rem;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  pre .com { color: #7ee787; }
+  pre .str { color: #ffd479; }
+  pre .kw { color: #79b8ff; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .92rem; }
+  th {
+    background: #16213e; color: #fff; text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .5px; padding: 10px 12px; text-align: left;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #e6e9f2; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f9fd; }
+
+  .badge {
+    display: inline-block; border-radius: 20px; padding: 2px 11px;
+    font-size: .74rem; font-weight: 600; letter-spacing: .3px;
+  }
+  .b-backend  { background: #e3ecff; color: #1d4ed8; }
+  .b-frontend { background: #e2f7e9; color: #15803d; }
+  .b-visual   { background: #fdf0dd; color: #b45309; }
+  .b-nuevo    { background: #fde3e3; color: #b91c1c; }
+  .b-fix      { background: #ede9fe; color: #6d28d9; }
+  .b-copy     { background: #dff5f6; color: #0e7490; }
+
+  .alerta {
+    background: #fff8e6; border-left: 5px solid #f0a500;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .ok {
+    background: #e8f7ee; border-left: 5px solid #22a05a;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .paso {
+    display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px;
+  }
+  .num {
+    background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff;
+    min-width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; margin-top: 2px;
+  }
+  footer {
+    text-align: center; color: #8a90a5; font-size: .82rem; padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SERFAGAB &mdash; Guía de Cambios: Paginación y Órdenes por Fecha (Grupo 5)</h1>
+  <p>Última tanda de mejoras: <b>paginación en Materiales, Proveedores y Tipos de Material</b>
+     (al estilo de Órdenes de Compra) y <b>listado de órdenes en orden descendente por fecha</b>,
+     para que una orden recién creada sea la primera que se vea.</p>
+  <div class="meta">Backend: Spring Boot 4 (Java 24) + MySQL &middot; Frontend: Angular 21 + Bootstrap 5 &middot; Tamaño de página: 5 registros &middot; Orden de listados: por ID ascendente</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= RESUMEN ================= -->
+  <div class="card">
+    <h2>1. Resumen rápido <span class="badge b-backend">BACKEND</span> <span class="badge b-frontend">FRONTEND</span></h2>
+
+    <table>
+      <tr><th>#</th><th>Cambio</th><th>Tipo</th><th>Dónde</th></tr>
+      <tr>
+        <td>1</td>
+        <td>Paginación en <b>Materiales</b> (nombre, descripción, tipo)</td>
+        <td><span class="badge b-nuevo">NUEVO</span></td>
+        <td>Backend <code>/api/materiales/paginado</code> + componente</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Paginación en <b>Proveedores</b> (razón social, RUC, email)</td>
+        <td><span class="badge b-nuevo">NUEVO</span></td>
+        <td>Backend <code>/api/proveedores/paginado</code> + componente</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Paginación en <b>Tipos de Material</b> (nombre, descripción)</td>
+        <td><span class="badge b-nuevo">NUEVO</span></td>
+        <td>Backend <code>/api/tipos-material/paginado</code> + componente</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Órdenes de compra listadas <b>por fecha descendente</b></td>
+        <td><span class="badge b-fix">FIX/MEJORA</span></td>
+        <td><code>OrdenCompraController.historialPaginado</code></td>
+      </tr>
+    </table>
+
+    <div class="ok">
+      <b>Resultado:</b> los 4 listados del sistema ahora tienen el mismo comportamiento:
+      5 registros por página, botones <code>&laquo; Anterior</code> / <code>Siguiente &raquo;</code>,
+      indicador <i>"Página X de Y (N registros)"</i>, y los filtros de búsqueda conviven con la paginación
+      (buscar siempre vuelve a la página 1).
+    </div>
+  </div>
+
+  <!-- ================= BACKEND ================= -->
+  <div class="card">
+    <h2>2. Backend: endpoints paginados <span class="badge b-backend">BACKEND</span></h2>
+
+    <h3>a) Repositorios: overloads con <code>Pageable</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Spring Data JPA permite sobrecargar un finder: si le pasas un <code>Pageable</code>, devuelve
+       <code>Page&lt;T&gt;</code> (contenido + total de páginas + total de registros). Se agregaron las versiones paginadas
+       de los finders que ya existían, sin tocar los originales:</p>
+
+    <table>
+      <tr><th>Repositorio</th><th>Métodos Page agregados</th></tr>
+      <tr>
+        <td><code>MaterialRepository.java</code></td>
+        <td>
+          <code>findByActivoTrue(Pageable)</code>,<br>
+          <code>findByNombreContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>,<br>
+          <code>findByDescripcionContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>,<br>
+          <code>findByTipoMaterial_IdTipoMaterialAndActivoTrue(Integer, Pageable)</code>
+        </td>
+      </tr>
+      <tr>
+        <td><code>ProveedorRepository.java</code></td>
+        <td>
+          <code>findByActivoTrue(Pageable)</code>,<br>
+          <code>findByRazonSocialContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>,<br>
+          <code>findByRucContainingAndActivoTrue(String, Pageable)</code>,<br>
+          <code>findByEmailContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>
+        </td>
+      </tr>
+      <tr>
+        <td><code>TipoMaterialRepository.java</code></td>
+        <td>
+          <code>findByActivoTrue(Pageable)</code>,<br>
+          <code>findByNombreContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>,<br>
+          <code>findByDescripcionContainingIgnoreCaseAndActivoTrue(String, Pageable)</code>
+        </td>
+      </tr>
+    </table>
+
+    <h3>b) Controladores: endpoint <code>/paginado</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Cada controlador recibió un nuevo GET. Los endpoints anteriores (<code>GET /api/materiales</code>,
+       <code>/api/proveedores</code>, etc.) <b>siguen funcionando igual</b>: el dashboard y los selects
+       (combo de tipos al crear material, combo de proveedores en órdenes) los siguen usando.</p>
+
+    <pre><span class="com">// Materiales</span>
+GET /api/materiales/paginado?page=<span class="str">0</span>&amp;size=<span class="str">5</span>&amp;criterio=<span class="str">nombre|descripcion|tipo</span>&amp;texto=...&amp;idTipo=...
+
+<span class="com">// Proveedores</span>
+GET /api/proveedores/paginado?page=<span class="str">0</span>&amp;size=<span class="str">5</span>&amp;criterio=<span class="str">razonSocial|ruc|email</span>&amp;texto=...
+
+<span class="com">// Tipos de material</span>
+GET /api/tipos-material/paginado?page=<span class="str">0</span>&amp;size=<span class="str">5</span>&amp;criterio=<span class="str">nombre|descripcion</span>&amp;texto=...</pre>
+
+    <p>Lógica interna (igual en los tres):</p>
+    <ul>
+      <li>Si <code>texto</code> viene vacío → devuelve <b>todo</b> el listado activo, paginado
+          (<code>findByActivoTrue(pageable)</code>).</li>
+      <li>Si hay texto → filtra según <code>criterio</code> (en materiales, <code>tipo</code> usa
+          <code>idTipo</code>).</li>
+      <li>El orden es por <b>ID ascendente</b> gracias a
+          <code>Sort.by("idMaterial").ascending()</code> (y equivalentes), así cada página muestra
+          siempre los mismos registros en el mismo orden.</li>
+      <li>La respuesta es un objeto JSON estándar de Spring:
+          <code>{ content, totalPages, totalElements, ... }</code>.</li>
+    </ul>
+
+    <pre><span class="com">// Ejemplo (MaterialController.java)</span>
+<span class="kw">@GetMapping</span>(<span class="str">"/paginado"</span>)
+<span class="kw">public</span> Page&lt;Material&gt; listarPaginado(
+        <span class="kw">@RequestParam</span>(defaultValue = <span class="str">"0"</span>) <span class="kw">int</span> page,
+        <span class="kw">@RequestParam</span>(defaultValue = <span class="str">"5"</span>) <span class="kw">int</span> size,
+        <span class="kw">@RequestParam</span>(defaultValue = <span class="str">"nombre"</span>) String criterio,
+        <span class="kw">@RequestParam</span>(required = <span class="kw">false</span>) String texto,
+        <span class="kw">@RequestParam</span>(required = <span class="kw">false</span>) Integer idTipo) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(<span class="str">"idMaterial"</span>).ascending());
+    <span class="kw">boolean</span> hayTexto = texto != <span class="kw">null</span> &amp;&amp; !texto.trim().isEmpty();
+    <span class="com">// switch (criterio) ... devuelve la página correspondiente,</span>
+    <span class="com">// o findByActivoTrue(pageable) cuando no hay filtros</span>
+}</pre>
+
+    <div class="alerta">
+      <b>Nota sobre seguridad:</b> como son GET bajo las mismas rutas ya cubiertas por
+      <code>SecurityConfig</code> ("leer es libre"), no hizo falta cambiar nada de permisos.
+    </div>
+
+    <h3>c) Órdenes de compra: fecha descendente <span class="badge b-fix">MEJORA</span></h3>
+    <p>Antes el listado paginado (<code>GET /api/ordenes-compra/usuario/{id}/paginado</code>) no definía orden,
+       así que las órdenes salían en el orden por defecto de la BD y una orden nueva quedaba "perdida"
+       entre las últimas páginas.</p>
+
+    <pre><span class="com">// Antes</span>
+Pageable pageable = PageRequest.of(page, size);
+
+<span class="com">// Ahora (OrdenCompraController.java - historialPaginado)</span>
+Sort sort = Sort.by(Sort.Order.desc(<span class="str">"fecha"</span>), Sort.Order.desc(<span class="str">"idOrdenCompra"</span>));
+Pageable pageable = PageRequest.of(page, size, sort);
+<span class="kw">return</span> ordenCompraRepository.buscarPaginadoConFiltros(idUsuario, estado, idProveedor, fechaDesde, fechaHasta, pageable);</pre>
+
+    <ul>
+      <li><b>fecha DESC</b>: lo más reciente primero.</li>
+      <li><b>idOrdenCompra DESC como desempate</b>: si dos órdenes tienen la misma fecha,
+          la de mayor ID (creada más tarde) aparece primero.</li>
+      <li>El frontend ya volvía a la página 0 después de crear una orden, así que ahora
+          <b>la orden recién creada se ve inmediatamente arriba</b>.</li>
+      <li>Los filtros (estado, proveedor, rango de fechas) siguen aplicando igual; solo cambia el orden.</li>
+      <li>El dashboard no se afecta: trae hasta 1000 órdenes y calcula pendientes en memoria.</li>
+    </ul>
+  </div>
+
+  <!-- ================= FRONTEND ================= -->
+  <div class="card">
+    <h2>3. Frontend Angular <span class="badge b-frontend">FRONTEND</span></h2>
+
+    <h3>a) Services: método <code>listarPaginado()</code> <span class="badge b-nuevo">NUEVO</span></h3>
+    <p>Los tres services sumaron un método que arma los parámetros con <code>HttpParams</code> y devuelve
+       el objeto <code>Page</code> tal cual lo manda Spring:</p>
+
+    <pre><span class="com">// material.service.ts (equivalente en proveedor.service.ts y tipo-material.service.ts)</span>
+listarPaginado(page: number, size: number, filtros?: MaterialFiltros): Observable&lt;any&gt; {
+  <span class="kw">let</span> params = <span class="kw">new</span> HttpParams().set(<span class="str">'page'</span>, page).set(<span class="str">'size'</span>, size);
+  <span class="kw">if</span> (filtros) {
+    <span class="kw">if</span> (filtros.criterio) { params = params.set(<span class="str">'criterio'</span>, filtros.criterio); }
+    <span class="kw">if</span> (filtros.texto)    { params = params.set(<span class="str">'texto'</span>, filtros.texto); }
+    <span class="kw">if</span> (filtros.idTipo != <span class="kw">null</span>) { params = params.set(<span class="str">'idTipo'</span>, filtros.idTipo); }
+  }
+  <span class="kw">return this</span>.http.get&lt;<span class="kw">any</span>&gt;(<span class="str">`${this.apiUrl}/paginado`</span>, { params });
+}</pre>
+
+    <h3>b) Componentes TS: campos y navegación <span class="badge b-nuevo">NUEVO</span></h3>
+    <p><code>materiales.component.ts</code>, <code>proveedores.component.ts</code> y
+       <code>tipos-material.component.ts</code> replican el patrón de <code>ordenes.component.ts</code>:</p>
+    <ul>
+      <li>Nuevos campos: <code>page = 0</code>, <code>size = 5</code>, <code>totalPages</code>,
+          <code>totalElements</code>.</li>
+      <li><code>listar()</code> ahora llama al endpoint paginado pasándole el criterio/texto actual y lee
+          <code>data.content</code>, <code>data.totalPages</code> y <code>data.totalElements</code>.</li>
+      <li><code>buscar()</code> reinicia a la página 0 antes de consultar (los resultados entran siempre
+          por la primera página).</li>
+      <li>Nuevos métodos <code>anterior()</code> y <code>siguiente()</code>, idénticos a los de órdenes.</li>
+      <li>Al crear/editar se vuelve a la página 1; al eliminar, si era el único registro de la página,
+          se retrocede una para no quedarse viendo una página vacía.</li>
+      <li><b>Búsqueda por ID:</b> sigue siendo resultado único vía <code>obtener(id)</code>; en ese caso
+          se fija <code>totalPages = 1</code> y los botones de paginación quedan deshabilitados.</li>
+      <li>Los criterios de búsqueda y placeholders dinámicos de la guía anterior
+          (<i>"Buscar por nombre..." / "Buscar por descripción..." / "Buscar por ID..."</i>) no cambiaron.</li>
+    </ul>
+
+    <h3>c) HTML: bloque de paginación <span class="badge b-visual">VISUAL</span></h3>
+    <p>Bajo la tabla de cada CRUD se agregó el mismo bloque que ya tenía órdenes:</p>
+
+    <pre>&lt;<span class="kw">div</span> <span class="str">class</span>=<span class="str">"mt-3"</span>&gt;
+  &lt;<span class="kw">button</span> <span class="str">class</span>=<span class="str">"btn btn-secondary"</span> (click)=<span class="str">"anterior()"</span> [disabled]=<span class="str">"page &lt;= 0"</span>&gt;
+    &amp;laquo; Anterior
+  &lt;/<span class="kw">button</span>&gt;
+  &lt;<span class="kw">span</span> <span class="str">class</span>=<span class="str">"mx-3"</span>&gt;Página {{ page + 1 }} de {{ totalPages }} ({{ totalElements }} materiales)&lt;/<span class="kw">span</span>&gt;
+  &lt;<span class="kw">button</span> <span class="str">class</span>=<span class="str">"btn btn-secondary"</span> (click)=<span class="str">"siguiente()"</span> [disabled]=<span class="str">"page &gt;= totalPages - 1"</span>&gt;
+    Siguiente &amp;raquo;
+  &lt;/<span class="kw">button</span>&gt;
+&lt;/<span class="kw">div</span>&gt;</pre>
+  </div>
+
+  <!-- ================= ARCHIVOS ================= -->
+  <div class="card">
+    <h2>4. Lista de archivos tocados <span class="badge b-copy">REFERENCIA</span></h2>
+
+    <table>
+      <tr><th>Zona</th><th>Archivo</th><th>Qué cambió</th></tr>
+      <tr><td rowspan="3"><span class="badge b-backend">BACKEND</span></td>
+          <td><code>repository/MaterialRepository.java</code><br>
+              <code>repository/ProveedorRepository.java</code><br>
+              <code>repository/TipoMaterialRepository.java</code></td>
+          <td>+ imports <code>Page</code>/<code>Pageable</code> y overloads paginados de los finders existentes</td></tr>
+      <tr><td><code>controller/MaterialController.java</code><br>
+              <code>controller/ProveedorController.java</code><br>
+              <code>controller/TipoMaterialController.java</code></td>
+          <td>+ endpoint <code>GET /paginado</code> con <code>criterio</code>, <code>texto</code>,
+              <code>idTipo</code> y <code>Sort</code> por ID ascendente</td></tr>
+      <tr><td><code>controller/OrdenCompraController.java</code></td>
+          <td><code>historialPaginado</code> ahora ordena <code>fecha DESC, idOrdenCompra DESC</code></td></tr>
+      <tr><td rowspan="3"><span class="badge b-frontend">FRONTEND</span></td>
+          <td><code>services/material.service.ts</code><br>
+              <code>services/proveedor.service.ts</code><br>
+              <code>services/tipo-material.service.ts</code></td>
+          <td>+ interfaz de filtros y método <code>listarPaginado()</code></td></tr>
+      <tr><td><code>components/materiales/materiales.component.ts/.html</code><br>
+              <code>components/proveedores/proveedores.component.ts/.html</code><br>
+              <code>components/tipos-material/tipos-material.component.ts/.html</code></td>
+          <td>campos de paginación, <code>anterior()/siguiente()</code>, resets de página y bloque de
+              paginación bajo la tabla</td></tr>
+      <tr><td><code>components/dashboard/*</code>, <code>components/ordenes/*</code></td>
+          <td><b>sin cambios de código</b>; órdenes hereda el nuevo orden desde el backend</td></tr>
+    </table>
+
+    <div class="ok">
+      <b>Verificado:</b> backend compila con <code>BUILD SUCCESS</code> y el frontend genera su bundle sin errores.
+    </div>
+  </div>
+
+  <!-- ================= PROBAR ================= -->
+  <div class="card">
+    <h2>5. Qué probar <span class="badge b-visual">DEMO</span></h2>
+
+    <div class="paso"><div class="num">1</div><div>
+      <b>Paginación básica:</b> entra a Materiales (27 registros → 6 páginas), Tipos (8 → 2 páginas)
+      y Proveedores (16 → 4 páginas). Navega con <i>Anterior/Siguiente</i> y revisa el contador
+      <i>"Página X de Y (N registros)"</i>.
+    </div></div>
+
+    <div class="paso"><div class="num">2</div><div>
+      <b>Filtros + paginación:</b> en Materiales busca <code>plancha</code> por nombre (una sola página),
+      cambia el criterio a Descripción y busca <code>galvanizada</code>, luego filtra por Tipo
+      <code>Cable electrico</code>. En cada búsqueda la tabla vuelve a la página 1.
+    </div></div>
+
+    <div class="paso"><div class="num">3</div><div>
+      <b>Búsqueda por ID:</b> con criterio ID busca <code>12</code>: debe aparecer solo ese material
+      con la paginación deshabilitada.
+    </div></div>
+
+    <div class="paso"><div class="num">4</div><div>
+      <b>Órdenes por fecha:</b> abre Órdenes de Compra: la más reciente aparece primero.
+      Crea una orden nueva: tras guardar vuelves a la página 1 y tu orden está arriba de todo.
+    </div></div>
+
+    <div class="paso"><div class="num">5</div><div>
+      <b>Edge case:</b> ubícate en la última página de cualquier CRUD y elimina el único registro de esa
+      página: la vista retrocede automáticamente a la página anterior.
+    </div></div>
+
+    <h3>Cómo levantar todo</h3>
+    <pre><span class="com">// 1) MySQL (XAMPP) corriendo y BD creada una sola vez:</span>
+CREATE DATABASE serfagab_db;
+
+<span class="com">// 2) Backend: ejecutar SerfagabApplication en IntelliJ (esperar "Started SerfagabApplication")</span>
+<span class="com">//    OJO: ddl-auto=create reinicia y re-siembra los datos en cada arranque (es normal).</span>
+
+<span class="com">// 3) Frontend:</span>
+cd frontend-angular
+npm install   <span class="com">// solo si cambiaste de máquina</span>
+npm start     <span class="com">// http://localhost:4200</span>
+
+<span class="com">// 4) Login: admin/admin123 (todo) o user/user123 (solo lectura)</span></pre>
+  </div>
+
+</div>
+
+<footer>SERFAGAB &middot; Grupo 5 &middot; Desarrollo de Aplicaciones Web I &middot; Guía de paginación y ordenamiento de órdenes</footer>
+
+</body>
+</html>

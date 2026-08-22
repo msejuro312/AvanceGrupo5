@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Commits - SERFAGAB S.A.C.</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            line-height: 1.7;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 5px solid #e94560;
+        }
+        header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid transparent;
+        }
+        .commit-1 { border-left-color: #e94560; }
+        .commit-2 { border-left-color: #2196F3; }
+        .commit-3 { border-left-color: #4CAF50; }
+        .commit-4 { border-left-color: #FF9800; }
+        .commit-5 { border-left-color: #9C27B0; }
+        .commit-6 { border-left-color: #e94560; }
+        h2 {
+            color: #0f3460;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        h2 .badge {
+            display: inline-block;
+            font-size: 0.6em;
+            padding: 4px 14px;
+            border-radius: 20px;
+            color: white;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        .badge-manuel { background: #e94560; }
+        .badge-valerie { background: #2196F3; }
+        .badge-carlos { background: #4CAF50; }
+        .badge-oscar { background: #FF9800; }
+        .badge-isaac { background: #9C27B0; }
+        h3 {
+            color: #16213e;
+            margin: 20px 0 10px;
+            font-size: 1.15em;
+        }
+        .files-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .files-list li {
+            background: #f8f9fa;
+            padding: 10px 16px;
+            margin: 6px 0;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+            border-left: 3px solid #ccc;
+        }
+        .files-list .file-path {
+            color: #555;
+        }
+        .files-list .file-label {
+            color: #888;
+            font-size: 0.8em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .note-info {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .shared-file {
+            background: #f3e5f5;
+            border: 2px dashed #9C27B0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .shared-file h4 { color: #9C27B0; margin-bottom: 12px; }
+        .code-block {
+            background: #1a1a2e;
+            color: #f0e6d3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+            line-height: 1.6;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .isaac-code { color: #ce93d8; }
+        .code-block .manuel-code { color: #ef9a9a; }
+        .code-block .separator {
+            display: block;
+            border-top: 2px dashed #555;
+            margin: 10px 0;
+            padding-top: 10px;
+        }
+        .owner-tag {
+            display: inline-block;
+            font-size: 0.7em;
+            padding: 2px 10px;
+            border-radius: 12px;
+            color: white;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .owner-isaac { background: #9C27B0; }
+        .owner-manuel { background: #e94560; }
+        .flow-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #888;
+            margin: 5px 0;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.6em; }
+            section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <h1>SERFAGAB S.A.C.</h1>
+        <p>Plan de Commits &middot; Avance de Proyecto &middot; Grupo 5</p>
+    </div>
+</header>
+<div class="container">
+
+    <div class="note-info">
+        <strong>Flujo de trabajo:</strong> Cada integrante hace <code>pull</code> del commit anterior,
+        agrega sus archivos, hace <code>commit</code> y <code>push</code>.
+        El siguiente integrante repite el proceso.
+    </div>
+
+    <!-- ===== COMMIT 1 ===== -->
+    <section class="commit-1">
+        <h2>Commit 1 <span class="badge badge-manuel">Manuel</span></h2>
+        <p><strong>Rol:</strong> Infraestructura base del proyecto.</p>
+        <ul class="files-list">
+            <li><span class="file-path">pom.xml</span></li>
+            <li><span class="file-path">src/main/resources/application.properties</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/SerfagabApplication.java</span></li>
+        </ul>
+        <p>Con estos archivos el proyecto compila y la aplicación Spring Boot inicia correctamente.</p>
+    </section>
+
+    <div class="flow-arrow">&darr;</div>
+
+    <!-- ===== COMMIT 2 ===== -->
+    <section class="commit-2">
+        <h2>Commit 2 <span class="badge badge-valerie">Valerie</span></h2>
+        <p><strong>Rol:</strong> Autenticación y gestión de usuarios.</p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/entities/Tipo.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/entities/Usuario.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/TipoRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/UsuarioRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/dto/LoginRequest.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/controller/AuthController.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/controller/UsuarioController.java</span></li>
+        </ul>
+        <p>Endpoints disponibles: <code>POST /api/auth/login</code>, <code>POST /api/usuarios/registrar</code>, <code>GET /api/usuarios</code>.</p>
+    </section>
+
+    <div class="flow-arrow">&darr;</div>
+
+    <!-- ===== COMMIT 3 ===== -->
+    <section class="commit-3">
+        <h2>Commit 3 <span class="badge badge-carlos">Carlos</span></h2>
+        <p><strong>Rol:</strong> CRUD de proveedores.</p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/entities/Proveedor.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/ProveedorRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/controller/ProveedorController.java</span></li>
+        </ul>
+        <p>Endpoints disponibles: <code>POST /api/proveedores</code>, <code>GET /api/proveedores</code>, <code>GET /api/proveedores/{id}</code>, <code>PUT /api/proveedores/{id}</code>.</p>
+    </section>
+
+    <div class="flow-arrow">&darr;</div>
+
+    <!-- ===== COMMIT 4 ===== -->
+    <section class="commit-4">
+        <h2>Commit 4 <span class="badge badge-oscar">Oscar</span></h2>
+        <p><strong>Rol:</strong> Gestión de tipos de material y materiales.</p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/entities/TipoMaterial.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/entities/Material.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/TipoMaterialRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/MaterialRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/service/MaterialService.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/controller/TipoMaterialController.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/controller/MaterialController.java</span></li>
+        </ul>
+        <p>Endpoints disponibles: <code>POST /api/tipos-material</code>, <code>GET /api/tipos-material</code>, <code>POST /api/materiales/lote</code>, <code>GET /api/materiales</code>, <code>GET /api/materiales/{id}</code>, <code>GET /api/materiales/buscar/{nombre}</code>, <code>PUT /api/materiales/{id}</code>.</p>
+    </section>
+
+    <div class="flow-arrow">&darr;</div>
+
+    <!-- ===== COMMIT 5 ===== -->
+    <section class="commit-5">
+        <h2>Commit 5 <span class="badge badge-isaac">Isaac</span></h2>
+        <p><strong>Rol:</strong> Órdenes de Compra &mdash; entidades, lógica de negocio y endpoints de creación y detalle.</p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/entities/OrdenCompra.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/entities/DetalleOrdenCompra.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/OrdenCompraRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/repository/DetalleOrdenCompraRepository.java</span></li>
+            <li><span class="file-path">src/main/java/com/serfagab/service/OrdenCompraService.java</span></li>
+        </ul>
+        <p>Endpoints que habilita Isaac en el archivo compartido (ver detalle abajo):</p>
+        <ul style="margin-left: 20px; margin-top: 5px;">
+            <li><code>POST /api/ordenes-compra/{idUsuario}/crear</code></li>
+            <li><code>POST /api/ordenes-compra/{idOrden}/agregar-detalle</code></li>
+        </ul>
+
+        <div class="shared-file">
+            <h4>&#128736; Archivo compartido: <code>OrdenCompraController.java</code></h4>
+            <p><strong>Isaac crea el archivo</strong> con la estructura completa del controlador
+            (package, imports, campos, constructor) más sus dos endpoints:</p>
+
+            <div class="code-block">
+<span class="comment">// package, imports, @RestController, @RequestMapping,</span>
+<span class="comment">// class declaration, fields, constructor</span>
+
+<span class="isaac-code">// ──────────────────────────────────────────</span>
+<span class="isaac-code">// CREADO POR ISAAC (líneas 22-33)</span>
+<span class="isaac-code">@PostMapping("/{idUsuario}/crear")</span>
+<span class="isaac-code">public ResponseEntity&lt;?&gt; crear(...) { ... }</span>
+<span class="isaac-code">// ──────────────────────────────────────────</span>
+
+<span class="isaac-code">// CREADO POR ISAAC (líneas 35-46)</span>
+<span class="isaac-code">@PostMapping("/{idOrden}/agregar-detalle")</span>
+<span class="isaac-code">public ResponseEntity&lt;?&gt; agregarDetalle(...) { ... }</span>
+<span class="isaac-code">// ──────────────────────────────────────────</span>
+
+<span class="comment">// ↓ El archivo termina aquí. Manuel agregará sus endpoints después.</span>
+            </div>
+            <p><strong>Nota:</strong> El proyecto ya compila y los endpoints de Isaac funcionan correctamente.</p>
+        </div>
+    </section>
+
+    <div class="flow-arrow">&darr;</div>
+
+    <!-- ===== COMMIT 6 ===== -->
+    <section class="commit-6">
+        <h2>Commit 6 <span class="badge badge-manuel">Manuel</span></h2>
+        <p><strong>Rol:</strong> Órdenes de Compra &mdash; cambio de estado, historial y detalle. Datos de prueba iniciales.</p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/config/DataSeeder.java</span></li>
+        </ul>
+        <p><strong>Además modifica:</strong></p>
+        <ul class="files-list">
+            <li><span class="file-path">src/main/java/com/serfagab/controller/OrdenCompraController.java</span>
+                <span class="file-label">— agrega 3 endpoints al final del archivo</span></li>
+        </ul>
+        <p>Endpoints que agrega Manuel (ver detalle abajo):</p>
+        <ul style="margin-left: 20px; margin-top: 5px;">
+            <li><code>PUT /api/ordenes-compra/{idOrden}/estado?estado=ENVIADO</code></li>
+            <li><code>GET /api/ordenes-compra/usuario/{idUsuario}</code></li>
+            <li><code>GET /api/ordenes-compra/{idOrden}</code></li>
+        </ul>
+
+        <div class="shared-file">
+            <h4>&#128736; Modificación al archivo compartido: <code>OrdenCompraController.java</code></h4>
+            <p><strong>Manuel agrega sus endpoints al final</strong> del archivo creado por Isaac,
+            después de la línea 46 (endpoint <code>agregarDetalle</code>):</p>
+
+            <div class="code-block">
+<span class="comment">// (Todo el contenido anterior creado por Isaac se mantiene intacto)</span>
+
+<span class="manuel-code">// ──────────────────────────────────────────</span>
+<span class="manuel-code">// AGREGADO POR MANUEL (después de línea 46)</span>
+<span class="manuel-code">// ──────────────────────────────────────────</span>
+
+<span class="manuel-code">@PutMapping("/{idOrden}/estado")</span>
+<span class="manuel-code">public ResponseEntity&lt;?&gt; cambiarEstado(</span>
+<span class="manuel-code">    @PathVariable Integer idOrden,</span>
+<span class="manuel-code">    @RequestParam String estado) { ... }</span>
+
+<span class="manuel-code">@GetMapping("/usuario/{idUsuario}")</span>
+<span class="manuel-code">public List&lt;OrdenCompra&gt; historial(</span>
+<span class="manuel-code">    @PathVariable Integer idUsuario) { ... }</span>
+
+<span class="manuel-code">@GetMapping("/{idOrden}")</span>
+<span class="manuel-code">public ResponseEntity&lt;OrdenCompra&gt; detalle(</span>
+<span class="manuel-code">    @PathVariable Integer idOrden) { ... }</span>
+
+<span class="comment">// Fin del archivo</span>
+<span class="comment">// Ahora el controlador tiene los 5 endpoints completos</span>
+            </div>
+            <p><strong>Nota:</strong> Isaac ya importó <code>DetalleOrdenCompra</code> y <code>OrdenCompraService</code>
+            en la parte superior del archivo, por lo que Manuel no necesita agregar más imports.</p>
+        </div>
+
+        <div class="note">
+            <strong>DataSeeder:</strong> Manuel también agrega <code>config/DataSeeder.java</code> que carga
+            los datos de prueba al iniciar la aplicación. Depende de todas las entidades y repositorios,
+            por lo que va al final.
+        </div>
+    </section>
+
+    <!-- ===== RESUMEN VISUAL ===== -->
+    <section style="border-left-color: #0f3460;">
+        <h2>Resumen del flujo</h2>
+        <table style="width:100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <th style="background: #0f3460; color: white; padding: 12px; text-align: left;">Orden</th>
+                <th style="background: #0f3460; color: white; padding: 12px; text-align: left;">Integrante</th>
+                <th style="background: #0f3460; color: white; padding: 12px; text-align: left;">Archivos nuevos</th>
+                <th style="background: #0f3460; color: white; padding: 12px; text-align: left;">Modifica</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">1</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Manuel</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">pom.xml, application.properties, SerfagabApplication.java</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">—</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">2</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Valerie</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">Tipo, Usuario, TipoRepository, UsuarioRepository, AuthController, UsuarioController, LoginRequest</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">—</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">3</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Carlos</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">Proveedor, ProveedorRepository, ProveedorController</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">—</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">4</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Oscar</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">TipoMaterial, Material, TipoMaterialRepository, MaterialRepository, MaterialService, TipoMaterialController, MaterialController</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">—</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">5</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Isaac</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">OrdenCompra, DetalleOrdenCompra, OrdenCompraRepository, DetalleOrdenCompraRepository, OrdenCompraService, OrdenCompraController*</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">—</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">6</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;"><strong>Manuel</strong></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">DataSeeder</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">OrdenCompraController (agrega estado, historial, detalle al final)</td>
+            </tr>
+        </table>
+        <p style="font-size: 0.85em; color: #888;">* OrdenCompraController.java es creado por Isaac con los endpoints <code>crear</code> y <code>agregar-detalle</code>. Manuel agrega <code>estado</code>, <code>historial</code> y <code>detalle</code> al final del mismo archivo.</p>
+    </section>
+
+</div>
+<footer>
+    <p>Grupo 5 &middot; SERFAGAB S.A.C. &mdash; Plan de Commits para Avance 1</p>
+</footer>
+</body>
+</html>

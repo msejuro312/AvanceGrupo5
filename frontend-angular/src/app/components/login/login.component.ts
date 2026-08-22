@@ -39,6 +39,7 @@ export class LoginComponent {
     this.loginService.login(this.login, this.clave).subscribe({
       next: (usuario) => {
         this.sesionService.guardarUsuario(usuario);
+        this.sesionService.guardarCredenciales(this.login, this.clave);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {

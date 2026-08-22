@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Completa del Proyecto - SERFAGAB Grupo 5</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6fb;
+    color: #2b2b2b;
+    line-height: 1.65;
+  }
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2rem; letter-spacing: 1px; margin-bottom: 8px; }
+  .hero p { opacity: .85; max-width: 720px; margin: 0 auto; }
+  .hero .meta { margin-top: 14px; font-size: .85rem; opacity: .7; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(22,33,62,.08);
+    padding: 28px 30px;
+    margin-bottom: 28px;
+  }
+  h2 {
+    color: #16213e;
+    font-size: 1.35rem;
+    border-left: 5px solid #16213e;
+    padding-left: 12px;
+    margin-bottom: 16px;
+  }
+  h3 { color: #1a1a2e; font-size: 1.05rem; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; }
+  ul, ol { margin: 8px 0 12px 24px; }
+  li { margin-bottom: 6px; }
+
+  code {
+    background: #eef1f8;
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .88em;
+    color: #16213e;
+  }
+  pre {
+    background: #1a1a2e;
+    color: #d7dcf0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: .85rem;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  pre .com { color: #7ee787; }
+  pre .str { color: #ffd479; }
+  pre .kw { color: #79b8ff; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .92rem; }
+  th {
+    background: #16213e; color: #fff; text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .5px; padding: 10px 12px; text-align: left;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #e6e9f2; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f9fd; }
+
+  .badge {
+    display: inline-block; border-radius: 20px; padding: 2px 11px;
+    font-size: .74rem; font-weight: 600; letter-spacing: .3px;
+  }
+  .b-backend  { background: #e3ecff; color: #1d4ed8; }
+  .b-frontend { background: #e2f7e9; color: #15803d; }
+  .b-visual   { background: #fdf0dd; color: #b45309; }
+  .b-nuevo    { background: #fde3e3; color: #b91c1c; }
+  .b-fix      { background: #ede9fe; color: #6d28d9; }
+  .b-copy     { background: #dff5f6; color: #0e7490; }
+
+  .alerta {
+    background: #fff8e6; border-left: 5px solid #f0a500;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .ok {
+    background: #e8f7ee; border-left: 5px solid #22a05a;
+    border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: .93rem;
+  }
+  .paso {
+    display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px;
+  }
+  .num {
+    background: linear-gradient(135deg, #1a1a2e, #16213e); color: #fff;
+    min-width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; margin-top: 2px;
+  }
+  footer {
+    text-align: center; color: #8a90a5; font-size: .82rem; padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>SERFAGAB &mdash; Guía COMPLETA del Proyecto (Grupo 5)</h1>
+  <p>Todo lo que se hizo desde el inicio hasta hoy: <b>login con roles y Spring Security</b>,
+     <b>PDF de órdenes</b>, <b>dashboard</b>, <b>CRUD completo de órdenes</b>, <b>filtros inteligentes</b>
+     con <b>más datos de prueba</b> y la apariencia del proyecto PROYECTO_LP2_GRUPO_B.</p>
+  <div class="meta">Backend: Spring Boot 4 (Java 24) + MySQL &middot; Frontend: Angular 21 + Bootstrap 5 &middot; Incluye instrucciones para sincronizar tu clon</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= COPIAR Y PEGAR ================= -->
+  <div class="card">
+    <h2>0. ¿Ya tienes el proyecto clonado? Copia esto <span class="badge b-copy">SINCRONIZAR</span></h2>
+    <p>Si clonaste <code>msejuro312/AvanceGrupo5</code> y tu copia está desactualizada,
+       <b>no necesitas volver a clonar nada</b>. Solo copia las siguientes carpetas/archivos del proyecto
+       actualizado y <b>pégalos encima de tu clon</b>, reemplazando lo que te pregunte:</p>
+
+    <table>
+      <tr><th>#</th><th>Copia esta carpeta / archivo COMPLETO</th><th>Pégalo en tu clon en la misma ruta</th><th>Qué trae</th></tr>
+      <tr><td>1</td><td><code>pom.xml</code></td><td><code>pom.xml</code> (raíz)</td><td>+ librería OpenPDF</td></tr>
+      <tr><td>2</td><td><code>src/main/java/com/serfagab/</code> (carpeta entera)</td><td>misma ruta</td><td>TODO el backend: seguridad, servicios, controladores, PDF, DataSeeder ampliado</td></tr>
+      <tr><td>3</td><td><code>src/main/resources/application.properties</code></td><td>misma ruta</td><td>config de BD y JPA</td></tr>
+      <tr><td>4</td><td><code>frontend-angular/src/app/</code> (carpeta entera)</td><td>misma ruta</td><td>TODO el frontend: componentes, services, guard, interceptor, rutas, estilos del app</td></tr>
+      <tr><td>5</td><td><code>frontend-angular/src/index.html</code> y <code>frontend-angular/src/styles.css</code></td><td>misma ruta</td><td>CDNs Font Awesome/SweetAlert2 + fondo láser</td></tr>
+      <tr><td>6</td><td><code>frontend-angular/angular.json</code></td><td>misma ruta</td><td>presupuesto de bundle ampliado</td></tr>
+      <tr><td>7</td><td><code>frontend-angular/public/imagenes/laser.jpg</code></td><td>misma ruta (crea la carpeta si no existe)</td><td>imagen de fondo</td></tr>
+    </table>
+
+    <h3>Después de pegar, ejecuta en orden:</h3>
+    <pre><span class="com">// 1) Abrir tu clon en IntelliJ y correr el backend (esperar "Started SerfagabApplication")
+// 2) En una terminal dentro de frontend-angular:</span>
+npm install      <span class="com">// solo por seguridad, actualiza dependencias</span>
+npm start        <span class="com">// levanta http://localhost:4200</span></pre>
+
+    <div class="ok"><b>No hay pasos de base de datos manuales más allá de crear la BD vacía una vez</b>
+      (ver sección 10): al arrancar, el backend crea tablas, usuarios y todos los datos de prueba solos.</div>
+    <div class="alerta"><b>Importante:</b> no mezcles archivos viejos con nuevos. Si dudas, borra la carpeta
+      destino y pega la nueva completa (aplica a las carpetas <code>app/</code> y <code>serfagab/</code>).</div>
+  </div>
+
+  <!-- ================= CREDENCIALES ================= -->
+  <div class="card">
+    <h2>1. Login con roles <span class="badge b-backend">Spring Security</span></h2>
+    <p><b>El problema original:</b> la BD solo tenía un usuario sembrado (<code>admin / 123</code>) que nadie
+       conocía, mientras Spring Security tenía usuarios internos distintos; y el frontend enviaba siempre
+       credenciales fijas (<code>user:user123</code>) en todas las peticiones.</p>
+    <div class="ok"><b>Solución:</b> el DataSeeder siembra los dos usuarios oficiales con clave encriptada
+       (BCrypt), el endpoint <code>/api/auth/login</code> valida contra la BD, y cada petición viaja con las
+       credenciales del usuario real.</div>
+
+    <h3>Credenciales (se crean automáticamente al arrancar el backend)</h3>
+    <table>
+      <tr><th>Usuario</th><th>Clave</th><th>Rol (tipo)</th><th>Puede hacer</th></tr>
+      <tr>
+        <td><code>admin</code></td><td><code>admin123</code></td><td>administrador</td>
+        <td>Crear, editar, eliminar, cambiar estado de OC, ver PDF y dashboard</td>
+      </tr>
+      <tr>
+        <td><code>user</code></td><td><code>user123</code></td><td>usuario</td>
+        <td>Solo consultar: listados, filtros, detalles y PDF</td>
+      </tr>
+    </table>
+
+    <h3>Piezas del login</h3>
+    <ul>
+      <li><code>config/DataSeeder.java</code>: crea tipos ADMIN(1)/USER(2) y los dos usuarios con
+          <code>passwordEncoder.encode(clave)</code>.</li>
+      <li><code>repository/UsuarioRepository.java</code>: método <code>findByLogin(login)</code>.</li>
+      <li><code>service/UsuarioDetailsService.java</code>: carga el usuario de la BD y le asigna
+          <code>ROLE_ADMIN</code> o <code>ROLE_USER</code> según su tipo. Es el puente entre la tabla
+          <code>tbl_usuario</code> y Spring Security.</li>
+      <li><code>controller/AuthController.java</code>: recibe JSON <code>{login, clave}</code>, busca el usuario
+          y valida con <code>passwordEncoder.matches()</code>. Devuelve el usuario sin la clave o error 401.
+          Registro público en <code>/api/auth/registrar</code>.</li>
+      <li><code>dto/LoginRequest.java</code>: el DTO del body.</li>
+    </ul>
+  </div>
+
+  <!-- ================= SECURITY CONFIG ================= -->
+  <div class="card">
+    <h2>2. Reglas de acceso en el backend <span class="badge b-backend">SecurityConfig</span></h2>
+    <p><code>config/SecurityConfig.java</code> define quién entra a cada endpoint.
+       Regla general: <b>leer es libre, escribir es solo del admin</b>.</p>
+    <table>
+      <tr><th>Método HTTP</th><th>Rutas</th><th>Quién puede</th></tr>
+      <tr><td><code>GET</code></td><td>materiales, tipos-material, proveedores, ordenes-compra</td><td>Todos (el rol user usa filtros y ve listados)</td></tr>
+      <tr><td><code>POST / PUT / DELETE</code></td><td>las mismas rutas</td><td>Solo <code>ROLE_ADMIN</code></td></tr>
+      <tr><td>cualquiera</td><td><code>/api/auth/**</code>, <code>/api/usuarios/**</code></td><td>Libre (login y registro)</td></tr>
+    </table>
+    <p>Autenticación HTTP Basic + BCrypt para comparar claves. Si un USER intenta crear/editar/borrar,
+       el backend responde <b>403 Forbidden</b>.</p>
+  </div>
+
+  <!-- ================= FRONTEND SEGURIDAD ================= -->
+  <div class="card">
+    <h2>3. Seguridad en el frontend <span class="badge b-frontend">Angular</span></h2>
+    <ul>
+      <li><code>services/sesion.service.ts</code> <span class="badge b-nuevo">NUEVO</span>: guarda el usuario logeado
+          en <code>sessionStorage</code>; expone <code>obtenerUsuario()</code>, <code>esAdministrador()</code>
+          (revisa <code>tipo.descripcion == 'administrador'</code>) y <code>cerrarSesion()</code>.</li>
+      <li><code>services/sesion.guard.ts</code> <span class="badge b-nuevo">NUEVO</span>: si intentas entrar a
+          <code>/materiales</code>, <code>/ordenes</code>, etc. sin sesión, te regresa a <code>/login</code>.
+          Activado en todas las rutas privadas de <code>app.routes.ts</code>.</li>
+      <li><code>services/auth.interceptor.ts</code> <span class="badge b-fix">CORREGIDO</span>: antes mandaba fijo
+          <code>user:user123</code>; ahora arma el header <code>Authorization: Basic usuario:clave</code> con las
+          credenciales de quien inició sesión.</li>
+      <li><code>components/login/*</code> <span class="badge b-fix">CORREGIDO</span>: valida contra el endpoint,
+          guarda la sesión, navega al dashboard, distingue error de credenciales (401) de servidor apagado,
+          botón con spinner.</li>
+      <li><b>Roles en pantalla:</b> cada CRUD pregunta <code>esAdmin</code>; si no eres admin se ocultan
+          Nuevo/Editar/Eliminar, la columna Acciones y el selector de estado (se muestra etiqueta de color).
+          Los filtros son visibles para todos.</li>
+    </ul>
+  </div>
+
+  <!-- ================= PDF ================= -->
+  <div class="card">
+    <h2>4. PDF de la Orden de Compra <span class="badge b-backend">OpenPDF</span></h2>
+    <ol>
+      <li><code>pom.xml</code>: dependencia <code>com.github.librepdf:openpdf:1.3.43</code> (gratuita, LGPL).</li>
+      <li><code>util/OrdenCompraPdf.java</code> <span class="badge b-nuevo">NUEVO</span>: método estático
+          <code>generar(orden)</code> que devuelve <code>byte[]</code>: encabezado con número de orden, tabla
+          general (fecha, estado, proveedor, RUC, contacto, usuario, observaciones), tabla de detalles
+          (material, unidad, cantidad, precio, subtotal), TOTAL en S/ y pie. Se arma en memoria con
+          <code>ByteArrayOutputStream</code>.</li>
+      <li><code>controller/OrdenCompraController.java</code>: <code>GET /api/ordenes-compra/{id}/pdf</code>
+          lo entrega con <code>APPLICATION_PDF</code> y <code>Content-Disposition: attachment</code>.</li>
+      <li>Frontend: <code>orden.service.ts</code> pide blob; <code>ordenes.component.ts</code> crea enlace temporal
+          <code>orden-compra-N.pdf</code>. Visible para admin y user.</li>
+    </ol>
+  </div>
+
+  <!-- ================= ORDENES CRUD ================= -->
+  <div class="card">
+    <h2>5. Órdenes de compra completas <span class="badge b-nuevo">CRUD</span></h2>
+    <ul>
+      <li><code>service/OrdenCompraService.java</code>: + <code>actualizarOrden(id, idProveedor, fecha, obs)</code>
+          y <code>eliminarOrden(id)</code> (los detalles se borran por <code>CascadeType.ALL</code>).</li>
+      <li><code>controller/OrdenCompraController.java</code>: <code>PUT /{id}</code>, <code>DELETE /{id}</code>,
+          <code>GET /{id}/pdf</code>.</li>
+      <li><code>services/orden.service.ts</code>: métodos correspondientes + <code>descargarPdf()</code>.</li>
+      <li>Pantalla: editar con modal, eliminar con SweetAlert2, PDF por fila,
+          <span class="badge b-fix">FIX</span> del selector de estado usando
+          <code>[selected]="e === o.estado"</code>.</li>
+      <li>Filtros: estado, proveedor y rango de fechas + <b>paginación</b> en servidor.</li>
+    </ul>
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <div class="card">
+    <h2>6. Dashboard <span class="badge b-nuevo">NUEVO</span> <span class="badge b-visual">estilo LP2</span></h2>
+    <p><code>components/dashboard/*</code>, ruta <code>/dashboard</code> (lo primero tras iniciar sesión).</p>
+    <ul>
+      <li>4 tarjetas de estadísticas (materiales, proveedores, tipos, órdenes) con íconos Font Awesome
+          y animación <code>fadeInUp</code> escalonada.</li>
+      <li>Tabla "Últimas órdenes de compra" (las 5 más recientes con estado en colores).</li>
+      <li>Tarjeta de pendientes con contador grande y botón directo a Órdenes.</li>
+      <li>En el menú lateral es el enlace "Inicio".</li>
+    </ul>
+  </div>
+
+  <!-- ================= FILTROS ================= -->
+  <div class="card">
+    <h2>7. Placeholders dinámicos en los filtros <span class="badge b-fix">CORREGIDO</span></h2>
+
+    <h3>a) El problema</h3>
+    <p>En <b>Materiales</b> el input tenía el texto fijo <i>"Buscar por nombre..."</i> aunque cambiaras el
+       criterio a ID o Descripción. Proveedores y Tipos de Material ya eran dinámicos; Órdenes no aplica
+       porque sus filtros son selects y fechas (no tiene campo de texto).</p>
+
+    <h3>b) La solución (binding dinámico)</h3>
+    <pre>&lt;<span class="kw">input</span> *ngIf=<span class="str">"criterioBusqueda !== 'tipo'"</span> ...
+       [placeholder]=<span class="str">"criterioBusqueda === 'nombre' ? 'Buscar por nombre...'
+                     : criterioBusqueda === 'descripcion' ? 'Buscar por descripción...'
+                     : 'Buscar por ID...'"</span> /&gt;</pre>
+
+    <h3>c) Resultado por pantalla</h3>
+    <table>
+      <tr><th>Pantalla</th><th>Criterios</th><th>Placeholder mostrado</th><th>Estado</th></tr>
+      <tr><td rowspan="4"><b>Materiales</b></td><td>Nombre</td><td>"Buscar por nombre..."</td><td><span class="badge b-fix">CORREGIDO</span></td></tr>
+      <tr><td>ID</td><td>"Buscar por ID..." (campo numérico)</td><td><span class="badge b-fix">CORREGIDO</span></td></tr>
+      <tr><td>Tipo</td><td>(select de tipos)</td><td>igual que antes</td></tr>
+      <tr><td>Descripción</td><td>"Buscar por descripción..."</td><td><span class="badge b-fix">CORREGIDO</span></td></tr>
+      <tr><td rowspan="4"><b>Proveedores</b></td><td>Razón social</td><td>"Buscar por razón social..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td>RUC</td><td>"Buscar por RUC..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td>Email</td><td>"Buscar por email..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td>ID</td><td>"Buscar por ID..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td rowspan="3"><b>Tipos de Material</b></td><td>Nombre</td><td>"Buscar por nombre..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td>Descripción</td><td>"Buscar por descripción..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td>ID</td><td>"Buscar por ID..."</td><td><span class="badge b-visual">YA ESTABA</span></td></tr>
+      <tr><td><b>Órdenes</b></td><td>Estado / Proveedor / Fechas</td><td>(sin campo de texto, no aplica)</td><td>igual que antes</td></tr>
+    </table>
+    <p>Archivo: <code>frontend-angular/src/app/components/materiales/materiales.component.html</code>.
+       El fieldset "Filtros", los botones Buscar/Limpiar y buscar con Enter quedaron igual.</p>
+  </div>
+
+  <!-- ================= DATOS DE PRUEBA ================= -->
+  <div class="card">
+    <h2>8. Datos de prueba ampliados <span class="badge b-backend">DataSeeder</span></h2>
+    <p>Misma clase de siempre: <code>src/main/java/com/serfagab/config/DataSeeder.java</code>.
+       Se conservaron los datos originales (pernos, Andina EIRL, DIP Industrial, primeras órdenes)
+       y se agregó variedad sin duplicar registros, respetando todas las relaciones.</p>
+
+    <h3>Cantidad final sembrada (en cada arranque)</h3>
+    <table>
+      <tr><th>Entidad</th><th>Antes</th><th>Ahora</th><th>Para qué sirve</th></tr>
+      <tr><td><b>Tipos de material</b></td><td>2</td><td><b>8</b></td>
+          <td>+ Tornilleria, Cable electrico, Herramienta manual, Soldadura, Madera, Accesorio electrico &rarr; filtro por tipo</td></tr>
+      <tr><td><b>Proveedores</b></td><td>2</td><td><b>16</b></td>
+          <td>RUCs de 11 dígitos, celulares y emails variados &rarr; búsqueda por RUC, email y razón social</td></tr>
+      <tr><td><b>Materiales</b></td><td>2</td><td><b>27</b></td>
+          <td>Nombres largos/cortos, unidades variadas (metro, kg, litro, placa) &rarr; búsqueda por nombre, descripción e ID</td></tr>
+      <tr><td><b>Órdenes de compra</b></td><td>7</td><td><b>26</b></td>
+          <td>Estados PENDIENTE/ENVIADO/ANULADO, fechas desde hoy hasta hace ~37 días, varios proveedores,
+              una orden con 3 materiales &rarr; filtros por estado/proveedor/fechas, paginación y PDF multi-detalle</td></tr>
+    </table>
+
+    <h3>Ejemplos de lo sembrado</h3>
+    <table>
+      <tr><th>Entidad</th><th>Ejemplos</th></tr>
+      <tr><td>Proveedores</td>
+          <td>Metalurgica Lima Sur SAC, Ferreteria El Constructor EIRL, Suministros Electricos Norte SAC,
+              Aceros del Centro S.A.C., Pinturas del Pacifico EIRL, Importadora TorniPeru SAC,
+              Maderera La Selva E.I.R.L., Soldaduras Peruanas SAC, Herramientas Profesionales Andinas SAC,
+              Cables y Conductores Peru EIRL, Grupo Metalico Unificado SAC, Distribuidora de Pinturas Union EIRL,
+              Almacen Industrial Villa El Salvador SAC, Comercial Ferromax E.I.R.L.</td></tr>
+      <tr><td>Materiales</td>
+          <td>Plancha GALV C24, Plancha LAC C26, Plancha Aluminio 1mm, Pintura Anticorrosiva Rojo,
+              Esmalte Negro Brillante, Thinner Estandar, Tornillo 1/2 x 2 pulgadas, Tuerca 1/2,
+              Arandela plana 1/2, Tarugo 8 x 1.5, Cable THW 12, Cable THW 10, Cable TW 14,
+              Martillo de uña 16 oz, Destornillador plano 6, Pinza universal 8 pulgadas,
+              Llave ajustable 10 pulgadas, Electrodo E6013 1/8, Alambre soldadura MIG 0.9mm,
+              Triplay 4mm 122x244, Liston 2x3 tornillo, Interruptor simple 10A,
+              Tomacorriente doble, Bornera 12 puntos</td></tr>
+    </table>
+
+    <h3>Cómo está hecho (para sustentar)</h3>
+    <pre>nuevoTipo(nombre, descripcion)            <span class="com">// crea y guarda un TipoMaterial activo</span>
+nuevoProveedor(rz, ruc, cel, email, desc) <span class="com">// crea y guarda un Proveedor activo</span>
+nuevoMaterial(tipo, nombre, und, stock, precio, desc)
+
+sembrarOrdenesDemo()   <span class="com">// 18 órdenes deterministas: proveedor = (i % 16) + 1,</span>
+                       <span class="com">// material = (i % 26) + 1, fecha = hoy - (i*2 + 1) días,</span>
+                       <span class="com">// estado rota PENDIENTE -&gt; ENVIADO -&gt; ANULADO</span>
+crearOrdenConTresDetalles()  <span class="com">// una orden con 3 materiales distintos</span></pre>
+    <p>Todas las órdenes usan <code>ordenCompraService.crearOrden()</code> +
+       <code>agregarDetalle()</code>, así que totales, detalles y PDF salen bien automáticamente.</p>
+
+    <div class="alerta"><b>Ojo para la demo:</b> como <code>application.properties</code> usa
+      <code>ddl-auto=create</code>, cada arranque del backend <b>borra y vuelve a sembrar todo</b>.
+      Los IDs vuelven a empezar en 1. Los registros que creen durante la demo se pierden al reiniciar:
+      es normal y esperado.</div>
+  </div>
+
+  <!-- ================= VISUAL ================= -->
+  <div class="card">
+    <h2>9. Apariencia (copiada del PROYECTO_LP2_GRUPO_B) <span class="badge b-visual">Visual</span></h2>
+    <table>
+      <tr><th>Elemento</th><th>Cómo quedó</th><th>Dónde</th></tr>
+      <tr><td>Fondo</td><td>Foto <code>laser.jpg</code> a pantalla completa, fija al scroll</td><td><code>public/imagenes/laser.jpg</code> + <code>styles.css</code></td></tr>
+      <tr><td>Barra superior</td><td>Fija, color <code>#1c1c1c</code>, menú hamburguesa, "Bienvenido, [nombre]"</td><td><code>app.html</code> / <code>app.css</code> / <code>app.ts</code></td></tr>
+      <tr><td>Menú lateral</td><td>Deslizante (250px), fondo oscuro, se cierra con X o al elegir opción</td><td><code>app.html</code> / <code>app.css</code></td></tr>
+      <tr><td>Velo oscuro</td><td>Capa negra translúcida con desenfoque</td><td><code>main</code> en <code>app.css</code></td></tr>
+      <tr><td>Login</td><td>Tarjeta blanca centrada (450px), gradiente azul marino, iconos, animación</td><td><code>login.component.*</code></td></tr>
+      <tr><td>Listados</td><td>Tarjetas blancas con sombra, cabeceras oscuras, recuadro "Filtros", botones outline, toasts SweetAlert2</td><td>los 4 CRUDs</td></tr>
+      <tr><td>Cerrar sesión</td><td>Confirmación SweetAlert2</td><td><code>app.ts</code></td></tr>
+    </table>
+    <p><code>index.html</code> incluye CDNs de Font Awesome 6.5.1 y SweetAlert2 v11.</p>
+  </div>
+
+  <!-- ================= ARCHIVOS MAESTRO ================= -->
+  <div class="card">
+    <h2>10. Lista maestra de archivos (todo lo tocado hasta hoy)</h2>
+    <table>
+      <tr><th>Zona</th><th>Archivo</th><th>Qué es / cambio</th></tr>
+      <tr><td rowspan="8"><span class="badge b-backend">Backend</span></td>
+          <td><code>pom.xml</code></td><td>+ OpenPDF 1.3.43</td></tr>
+      <tr><td><code>config/DataSeeder.java</code></td><td>usuarios con BCrypt + roles + datos ampliados (tipos, proveedores, materiales, órdenes)</td></tr>
+      <tr><td><code>config/SecurityConfig.java</code></td><td>GET libre, escrituras solo ADMIN, UserDetailsService conectado</td></tr>
+      <tr><td><code>service/UsuarioDetailsService.java</code></td><td>carga usuarios de la BD con su rol</td></tr>
+      <tr><td><code>controller/AuthController.java</code></td><td>login validando BCrypt + registro público</td></tr>
+      <tr><td><code>service/OrdenCompraService.java</code></td><td>+ actualizarOrden(), eliminarOrden(), validaciones</td></tr>
+      <tr><td><code>controller/OrdenCompraController.java</code></td><td>+ PUT/{id}, DELETE/{id}, GET/{id}/pdf</td></tr>
+      <tr><td><code>util/OrdenCompraPdf.java</code></td><td>NUEVO: genera el PDF con OpenPDF</td></tr>
+
+      <tr><td rowspan="11"><span class="badge b-frontend">Frontend</span></td>
+          <td><code>services/sesion.service.ts</code></td><td>NUEVO: sesión en sessionStorage</td></tr>
+      <tr><td><code>services/sesion.guard.ts</code></td><td>NUEVO: protege rutas privadas</td></tr>
+      <tr><td><code>services/auth.interceptor.ts</code></td><td>credenciales del usuario real</td></tr>
+      <tr><td><code>services/login.service.ts</code></td><td>consume /api/auth/login</td></tr>
+      <tr><td><code>services/orden.service.ts</code></td><td>+ actualizar, eliminar, descargarPdf</td></tr>
+      <tr><td><code>components/dashboard/*</code></td><td>NUEVO: estadísticas y últimas órdenes</td></tr>
+      <tr><td><code>components/login/*</code></td><td>diseño LP2 + mensajes claros + spinner</td></tr>
+      <tr><td><code>components/materiales/*</code></td><td>diseño LP2, roles, toasts, <b>placeholder dinámico</b>, buscador multi-criterio</td></tr>
+      <tr><td><code>components/tipos-material/*</code>, <code>proveedores/*</code></td><td>diseño LP2, roles, toasts, placeholders dinámicos, paginación</td></tr>
+      <tr><td><code>components/ordenes/*</code></td><td>editar, eliminar, PDF, fix estado, filtros estado/proveedor/fecha, paginación</td></tr>
+      <tr><td><code>app.routes.ts</code>, <code>app.ts/html/css</code>, <code>index.html</code>, <code>styles.css</code>, <code>angular.json</code></td><td>rutas + guard, header/menú/logout, CDNs, fondo, presupuesto bundle</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= EJECUTAR ================= -->
+  <div class="card">
+    <h2>11. Cómo ejecutar desde cero</h2>
+    <div class="paso"><div class="num">1</div><div><b>MySQL con XAMPP:</b> Start a MySQL. Si además tienen el
+      servicio Windows "MySQL80", deténello primero (services.msc &rarr; MySQL80 &rarr; Detener) porque ocupa
+      el 3306 y genera "Access denied for user 'root'".</div></div>
+    <div class="paso"><div class="num">2</div><div><b>Crear la BD (una sola vez)</b> en phpMyAdmin:
+      <code>CREATE DATABASE serfagab_db;</code> &mdash; tablas, usuarios y datos de prueba los crea el backend.</div></div>
+    <div class="paso"><div class="num">3</div><div><b>Backend:</b> abrir en IntelliJ y ejecutar. Esperar
+      "Started SerfagabApplication" (Tomcat en 8080). Si sale "Port 8080 was already in use", otra instancia
+      sigue corriendo: deténerla (botón Stop rojo) o cierra ese proceso y vuelve a ejecutar.</div></div>
+    <div class="paso"><div class="num">4</div><div><b>Frontend:</b> terminal en <code>frontend-angular</code>:
+      <code>npm install</code> (primera vez) y <code>npm start</code>. Abrir <code>http://localhost:4200</code>.</div></div>
+  </div>
+
+  <!-- ================= DEMO ================= -->
+  <div class="card">
+    <h2>12. Guion de demostración sugerido</h2>
+    <div class="paso"><div class="num">1</div><div><b>Ingresar con <code>admin / admin123</code></b> &rarr;
+      cae al Dashboard con estadísticas.</div></div>
+    <div class="paso"><div class="num">2</div><div><b>Materiales:</b> mover el selector y mostrar cómo cambia el
+      placeholder (nombre/descripción/ID). Buscar <code>plancha</code> por nombre (3 resultados),
+      <code>galvanizada</code> por descripción, ID <code>12</code>, tipo <i>Cable electrico</i> (3).
+      Crear un material para mostrar permisos de admin.</div></div>
+    <div class="paso"><div class="num">3</div><div><b>Proveedores:</b> razón social <code>aceros</code> (2),
+      RUC <code>20539847120</code> (1 exacto), email <code>pinturas</code>.</div></div>
+    <div class="paso"><div class="num">4</div><div><b>Órdenes:</b> filtrar estado ANULADO, por proveedor y rango
+      de fechas (últimos 15 días). Cambiar de página (26 órdenes). Descargar el PDF de la orden con
+      3 materiales. Editar y eliminar una OC con confirmación.</div></div>
+    <div class="paso"><div class="num">5</div><div><b>Cambiar a <code>user / user123</code>:</b> puede filtrar,
+      listar y descargar PDF, pero NO ve botones de escritura; si fuerza una petición de escritura el backend
+      responde 403.</div></div>
+  </div>
+
+</div>
+
+<footer>Guía generada para el equipo 5 &mdash; Desarrollo de Aplicaciones Web I &mdash; Sistema SERFAGAB</footer>
+
+</body>
+</html>

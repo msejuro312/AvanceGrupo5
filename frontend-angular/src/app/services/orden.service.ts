@@ -4,14 +4,27 @@ import { Observable } from 'rxjs';
 
 import { OrdenCompra } from '../models/orden-compra';
 
+export interface OrdenFiltros {
+  estado?: string | null;
+  idProveedor?: number | null;
+  fechaDesde?: string | null;
+  fechaHasta?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class OrdenService {
   private apiUrl = 'http://localhost:8080/api/ordenes-compra';
 
   constructor(private http: HttpClient) {}
 
-  historialPaginado(idUsuario: number, page: number, size: number): Observable<any> {
-    const params = new HttpParams().set('page', page).set('size', size);
+  historialPaginado(idUsuario: number, page: number, size: number, filtros?: OrdenFiltros): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (filtros) {
+      if (filtros.estado) { params = params.set('estado', filtros.estado); }
+      if (filtros.idProveedor != null) { params = params.set('idProveedor', filtros.idProveedor); }
+      if (filtros.fechaDesde) { params = params.set('fechaDesde', filtros.fechaDesde); }
+      if (filtros.fechaHasta) { params = params.set('fechaHasta', filtros.fechaHasta); }
+    }
     return this.http.get<any>(`${this.apiUrl}/usuario/${idUsuario}/paginado`, { params });
   }
 

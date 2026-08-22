@@ -1,5 +1,9 @@
 package com.serfagab.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.serfagab.entities.Material;
@@ -36,6 +40,36 @@ public class MaterialController {
         return materialService.listarTodos();
     }
 
+    @GetMapping("/paginado")
+    public Page<Material> listarPaginado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "nombre") String criterio,
+            @RequestParam(required = false) String texto,
+            @RequestParam(required = false) Integer idTipo) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idMaterial").ascending());
+        boolean hayTexto = texto != null && !texto.trim().isEmpty();
+        switch (criterio) {
+            case "tipo":
+                if (idTipo != null) {
+                    return materialRepository.findByTipoMaterial_IdTipoMaterialAndActivoTrue(idTipo, pageable);
+                }
+                break;
+            case "descripcion":
+                if (hayTexto) {
+                    return materialRepository.findByDescripcionContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                }
+                break;
+            case "nombre":
+            default:
+                if (hayTexto) {
+                    return materialRepository.findByNombreContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                }
+                break;
+        }
+        return materialRepository.findByActivoTrue(pageable);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Material> obtenerPorId(@PathVariable Integer id) {
         return materialRepository.findById(id)
@@ -51,6 +85,24 @@ public class MaterialController {
     @GetMapping("/buscarPorNombre")
     public ResponseEntity<List<Material>> buscarPorNombreParam(@RequestParam String texto) {
         List<Material> resultados = materialRepository.buscarPorNombre(texto);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
+    }
+
+    @GetMapping("/buscarPorTipo")
+    public ResponseEntity<List<Material>> buscarPorTipo(@RequestParam Integer idTipo) {
+        List<Material> resultados = materialRepository.findByTipoMaterial_IdTipoMaterialAndActivoTrue(idTipo);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
+    }
+
+    @GetMapping("/buscarPorDescripcion")
+    public ResponseEntity<List<Material>> buscarPorDescripcionParam(@RequestParam String texto) {
+        List<Material> resultados = materialRepository.findByDescripcionContainingIgnoreCaseAndActivoTrue(texto);
         if (resultados.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

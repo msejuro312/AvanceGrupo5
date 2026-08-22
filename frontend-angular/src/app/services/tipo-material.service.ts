@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { TipoMaterial } from '../models/tipo-material';
+
+export interface TipoMaterialFiltros {
+  criterio?: string;
+  texto?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class TipoMaterialService {
@@ -12,6 +17,27 @@ export class TipoMaterialService {
 
   listar(): Observable<TipoMaterial[]> {
     return this.http.get<TipoMaterial[]>(this.apiUrl);
+  }
+
+  listarPaginado(page: number, size: number, filtros?: TipoMaterialFiltros): Observable<any> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (filtros) {
+      if (filtros.criterio) { params = params.set('criterio', filtros.criterio); }
+      if (filtros.texto) { params = params.set('texto', filtros.texto); }
+    }
+    return this.http.get<any>(`${this.apiUrl}/paginado`, { params });
+  }
+
+  obtener(id: number): Observable<TipoMaterial> {
+    return this.http.get<TipoMaterial>(`${this.apiUrl}/${id}`);
+  }
+
+  buscarPorNombre(texto: string): Observable<TipoMaterial[]> {
+    return this.http.get<TipoMaterial[]>(`${this.apiUrl}/buscarPorNombre?texto=${texto}`);
+  }
+
+  buscarPorDescripcion(texto: string): Observable<TipoMaterial[]> {
+    return this.http.get<TipoMaterial[]>(`${this.apiUrl}/buscarPorDescripcion?texto=${texto}`);
   }
 
   crear(tipo: TipoMaterial): Observable<TipoMaterial> {

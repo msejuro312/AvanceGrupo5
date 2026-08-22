@@ -1,5 +1,9 @@
 package com.serfagab.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.serfagab.entities.Proveedor;
@@ -26,6 +30,28 @@ public class ProveedorController {
         return proveedorRepository.findByActivoTrue();
     }
 
+    @GetMapping("/paginado")
+    public Page<Proveedor> listarPaginado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "razonSocial") String criterio,
+            @RequestParam(required = false) String texto) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("idProveedor").ascending());
+        boolean hayTexto = texto != null && !texto.trim().isEmpty();
+        if (hayTexto) {
+            switch (criterio) {
+                case "ruc":
+                    return proveedorRepository.findByRucContainingAndActivoTrue(texto.trim(), pageable);
+                case "email":
+                    return proveedorRepository.findByEmailContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                case "razonSocial":
+                default:
+                    return proveedorRepository.findByRazonSocialContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+            }
+        }
+        return proveedorRepository.findByActivoTrue(pageable);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Proveedor> eliminar(@PathVariable Integer id) {
         return proveedorRepository.findById(id)
@@ -41,6 +67,33 @@ public class ProveedorController {
         return proveedorRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/buscarPorRazonSocial")
+    public ResponseEntity<List<Proveedor>> buscarPorRazonSocial(@RequestParam String texto) {
+        List<Proveedor> resultados = proveedorRepository.findByRazonSocialContainingIgnoreCaseAndActivoTrue(texto);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
+    }
+
+    @GetMapping("/buscarPorRuc")
+    public ResponseEntity<List<Proveedor>> buscarPorRuc(@RequestParam String texto) {
+        List<Proveedor> resultados = proveedorRepository.findByRucContainingAndActivoTrue(texto);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
+    }
+
+    @GetMapping("/buscarPorEmail")
+    public ResponseEntity<List<Proveedor>> buscarPorEmail(@RequestParam String texto) {
+        List<Proveedor> resultados = proveedorRepository.findByEmailContainingIgnoreCaseAndActivoTrue(texto);
+        if (resultados.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultados);
     }
 
     @PutMapping("/{id}")

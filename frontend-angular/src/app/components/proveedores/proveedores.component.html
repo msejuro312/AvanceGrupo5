@@ -5,6 +5,40 @@
 
       <div *ngIf="errorMensaje" class="alert alert-danger">{{ errorMensaje }}</div>
 
+      <fieldset class="border border-2 border-dark pb-2 px-3 mb-4">
+        <legend class="float-none w-auto px-2 h6 mb-0">Filtros</legend>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-auto">
+            <label class="form-label mb-0">Buscar por:</label>
+          </div>
+          <div class="col-md-3">
+            <select class="form-select" [(ngModel)]="criterioBusqueda" (ngModelChange)="alCambiarCriterio()">
+              <option value="razonSocial">Razón social</option>
+              <option value="id">ID</option>
+              <option value="ruc">RUC</option>
+              <option value="email">Email</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <input class="form-control"
+                   [type]="criterioBusqueda === 'id' ? 'number' : 'text'"
+                   [(ngModel)]="textoBusqueda"
+                   [placeholder]="'Buscar por ' + (criterioBusqueda === 'razonSocial' ? 'razón social...' : criterioBusqueda === 'ruc' ? 'RUC...' : criterioBusqueda === 'email' ? 'email...' : 'ID...')"
+                   (keyup.enter)="buscar()" />
+          </div>
+          <div class="col-md-auto">
+            <button class="btn btn-outline-dark" (click)="buscar()">
+              <i class="fa-solid fa-magnifying-glass me-1"></i>Buscar
+            </button>
+          </div>
+          <div class="col-md-auto">
+            <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+              <i class="fa-solid fa-eraser me-1"></i>Limpiar
+            </button>
+          </div>
+        </div>
+      </fieldset>
+
       <div class="card p-3 mb-4" *ngIf="esAdmin">
         <h5 class="mb-3"><i class="fa-solid fa-plus me-1"></i>Nuevo proveedor</h5>
         <div class="row g-2">
@@ -64,6 +98,18 @@
       </table>
 
       <div *ngIf="!cargando && proveedores.length == 0">No hay proveedores para mostrar</div>
+
+      <div class="mt-3">
+        <button class="btn btn-secondary" (click)="anterior()" [disabled]="page <= 0">
+          &laquo; Anterior
+        </button>
+        <span class="mx-3">
+          Página {{ page + 1 }} de {{ totalPages }} ({{ totalElements }} proveedores)
+        </span>
+        <button class="btn btn-secondary" (click)="siguiente()" [disabled]="page >= totalPages - 1">
+          Siguiente &raquo;
+        </button>
+      </div>
     </div>
   </div>
 </div>

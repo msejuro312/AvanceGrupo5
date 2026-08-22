@@ -13,6 +13,7 @@ import com.serfagab.entities.OrdenCompra;
 import com.serfagab.repository.OrdenCompraRepository;
 import com.serfagab.service.OrdenCompraService;
 import com.serfagab.util.OrdenCompraPdf;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -94,9 +95,17 @@ public class OrdenCompraController {
     }
 
     @GetMapping("/usuario/{idUsuario}/paginado")
-    public Page<OrdenCompra> historialPaginado(@PathVariable Integer idUsuario, @RequestParam int page, @RequestParam int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ordenCompraRepository.findByUsuarioIdUsuario(idUsuario, pageable);
+    public Page<OrdenCompra> historialPaginado(
+            @PathVariable Integer idUsuario,
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) Integer idProveedor,
+            @RequestParam(required = false) LocalDate fechaDesde,
+            @RequestParam(required = false) LocalDate fechaHasta) {
+        Sort sort = Sort.by(Sort.Order.desc("fecha"), Sort.Order.desc("idOrdenCompra"));
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ordenCompraRepository.buscarPaginadoConFiltros(idUsuario, estado, idProveedor, fechaDesde, fechaHasta, pageable);
     }
 
     @GetMapping("/usuario/{idUsuario}/paginado/ordenado")
