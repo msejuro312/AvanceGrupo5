@@ -8,10 +8,7 @@
 }
 
 body {
-  background-image: url('/imagenes/laser.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-color: #f3f4f6;
   min-height: 100vh;
 }
 

@@ -14,6 +14,12 @@
 
   <div class="container-menu">
     <div class="cont-menu">
+
+      <a routerLink="/dashboard" class="menu-brand" (click)="cerrarMenu()">
+        <i class="fa-solid fa-cubes menu-brand__icon"></i>
+        <span class="menu-brand__text"> SERFAGAB</span>
+      </a>
+
       <nav>
         <a routerLink="/dashboard" routerLinkActive="activo" (click)="cerrarMenu()">
           <i class="fa-solid fa-house me-2"></i> Inicio
@@ -30,18 +36,16 @@
         <a routerLink="/ordenes" routerLinkActive="activo" (click)="cerrarMenu()">
           <i class="fa-solid fa-file-lines me-2"></i> Órdenes de Compra
         </a>
-        <a href="#" (click)="$event.preventDefault(); cerrarSesion()">
+        <a href="#" class="menu-logout" (click)="$event.preventDefault(); cerrarSesion()">
           <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión
         </a>
       </nav>
-      <label for="btn-menu"><i class="fa-solid fa-xmark"></i></label>
+
     </div>
   </div>
 
   <main>
-    <div class="container mt-5 pt-3 pb-4">
       <router-outlet />
-    </div>
   </main>
 } @else {
   <router-outlet />

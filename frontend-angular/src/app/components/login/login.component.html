@@ -1,56 +1,85 @@
-<div class="box-login">
-  <div class="card shadow-lg">
-    <div class="card-header text-center text-white">
-      <h3><i class="fas fa-cubes me-2"></i>SERFAGAB</h3>
-      <small class="opacity-75">Sistema de Gestión de Compras</small>
+<div class="login-screen">
+
+  <div class="login-left">
+    <h1 class="login-left__title">SERFAGAB</h1>
+    <p class="login-left__subtitle">Sistema de Gestión de Compras</p>
+    <p class="login-left__desc">
+      Plataforma para la gestión de compras, proveedores, tableros metálicos
+      y control de inventario de SERFAGAB S.A.C.
+    </p>
+
+    <div class="login-left__features">
+      <div class="feature-pill">
+        <span class="feature-pill__icon"><i class="fas fa-check"></i></span>
+        Gestión de Materiales
+      </div>
+      <div class="feature-pill">
+        <span class="feature-pill__icon"><i class="fas fa-check"></i></span>
+        Gestión de Tipo de Materiales
+      </div>
+      <div class="feature-pill">
+        <span class="feature-pill__icon"><i class="fas fa-check"></i></span>
+        Gestión de Proveedores
+      </div>
+      <div class="feature-pill">
+        <span class="feature-pill__icon"><i class="fas fa-check"></i></span>
+        Gestión de Orden de Compra
+      </div>
     </div>
 
-    <div class="card-body">
-      <h5 class="text-center mb-4">
-        <i class="fas fa-sign-in-alt me-2 text-dark"></i>Inicio de Sesión
-      </h5>
+      <span class="login-left__watermark">SERFAGAB</span>
+  </div>
 
-      <div *ngIf="mensajeError" class="alert alert-danger py-2">{{ mensajeError }}</div>
+  <div class="login-right">
+    <div class="login-card">
+
+      <div class="login-card__avatar">
+        <i class="fas fa-user"></i>
+      </div>
+
+      <h2 class="login-card__title">Bienvenido</h2>
+      <p class="login-card__subtitle">Ingrese sus credenciales para continuar</p>
+
+      <div *ngIf="mensajeError" class="login-error">
+        {{ mensajeError }}
+      </div>
 
       <form (submit)="$event.preventDefault(); iniciarSesion()" novalidate>
-        <div class="mb-3">
-          <label class="form-label fw-semibold">
-            <i class="fas fa-user me-1"></i> Login
-          </label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
-            <input type="text" class="form-control" placeholder="Ingrese su login"
-                   name="login" [(ngModel)]="login" required autofocus>
+
+        <div class="form-group">
+          <label for="login">Usuario</label>
+          <div class="input-with-icon">
+            <i class="fa-regular fa-user"></i>
+            <input id="login" type="text" placeholder="Ingrese su login" name="login" [(ngModel)]="login"
+                   required autofocus>
           </div>
         </div>
 
-        <div class="mb-4">
-          <label class="form-label fw-semibold">
-            <i class="fas fa-key me-1"></i> Clave
-          </label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
-            <input type="password" class="form-control" placeholder="Ingrese su clave"
-                   name="clave" [(ngModel)]="clave" required>
+        <div class="form-group">
+          <label for="clave">Contraseña</label>
+          <div class="input-with-icon">
+            <i class="fa-solid fa-lock"></i>
+            <input id="clave" type="password" placeholder="Ingrese su clave" name="clave" [(ngModel)]="clave"
+                   required>
           </div>
         </div>
 
-        <div class="d-grid">
-          <button type="submit" class="btn btn-dark" [disabled]="cargando">
-            <span *ngIf="!cargando">
-              <i class="fas fa-sign-in-alt me-2"></i>INGRESAR
-            </span>
-            <span *ngIf="cargando">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Ingresando...
-            </span>
-          </button>
-        </div>
+        <button type="submit" class="btn-login" [disabled]="cargando">
+          <span *ngIf="!cargando">Ingresar al Sistema</span>
+          <span *ngIf="cargando">
+            <span class="spinner"></span> Ingresando...
+          </span>
+        </button>
+
       </form>
-    </div>
 
-    <div class="card-footer text-muted text-center">
-      &copy; 2025 SERFAGAB - Todos los derechos reservados
+      <div class="login-card__footer">
+        SERFAGAB S.A.C<br>
+        Sistema de Gestión de Compras · Versión 1.0<br>
+        &copy; 2025 Todos los derechos reservados
+      </div>
+
     </div>
   </div>
+
 </div>
