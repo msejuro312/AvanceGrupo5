@@ -52,22 +52,22 @@ public class MaterialController {
         switch (criterio) {
             case "tipo":
                 if (idTipo != null) {
-                    return materialRepository.findByTipoMaterial_IdTipoMaterialAndActivoTrue(idTipo, pageable);
+                    return materialRepository.findByTipoMaterial_IdTipoMaterial(idTipo, pageable);
                 }
                 break;
             case "descripcion":
                 if (hayTexto) {
-                    return materialRepository.findByDescripcionContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return materialRepository.findByDescripcionContainingIgnoreCase(texto.trim(), pageable);
                 }
                 break;
             case "nombre":
             default:
                 if (hayTexto) {
-                    return materialRepository.findByNombreContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return materialRepository.findByNombreContainingIgnoreCase(texto.trim(), pageable);
                 }
                 break;
         }
-        return materialRepository.findByActivoTrue(pageable);
+        return materialRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -114,6 +114,16 @@ public class MaterialController {
         return materialRepository.findById(id)
                 .map(m -> {
                     m.setActivo(false);
+                    return ResponseEntity.ok(materialRepository.save(m));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<Material> activar(@PathVariable Integer id) {
+        return materialRepository.findById(id)
+                .map(m-> {
+                    m.setActivo(true);
                     return ResponseEntity.ok(materialRepository.save(m));
                 })
                 .orElse(ResponseEntity.notFound().build());

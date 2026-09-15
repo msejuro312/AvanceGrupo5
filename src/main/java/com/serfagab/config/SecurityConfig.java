@@ -56,6 +56,12 @@ public class SecurityConfig {
                                 "/api/proveedores/**",
                                 "/api/ordenes-compra/**"
                         ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/materiales/**",
+                                "/api/tipos-material/**",
+                                "/api/proveedores/**",
+                                "/api/ordenes-compra/**"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -68,7 +74,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
