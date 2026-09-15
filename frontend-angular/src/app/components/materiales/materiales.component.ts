@@ -218,6 +218,21 @@ export class MaterialesComponent implements OnInit {
     }
   }
 
+  activar(m: Material) {
+    if(confirm(`¿Activar el material "${m.nombre}"?`)) {
+      this.materialService.activar(m.idMaterial).subscribe({
+        next: () => {
+          this.mostrarToast('success', 'Material el activado correctamente');
+          this.listar();
+        },
+        error: (err) => {
+          console.error('Error al activar material', err);
+          this.errorMensaje = 'No se pudo activar el material.';
+        }
+      });
+    }
+  }
+
   private mostrarToast(icono: string, titulo: string) {
     const Swal = (window as any).Swal;
     const Toast = Swal.mixin({

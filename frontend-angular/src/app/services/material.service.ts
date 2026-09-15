@@ -23,9 +23,15 @@ export class MaterialService {
   listarPaginado(page: number, size: number, filtros?: MaterialFiltros): Observable<any> {
     let params = new HttpParams().set('page', page).set('size', size);
     if (filtros) {
-      if (filtros.criterio) { params = params.set('criterio', filtros.criterio); }
-      if (filtros.texto) { params = params.set('texto', filtros.texto); }
-      if (filtros.idTipo != null) { params = params.set('idTipo', filtros.idTipo); }
+      if (filtros.criterio) {
+        params = params.set('criterio', filtros.criterio);
+      }
+      if (filtros.texto) {
+        params = params.set('texto', filtros.texto);
+      }
+      if (filtros.idTipo != null) {
+        params = params.set('idTipo', filtros.idTipo);
+      }
     }
     return this.http.get<any>(`${this.apiUrl}/paginado`, { params });
   }
@@ -56,5 +62,9 @@ export class MaterialService {
 
   eliminar(id: number): Observable<Material> {
     return this.http.delete<Material>(`${this.apiUrl}/${id}`);
+  }
+
+  activar(id: number): Observable<Material> {
+    return this.http.patch<Material>(`${this.apiUrl}/${id}/activar`, {});
   }
 }
