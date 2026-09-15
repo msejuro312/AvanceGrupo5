@@ -25,10 +25,18 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
 
     Page<Material> findByActivoTrue(Pageable pageable);
 
-    Page<Material> findByNombreContainingIgnoreCaseAndActivoTrue(String nombre, Pageable pageable);
+    Page<Material> findByActivoFalse(Pageable pageable);
 
-    Page<Material> findByDescripcionContainingIgnoreCaseAndActivoTrue(String descripcion, Pageable pageable);
+    //Page<Material> findByNombreContainingIgnoreCaseAndActivoTrue(String nombre, Pageable pageable);
 
-    Page<Material> findByTipoMaterial_IdTipoMaterialAndActivoTrue(Integer idTipo, Pageable pageable);
+    //Page<Material> findByDescripcionContainingIgnoreCaseAndActivoTrue(String descripcion, Pageable pageable);
+
+    //Page<Material> findByTipoMaterial_IdTipoMaterialAndActivoTrue(Integer idTipo, Pageable pageable);
+
+    Page<Material> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
+
+    Page<Material> findByDescripcionContainingIgnoreCase(String descripcion, Pageable pageable);
+
+    Page<Material> findByTipoMaterial_IdTipoMaterial(Integer idTipo, Pageable pageable);
 
 }
