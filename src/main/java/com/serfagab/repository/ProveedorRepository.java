@@ -17,9 +17,15 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
 
     Page<Proveedor> findByActivoTrue(Pageable pageable);
 
-    Page<Proveedor> findByRazonSocialContainingIgnoreCaseAndActivoTrue(String razonSocial, Pageable pageable);
+    //Page<Proveedor> findByRazonSocialContainingIgnoreCaseAndActivoTrue(String razonSocial, Pageable pageable);
 
-    Page<Proveedor> findByRucContainingAndActivoTrue(String ruc, Pageable pageable);
+    //Page<Proveedor> findByRucContainingAndActivoTrue(String ruc, Pageable pageable);
 
-    Page<Proveedor> findByEmailContainingIgnoreCaseAndActivoTrue(String email, Pageable pageable);
+    //Page<Proveedor> findByEmailContainingIgnoreCaseAndActivoTrue(String email, Pageable pageable);
+
+    Page<Proveedor> findByRazonSocialContainingIgnoreCase(String razonSocial, Pageable pageable);
+
+    Page<Proveedor> findByRucContaining(String ruc, Pageable pageable);
+
+    Page<Proveedor> findByEmailContainingIgnoreCase(String email, Pageable pageable);
 }
