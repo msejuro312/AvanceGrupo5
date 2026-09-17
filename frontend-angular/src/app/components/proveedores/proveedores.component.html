@@ -79,6 +79,7 @@
             <th>RUC</th>
             <th>Celular</th>
             <th>Email</th>
+            <th>Estado</th>
             <th *ngIf="esAdmin">Acciones</th>
           </tr>
         </thead>
@@ -89,9 +90,15 @@
             <td>{{ p.ruc }}</td>
             <td>{{ p.celular }}</td>
             <td>{{ p.email }}</td>
+            <td class="text-center">
+              <span class="badge" [class.bg-success]="p.activo" [class.bg-secondary]="!p.activo">
+                {{ p.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
             <td *ngIf="esAdmin" class="text-center">
               <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(p)">Editar</button>
-              <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(p)">Eliminar</button>
+              <button *ngIf="p.activo" class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(p)">Eliminar</button>
+              <button *ngIf="!p.activo" class="btn btn-outline-success btn-sm ms-1" (click)="activar(p)">Activar</button>
             </td>
           </tr>
         </tbody>

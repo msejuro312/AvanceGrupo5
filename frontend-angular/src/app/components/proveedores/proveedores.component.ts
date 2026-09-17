@@ -183,6 +183,22 @@ export class ProveedoresComponent implements OnInit {
     }
   }
 
+  activar(p: Proveedor) {
+    if (p.idProveedor == null) return;
+    if (confirm(`¿Activar el proveedor "${p.razonSocial}"?`)) {
+      this.proveedorService.activar(p.idProveedor).subscribe({
+        next: () => {
+          this.mostrarToast('success', 'Proveedor activado correctamente');
+          this.listar();
+        },
+        error: (err) => {
+          console.error('Error al activar proveedor', err);
+          this.errorMensaje = 'No se pudo activar el proveedor.';
+        }
+      });
+    }
+  }
+
   private mostrarToast(icono: string, titulo: string) {
     const Swal = (window as any).Swal;
     const Toast = Swal.mixin({

@@ -55,4 +55,7 @@ export class ProveedorService {
   eliminar(id: number): Observable<Proveedor> {
     return this.http.delete<Proveedor>(`${this.apiUrl}/${id}`);
   }
+  activar(id: number): Observable<Proveedor> {
+    return this.http.patch<Proveedor>(`${this.apiUrl}/${id}/activar`, {});
+  }
 }
