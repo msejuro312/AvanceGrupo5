@@ -41,15 +41,15 @@ public class ProveedorController {
         if (hayTexto) {
             switch (criterio) {
                 case "ruc":
-                    return proveedorRepository.findByRucContainingAndActivoTrue(texto.trim(), pageable);
+                    return proveedorRepository.findByRucContaining(texto.trim(), pageable);
                 case "email":
-                    return proveedorRepository.findByEmailContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return proveedorRepository.findByEmailContainingIgnoreCase(texto.trim(), pageable);
                 case "razonSocial":
                 default:
-                    return proveedorRepository.findByRazonSocialContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return proveedorRepository.findByRazonSocialContainingIgnoreCase(texto.trim(), pageable);
             }
         }
-        return proveedorRepository.findByActivoTrue(pageable);
+        return proveedorRepository.findAll(pageable);
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +57,16 @@ public class ProveedorController {
         return proveedorRepository.findById(id)
                 .map(p -> {
                     p.setActivo(false);
+                    return ResponseEntity.ok(proveedorRepository.save(p));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<Proveedor> activar(@PathVariable Integer id) {
+        return proveedorRepository.findById(id)
+                .map(p -> {
+                    p.setActivo(true);
                     return ResponseEntity.ok(proveedorRepository.save(p));
                 })
                 .orElse(ResponseEntity.notFound().build());
