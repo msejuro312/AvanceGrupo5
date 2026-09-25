@@ -50,6 +50,7 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Estado</th>
             <th *ngIf="esAdmin">Acciones</th>
           </tr>
         </thead>
@@ -58,12 +59,19 @@
             <td>{{ t.idTipoMaterial }}</td>
             <td>{{ t.nombre }}</td>
             <td>{{ t.descripcion }}</td>
+            <td class="text-center">
+              <span class="badge" [class.bg-success]="t.activo" [class.bg-secondary]="!t.activo">
+                {{ t.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
             <td *ngIf="esAdmin" class="text-center">
               <button class="btn btn-outline-primary btn-sm" (click)="abrirEditar(t)">Editar</button>
-              <button class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(t)">Eliminar</button>
+              <button *ngIf="t.activo" class="btn btn-outline-danger btn-sm ms-1" (click)="eliminar(t)">Eliminar</button>
+              <button *ngIf="!t.activo" class="btn btn-outline-success btn-sm ms-1" (click)="activar(t)">Activar</button>
             </td>
           </tr>
         </tbody>
+
       </table>
 
       <div *ngIf="!cargando && tipos.length == 0">No hay tipos de material para mostrar</div>

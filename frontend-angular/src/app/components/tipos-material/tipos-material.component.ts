@@ -189,6 +189,21 @@ export class TiposMaterialComponent implements OnInit {
     }
   }
 
+  activar(t: TipoMaterial) {
+    if (confirm(`¿Activar el tipo de material "${t.nombre}"?`)) {
+      this.tipoMaterialService.activar(t.idTipoMaterial).subscribe({
+        next: () => {
+          this.mostrarToast('success', 'Tipo de material activado correctamente');
+          this.listar();
+        },
+        error: (err) => {
+          console.error('Error al activar tipo de material', err);
+          this.errorMensaje = 'No se pudo activar el tipo de material.';
+        }
+      });
+    }
+  }
+
   private mostrarToast(icono: string, titulo: string) {
     const Swal = (window as any).Swal;
     const Toast = Swal.mixin({

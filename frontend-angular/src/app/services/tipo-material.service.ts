@@ -51,4 +51,7 @@ export class TipoMaterialService {
   eliminar(id: number): Observable<TipoMaterial> {
     return this.http.delete<TipoMaterial>(`${this.apiUrl}/${id}`);
   }
+  activar(id: number): Observable<TipoMaterial> {
+    return this.http.patch<TipoMaterial>(`${this.apiUrl}/${id}/activar`, {});
+  }
 }
