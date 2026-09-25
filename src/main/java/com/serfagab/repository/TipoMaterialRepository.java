@@ -15,7 +15,12 @@ public interface TipoMaterialRepository extends JpaRepository<TipoMaterial, Inte
 
     Page<TipoMaterial> findByActivoTrue(Pageable pageable);
 
-    Page<TipoMaterial> findByNombreContainingIgnoreCaseAndActivoTrue(String nombre, Pageable pageable);
+    //Page<TipoMaterial> findByNombreContainingIgnoreCaseAndActivoTrue(String nombre, Pageable pageable);
 
-    Page<TipoMaterial> findByDescripcionContainingIgnoreCaseAndActivoTrue(String descripcion, Pageable pageable);
+    //Page<TipoMaterial> findByDescripcionContainingIgnoreCaseAndActivoTrue(String descripcion, Pageable pageable);
+
+    Page<TipoMaterial> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
+
+    Page<TipoMaterial> findByDescripcionContainingIgnoreCase(String descripcion, Pageable pageable);
+
 }

@@ -41,13 +41,13 @@ public class TipoMaterialController {
         if (hayTexto) {
             switch (criterio) {
                 case "descripcion":
-                    return tipoMaterialRepository.findByDescripcionContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return tipoMaterialRepository.findByDescripcionContainingIgnoreCase(texto.trim(), pageable);
                 case "nombre":
                 default:
-                    return tipoMaterialRepository.findByNombreContainingIgnoreCaseAndActivoTrue(texto.trim(), pageable);
+                    return tipoMaterialRepository.findByNombreContainingIgnoreCase(texto.trim(), pageable);
             }
         }
-        return tipoMaterialRepository.findByActivoTrue(pageable);
+        return tipoMaterialRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -95,4 +95,15 @@ public class TipoMaterialController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<TipoMaterial> activar(@PathVariable Integer id) {
+        return tipoMaterialRepository.findById(id)
+                .map(t -> {
+                    t.setActivo(true);
+                    return ResponseEntity.ok(tipoMaterialRepository.save(t));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
