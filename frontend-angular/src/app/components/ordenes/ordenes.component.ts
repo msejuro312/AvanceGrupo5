@@ -149,12 +149,79 @@ export class OrdenesComponent implements OnInit {
     );
   }
 
+  onMaterialSeleccionado(fila: FilaDetalle) {
+    const material = this.materiales.find(m => m.idMaterial === fila.materialId);
+    fila.precioUnitario = material ? material.precioReferencial : 0;
+  }
+
+  precioReferencialDe(fila: FilaDetalle): number {
+    const material = this.materiales.find(m => m.idMaterial === fila.materialId);
+    return material ? material.precioReferencial : 0;
+  }
+
+  esPrecioSospechoso(fila: FilaDetalle): boolean {
+    const referencial = this.precioReferencialDe(fila);
+    if (!referencial || fila.precioUnitario == null || fila.precioUnitario <= 0) {
+      return false;
+    }
+
+    const deviacion = Math.abs(fila.precioUnitario - referencial) / referencial;
+    return deviacion > 0.3;
+  }
+
+  cantidadInvalida(d:FilaDetalle): boolean {
+    return d.cantidad == null || d.cantidad <= 0;
+  }
+
+  precioInvalido(d:FilaDetalle): boolean {
+    return d.precioUnitario == null || d.precioUnitario <= 0;
+  }
+
+  precioFueraDeRango(fila: FilaDetalle): boolean {
+    const referencial = this.precioReferencialDe(fila);
+
+    if (!referencial || fila.precioUnitario <= 0) {
+      return false;
+    }
+
+    const minimo = referencial * 0.5;
+    const maximo = referencial * 2.0;
+
+    return fila.precioUnitario < minimo ||
+      fila.precioUnitario > maximo;
+  }
+
+  hayDetallesInvalidos(): boolean {
+    return this.detalles.some(fila =>
+      !fila.materialId ||
+      this.cantidadInvalida(fila) ||
+      this.precioInvalido(fila) ||
+      this.precioFueraDeRango(fila)
+    );
+  }
+
   guardar() {
     this.mensajeError = '';
 
     if (!this.idProveedor || !this.fecha || this.detalles.length === 0) {
       this.mensajeError = 'Selecciona un proveedor, una fecha y al menos un detalle.';
       return;
+    }
+
+    for (const detalle of this.detalles) {
+
+      if (!detalle.materialId) {
+        return;
+      }
+      if (this.cantidadInvalida(detalle)) {
+        return;
+      }
+      if (this.precioInvalido(detalle)) {
+        return;
+      }
+      if (this.precioFueraDeRango(detalle)) {
+        return;
+      }
     }
 
     this.guardando = true;
@@ -236,6 +303,31 @@ export class OrdenesComponent implements OnInit {
 
   cambiarEstado(o: OrdenCompra, event: any) {
     const estado = event.target.value;
+
+    if (estado === 'ANULADO') {
+      const Swal = (window as any).Swal;
+      Swal.fire({
+        title: `¿Anular la orden  #${o.idOrdenCompra}?`,
+        text: 'Esta acción no se puede deshacer ni volver a cambiar después.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, anular',
+        cancelButtonText: 'Cancelar',
+      }).then((resultado: any) => {
+        if (resultado.isConfirmed) {
+          this.confirmarCambioEstado(o, estado);
+        } else {
+          this.cargar();
+        }
+      });
+      return;
+    }
+    this.confirmarCambioEstado(o, estado);
+  }
+
+  private confirmarCambioEstado(o: OrdenCompra, estado: string) {
     this.ordenService.cambiarEstado(o.idOrdenCompra, estado).subscribe({
       next: () => {
         this.mensajeError = '';
@@ -245,8 +337,9 @@ export class OrdenesComponent implements OnInit {
       error: (err) => {
         console.error('Error al cambiar estado', err);
         this.mensajeError = 'No se pudo cambiar el estado de la orden.';
+        this.cargar();
       }
-    });
+    })
   }
 
   abrirEditar(o: OrdenCompra) {

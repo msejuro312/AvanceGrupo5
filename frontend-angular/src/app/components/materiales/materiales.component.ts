@@ -13,7 +13,7 @@ import { SesionService } from '../../services/sesion.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './materiales.component.html',
-  styleUrl: './materiales.component.css'
+  styleUrl: './materiales.component.css',
 })
 export class MaterialesComponent implements OnInit {
   materiales: Material[] = [];
@@ -29,6 +29,7 @@ export class MaterialesComponent implements OnInit {
   editandoId: number | null = null;
   mostrarModal = false;
   errorMensaje = '';
+  erroresCampos: { [campo: string]: string } = {};
   esAdmin = false;
   edicion: Material = {
     idMaterial: 0,
@@ -39,13 +40,13 @@ export class MaterialesComponent implements OnInit {
     precioReferencial: 0,
     descripcion: '',
     activo: true,
-    version: 0
+    version: 0,
   };
 
   constructor(
     private materialService: MaterialService,
     private tipoMaterialService: TipoMaterialService,
-    private sesionService: SesionService
+    private sesionService: SesionService,
   ) {
     this.esAdmin = this.sesionService.esAdministrador();
   }
@@ -58,14 +59,17 @@ export class MaterialesComponent implements OnInit {
   cargarTipos() {
     this.tipoMaterialService.listar().subscribe({
       next: (data) => (this.tiposMaterial = data),
-      error: (err) => console.error('Error al listar tipos de material', err)
+      error: (err) => console.error('Error al listar tipos de material', err),
     });
   }
 
   listar() {
     this.cargando = true;
     const filtros: MaterialFiltros = { criterio: this.criterioBusqueda };
-    if ((this.criterioBusqueda === 'nombre' || this.criterioBusqueda === 'descripcion') && this.textoBusqueda.trim()) {
+    if (
+      (this.criterioBusqueda === 'nombre' || this.criterioBusqueda === 'descripcion') &&
+      this.textoBusqueda.trim()
+    ) {
       filtros.texto = this.textoBusqueda.trim();
     }
     if (this.criterioBusqueda === 'tipo' && this.idTipoSeleccionado != null) {
@@ -91,7 +95,7 @@ export class MaterialesComponent implements OnInit {
         this.totalPages = 0;
         this.totalElements = 0;
         this.cargando = false;
-      }
+      },
     });
   }
 
@@ -113,7 +117,7 @@ export class MaterialesComponent implements OnInit {
         this.totalPages = 0;
         this.totalElements = 0;
         this.cargando = false;
-      }
+      },
     });
   }
 
@@ -157,9 +161,10 @@ export class MaterialesComponent implements OnInit {
       precioReferencial: 0,
       descripcion: '',
       activo: true,
-      version: 0
+      version: 0,
     };
     this.errorMensaje = '';
+    this.erroresCampos = {};
     this.mostrarModal = true;
   }
 
@@ -167,9 +172,10 @@ export class MaterialesComponent implements OnInit {
     this.editandoId = m.idMaterial;
     this.edicion = {
       ...m,
-      tipoMaterial: m.tipoMaterial ? { ...m.tipoMaterial } : null
+      tipoMaterial: m.tipoMaterial ? { ...m.tipoMaterial } : null,
     };
     this.errorMensaje = '';
+    this.erroresCampos = {};
     this.mostrarModal = true;
   }
 
@@ -180,23 +186,32 @@ export class MaterialesComponent implements OnInit {
 
   guardar() {
     this.errorMensaje = '';
-    const accion = this.editandoId !== null
-      ? this.materialService.actualizar(this.editandoId, this.edicion)
-      : this.materialService.crear(this.edicion);
+    this.erroresCampos = {};
+    const accion =
+      this.editandoId !== null
+        ? this.materialService.actualizar(this.editandoId, this.edicion)
+        : this.materialService.crear(this.edicion);
 
     accion.subscribe({
       next: () => {
-        this.mostrarToast('success', this.editandoId !== null
-          ? 'Material actualizado correctamente'
-          : 'Material creado correctamente');
+        this.mostrarToast(
+          'success',
+          this.editandoId !== null
+            ? 'Material actualizado correctamente'
+            : 'Material creado correctamente',
+        );
         this.cancelarEdicion();
         this.page = 0;
         this.listar();
       },
       error: (err) => {
         console.error('Error al guardar material', err);
-        this.errorMensaje = 'No se pudo guardar el material.';
-      }
+        if (err.status === 400 && typeof err.error === 'object') {
+          this.erroresCampos = err.error;
+        } else {
+          this.errorMensaje = 'No se pudo guardar el material.';
+        }
+      },
     });
   }
 
@@ -213,13 +228,13 @@ export class MaterialesComponent implements OnInit {
         error: (err) => {
           console.error('Error al eliminar material', err);
           this.errorMensaje = 'No se pudo eliminar el material.';
-        }
+        },
       });
     }
   }
 
   activar(m: Material) {
-    if(confirm(`¿Activar el material "${m.nombre}"?`)) {
+    if (confirm(`¿Activar el material "${m.nombre}"?`)) {
       this.materialService.activar(m.idMaterial).subscribe({
         next: () => {
           this.mostrarToast('success', 'Material el activado correctamente');
@@ -228,7 +243,7 @@ export class MaterialesComponent implements OnInit {
         error: (err) => {
           console.error('Error al activar material', err);
           this.errorMensaje = 'No se pudo activar el material.';
-        }
+        },
       });
     }
   }
@@ -240,7 +255,7 @@ export class MaterialesComponent implements OnInit {
       position: 'top-end',
       showConfirmButton: false,
       timer: 3000,
-      timerProgressBar: true
+      timerProgressBar: true,
     });
     Toast.fire({ icon: icono, title: titulo });
   }

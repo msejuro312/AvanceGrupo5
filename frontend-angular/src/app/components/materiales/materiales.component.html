@@ -113,30 +113,40 @@
 
     <div class="mb-2">
       <label class="form-label">Nombre</label>
-      <input class="form-control" [(ngModel)]="edicion.nombre" />
+      <input class="form-control" [(ngModel)]="edicion.nombre"
+             [class.is-invalid]="erroresCampos['nombre']" />
+      <div class="invalid-feedback" *ngIf="erroresCampos['nombre']">{{ erroresCampos['nombre'] }}</div>
     </div>
 
     <div class="row g-2 mb-2">
       <div class="col-6">
         <label class="form-label">Tipo de material</label>
-        <select class="form-select" [(ngModel)]="edicion.tipoMaterial">
+        <select class="form-select" [(ngModel)]="edicion.tipoMaterial"
+                [class.is-invalid]="erroresCampos['tipoMaterial']">
           <option [ngValue]="null">-- Selecciona un tipo --</option>
           <option *ngFor="let t of tiposMaterial" [ngValue]="t">{{ t.nombre }}</option>
         </select>
+        <div class="invalid-feedback" *ngIf="erroresCampos['tipoMaterial']">{{ erroresCampos['tipoMaterial'] }}</div>
       </div>
       <div class="col-6">
         <label class="form-label">Unidad de medida</label>
-        <input class="form-control" [(ngModel)]="edicion.unidadMedida" />
+        <input class="form-control" [(ngModel)]="edicion.unidadMedida"
+               [class.is-invalid]="erroresCampos['unidadMedida']"/>
+        <div class="invalid-feedback" *ngIf="erroresCampos['unidadMedida']">{{ erroresCampos['unidadMedida'] }}</div>
       </div>
     </div>
     <div class="row g-2 mb-2">
       <div class="col-6">
         <label class="form-label">Stock actual</label>
-        <input type="number" class="form-control" [(ngModel)]="edicion.stockActual" />
+        <input type="number" class="form-control" [(ngModel)]="edicion.stockActual"
+               [class.is-invalid]="erroresCampos['stockActual']"/>
+        <div class="invalid-feedback" *ngIf="erroresCampos['stockActual']">{{ erroresCampos['stockActual'] }}</div>
       </div>
       <div class="col-6">
         <label class="form-label">Precio referencial</label>
-        <input type="number" step="0.01" class="form-control" [(ngModel)]="edicion.precioReferencial" />
+        <input type="number" step="0.01" class="form-control" [(ngModel)]="edicion.precioReferencial"
+               [class.is-invalid]="erroresCampos['precioReferencial']"/>
+        <div class="invalid-feedback" *ngIf="erroresCampos['precioReferencial']">{{ erroresCampos['precioReferencial'] }}</div>
       </div>
     </div>
     <div class="mb-3">

@@ -63,16 +63,35 @@
         <h6 class="mt-2">Detalles</h6>
         <div class="row g-2 mb-2" *ngFor="let d of detalles; let i = index">
           <div class="col-md-5">
-            <select class="form-select" [(ngModel)]="d.materialId">
+            <select class="form-select" [(ngModel)]="d.materialId" (ngModelChange)="onMaterialSeleccionado(d)"
+                    [class.is-invalid]="!d.materialId">
               <option [ngValue]="null">-- Selecciona un material --</option>
               <option *ngFor="let m of materiales" [ngValue]="m.idMaterial">{{ m.nombre }}</option>
             </select>
+            <div class="invalid-feedback" *ngIf="!d.materialId">
+              Debes seleccionar un material.
+            </div>
           </div>
           <div class="col-md-2">
-            <input type="number" class="form-control" [(ngModel)]="d.cantidad" placeholder="Cantidad" />
+            <input type="number" class="form-control" [(ngModel)]="d.cantidad" placeholder="Cantidad" min="1"
+                   [class.is-invalid]="cantidadInvalida(d)"/>
+            <div class="invalid-feedback" *ngIf="cantidadInvalida(d)">
+              La cantidad debe ser mayor  0.
+            </div>
           </div>
           <div class="col-md-3">
-            <input type="number" step="0.01" class="form-control" [(ngModel)]="d.precioUnitario" placeholder="Precio unit." />
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="d.precioUnitario" placeholder="Precio unit."
+                   [disabled]="!d.materialId" [class.border-warning]="!precioInvalido(d) && esPrecioSospechoso(d)"/>
+            <div class="text-warning small mt-1" *ngIf="!precioInvalido(d) && esPrecioSospechoso(d)">
+              Se aleja del referencial (S/ {{ precioReferencialDe(d) | number:'1.2-2' }})
+            </div>
+            <div class="text-danger small mt-1" *ngIf="!precioInvalido(d) && precioFueraDeRango(d)">
+              El precio debe estar entre S/ {{ (precioReferencialDe(d) * 0.5) | number:'1.2-2' }} y
+              S/ {{ (precioReferencialDe(d) * 2) | number:'1.2-2' }}.
+            </div>
+            <div class="invalid-feedback" *ngIf="precioInvalido(d)">
+              El precio unitario debe ser mayor a 0.
+            </div>
           </div>
           <div class="col-md-2">
             <button class="btn btn-outline-danger" (click)="quitarFila(i)">Quitar</button>
@@ -85,7 +104,7 @@
         <div class="d-flex justify-content-between align-items-center mt-2">
           <strong>Total estimado: S/ {{ totalEstimado() }}</strong>
           <button class="btn btn-success" (click)="guardar()"
-                  [disabled]="guardando || !idProveedor || detalles.length === 0">
+                  [disabled]="guardando || !idProveedor || !fecha || detalles.length === 0 || hayDetallesInvalidos()">
             {{ guardando ? 'Guardando...' : 'Guardar orden' }}
           </button>
         </div>
@@ -111,7 +130,8 @@
             <td>{{ o.proveedor.razonSocial }}</td>
             <td>{{ o.fecha }}</td>
             <td class="text-center">
-              <select *ngIf="esAdmin" class="form-select form-select-sm" (change)="cambiarEstado(o, $event)">
+              <select *ngIf="esAdmin" class="form-select form-select-sm" (change)="cambiarEstado(o, $event)"
+                      [disabled]="o.estado !== 'PENDIENTE'">
                 <option *ngFor="let e of estados" [value]="e" [selected]="e === o.estado">{{ e }}</option>
               </select>
               <span *ngIf="!esAdmin"
@@ -132,13 +152,15 @@
               </button>
               <ng-container *ngIf="esAdmin">
                 <button class="btn btn-outline-primary btn-sm ms-1" title="Editar"
-                        (click)="abrirEditar(o)">
+                        (click)="abrirEditar(o)" [disabled]="o.estado !== 'PENDIENTE'">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </button>
+                <!--
                 <button class="btn btn-outline-danger btn-sm ms-1" title="Eliminar"
                         (click)="eliminar(o)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
+                -->
               </ng-container>
             </td>
           </tr>
