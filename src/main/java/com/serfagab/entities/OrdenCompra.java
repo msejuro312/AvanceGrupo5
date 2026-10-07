@@ -3,6 +3,7 @@ package com.serfagab.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,5 +36,5 @@ public class OrdenCompra {
     private String observaciones;
 
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleOrdenCompra> detalles;
+    private List<DetalleOrdenCompra> detalles = new ArrayList<>();;
 }
