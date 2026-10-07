@@ -1,5 +1,7 @@
 package com.serfagab.controller;
 
+import com.serfagab.entities.Material;
+import com.serfagab.repository.MaterialRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,12 @@ import java.util.List;
 public class OrdenCompraController {
     private final OrdenCompraService ordenCompraService;
     private final OrdenCompraRepository ordenCompraRepository;
+    private final MaterialRepository materialRepository;
 
-    public OrdenCompraController(OrdenCompraService ordenCompraService, OrdenCompraRepository ordenCompraRepository) {
+    public OrdenCompraController(OrdenCompraService ordenCompraService, OrdenCompraRepository ordenCompraRepository, MaterialRepository materialRepository) {
         this.ordenCompraService = ordenCompraService;
         this.ordenCompraRepository = ordenCompraRepository;
+        this.materialRepository = materialRepository;
     }
 
     @PostMapping("/{idUsuario}/crear")
@@ -45,6 +49,27 @@ public class OrdenCompraController {
         if (detalle.getMaterial() == null || detalle.getMaterial().getIdMaterial() == null) {
             return ResponseEntity.badRequest().body("Debe especificar un material");
         }
+        if (detalle.getCantidad() == null || detalle.getCantidad() <=0) {
+            return ResponseEntity.badRequest().body("La cantidad debe ser mayor a 0");
+        }
+        if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario() <=0) {
+            return ResponseEntity.badRequest().body("El precio unitario debe ser mayor a 0");
+        }
+
+        Material material = materialRepository.findById(detalle.getMaterial().getIdMaterial()).orElse(null);
+        if (material == null) {
+            return ResponseEntity.badRequest().body("El material no existe");
+        }
+
+        double referencial = material.getPrecioReferencial();
+        double minimo = referencial * 0.5;
+        double maximo = referencial * 2.0;
+
+        if (detalle.getPrecioUnitario() < minimo || detalle.getPrecioUnitario() > maximo) {
+            return ResponseEntity.badRequest().body(
+                    "El precio se aleja demasiado del referencial (S/ "+ referencial + ")");
+        }
+
         DetalleOrdenCompra guardado = ordenCompraService.agregarDetalle(
                 idOrden,
                 detalle.getMaterial().getIdMaterial(),
@@ -70,6 +95,7 @@ public class OrdenCompraController {
         }
     }
 
+    /*
     @DeleteMapping("/{idOrden}")
     public ResponseEntity<?> eliminar(@PathVariable Integer idOrden) {
         if (!ordenCompraRepository.existsById(idOrden)) {
@@ -78,11 +104,23 @@ public class OrdenCompraController {
         ordenCompraService.eliminarOrden(idOrden);
         return ResponseEntity.noContent().build();
     }
+    */
 
     @PutMapping("/{idOrden}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable Integer idOrden, @RequestParam String estado) {
         return ordenCompraRepository.findById(idOrden)
                 .map(orden -> {
+                    if ("ENVIADO".equals(orden.getEstado()) || "ANULADO".equals(orden.getEstado())){
+                        return ResponseEntity.badRequest()
+                                .body("No se puede cambiar el estado de una orden ya " + orden.getEstado().toLowerCase());
+                    }
+                    if ("ENVIADO".equals(estado)) {
+                        for (DetalleOrdenCompra detalle : orden.getDetalles()) {
+                            Material material = detalle.getMaterial();
+                            material.setStockActual(material.getStockActual() + detalle.getCantidad());
+                            materialRepository.save(material);
+                        }
+                    }
                     orden.setEstado(estado);
                     return ResponseEntity.ok(ordenCompraRepository.save(orden));
                 })

@@ -29,7 +29,11 @@ public class MaterialController {
     }
 
     @PostMapping
-    public ResponseEntity<Material> crear(@RequestBody Material material) {
+    public ResponseEntity<?> crear(@RequestBody Material material) {
+        var errores = validar(material);
+        if (!errores.isEmpty()) {
+            return ResponseEntity.badRequest().body(errores);
+        }
         material.setIdMaterial(null);
         material.setVersion(null);
         return ResponseEntity.ok(materialRepository.save(material));
@@ -130,7 +134,11 @@ public class MaterialController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Material> actualizar(@PathVariable Integer id, @RequestBody Material material) {
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Material material) {
+        var errores = validar(material);
+        if (!errores.isEmpty()) {
+            return ResponseEntity.badRequest().body(errores);
+        }
         return materialRepository.findById(id)
                 .map(m -> {
                     m.setNombre(material.getNombre());
@@ -142,5 +150,25 @@ public class MaterialController {
                     return ResponseEntity.ok(materialRepository.save(m));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private java.util.Map<String, String> validar(Material material) {
+        java.util.Map<String, String> errores = new java.util.HashMap<>();
+        if (material.getNombre() == null || material.getNombre().isBlank()) {
+            errores.put("nombre", "El nombre es obligatorio");
+        }
+        if (material.getUnidadMedida() == null || material.getUnidadMedida().isBlank()) {
+            errores.put("unidadMedida", "La unidad de medida es obligatoria");
+        }
+        if (material.getPrecioReferencial() == null || material.getPrecioReferencial() <=0) {
+            errores.put("precioReferencial", "El precio debe ser mayor a 0");
+        }
+        if (material.getStockActual() == null ||  material.getStockActual() <=0) {
+            errores.put("stockActual", "El stock debe ser mayor a 0");
+        }
+        if (material.getTipoMaterial() == null || material.getTipoMaterial().getIdTipoMaterial() == null) {
+            errores.put("tipoMaterial", "Debe seleccionar un tipo de material");
+        }
+        return errores;
     }
 }

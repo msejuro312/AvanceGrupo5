@@ -1,5 +1,6 @@
 package com.serfagab.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class Usuario {
     @Column(name = "login")
     private String login;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "clave")
     private String clave;
 
