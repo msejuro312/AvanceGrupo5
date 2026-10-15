@@ -95,7 +95,7 @@ public class OrdenCompraController {
         }
     }
 
-    /*
+
     @DeleteMapping("/{idOrden}")
     public ResponseEntity<?> eliminar(@PathVariable Integer idOrden) {
         if (!ordenCompraRepository.existsById(idOrden)) {
@@ -104,7 +104,7 @@ public class OrdenCompraController {
         ordenCompraService.eliminarOrden(idOrden);
         return ResponseEntity.noContent().build();
     }
-    */
+
 
     @PutMapping("/{idOrden}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable Integer idOrden, @RequestParam String estado) {
